@@ -1,34 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Bingo
 
-## Getting Started
+## campaigns
 
-First, run the development server:
+-   campaign_id
+-   name
+-   network
+-   symbol
+-   description
+-   price
+-   size
+-   start_at
+-   end_at
+-   mint_limit
+-   bingo_size
+-   each_bingo
+-   each_completion
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## campaigns_tasks
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   campaign_task_id
+-   campaign_id
+-   task_type
+-   task_config
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## bingo
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+-   bingo_id
+-   wallet_address
+-   token_id
+-   image
+-   campaign_id
+-   grid_1 json
+    ....
+-   grid_25
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## bingo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   bingo_id
+-   wallet_address
+-   token_id
+-   image
+-   campaign_id
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## bingo_tasks
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-   task_id
+-   bingo_id
+-   grid_number
+-   task_name
+-   task_status
