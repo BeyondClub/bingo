@@ -197,6 +197,10 @@ const getImage = async () => {
 	);
 	ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
+	/*
+	 *	List out bingo tasks on the image
+	 */
+
 	ctx.font = ' 14px Arial';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'center';
@@ -211,9 +215,12 @@ const getImage = async () => {
 		}
 	}
 
-	// Score
+	/*
+	 *	Show Score on the bingo card
+	 */
+
 	ctx.font = 'bold 14px Arial';
-	ctx.fillText('200', 290, 95);
+	ctx.fillText('2000', 290, 95);
 
 	/*
 	 *	Check mark for the completed tasks
