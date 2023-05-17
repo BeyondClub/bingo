@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bingo {
+  bingo_id       String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wallet_address String
+  token_id       Decimal       @db.Decimal
+  score          Decimal       @default(0) @db.Decimal
+  image          String?
+  campaign_id    String        @db.Uuid
+  campaigns      campaigns     @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+  bingo_tasks    bingo_tasks[]
+}
+
+model bingo_tasks {
+  bingo_task_id    String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  bingo_id         String    @db.Uuid
+  grid_number      Decimal   @db.Decimal
+  task_name        String
+  task_status      Boolean   @default(false)
+  campaign_task_id String    @db.Uuid
+  last_processed   DateTime? @db.Timestamp(6)
+  bingo            bingo     @relation(fields: [bingo_id], references: [bingo_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model campaigns {
+  campaign_id      String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name             String
+  network          Decimal           @default(137) @db.Decimal
+  symbol           String
+  description      String?
+  price            Decimal?          @default(0) @db.Decimal
+  currency         String?
+  size             Decimal           @default(5) @db.Decimal
+  start_at         DateTime?         @db.Timestamptz(6)
+  end_at           DateTime?         @db.Timestamptz(6)
+  mint_limit       Decimal           @default(1) @db.Decimal
+  bingo_size       Decimal           @default(5) @db.Decimal
+  each_bingo       Decimal           @default(1) @db.Decimal
+  each_completion  Decimal           @default(1) @db.Decimal
+  contract_address String?
+  bingo            bingo[]
+  campaigns_tasks  campaigns_tasks[]
+}
+
+model campaigns_tasks {
+  campaign_task_id   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  campaign_id        String    @db.Uuid
+  task_type          String
+  api_url            String?
+  api_method         String?   @default("POST")
+  headers            String?
+  req_body           String?
+  response_variable  String?
+  response_condition String?
+  response_value     String?
+  campaigns          campaigns @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+}

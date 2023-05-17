@@ -17,11 +17,24 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: #fff;
+  background: #000;
+}
+
+.primary_button{
+  background: #fff !important;
+  color: #000 !important
+}
+
+.primary_button:hover{
+  background: #f1f1f1 !important;
+}
+
+.primary_button:hover{
+  background: #f1f1f1 !important;
+}
+
+.primary_button:disabled svg,
+.primary_button[disabled] svg{
+  stroke: #000;
 }
