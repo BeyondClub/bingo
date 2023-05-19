@@ -602,7 +602,7 @@ const getImage = async () => {
 
 	// return `data:image/png;base64,${base64}`;
 
-	return null;
+	return ``;
 };
 
 const Page = async () => {
