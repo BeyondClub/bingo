@@ -1,5 +1,7 @@
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
 
     // things to do after the purchase is completed?
 

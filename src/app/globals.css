@@ -34,6 +34,13 @@ body {
   background: #f1f1f1 !important;
 }
 
+.primary_button[data-loading]
+{
+    background: #000 !important;
+    color: #fff !important;
+      cursor: not-allowed;
+}
+
 .primary_button:disabled svg,
 .primary_button[disabled] svg{
   stroke: #000;

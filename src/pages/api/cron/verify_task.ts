@@ -1,7 +1,8 @@
 import { db } from "@/libs/db";
 import { makeApiRequest } from "@/libs/helpers";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // lets get the task to verify from bingo tasks
 

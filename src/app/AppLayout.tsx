@@ -8,15 +8,18 @@ import '@rainbow-me/rainbowkit/styles.css';
 // import { SessionProvider } from 'next-auth/react';
 import Link from 'next/link';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { arbitrum, mainnet, optimism, polygon, polygonMumbai } from 'wagmi/chains';
+import { polygonMumbai } from 'wagmi/chains';
+// import { arbitrum, mainnet, optimism, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+
+import { Toaster } from 'sonner';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[
-		mainnet,
-		polygon,
-		optimism,
-		arbitrum,
+		// mainnet,
+		// polygon,
+		// optimism,
+		// arbitrum,
 		...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [polygonMumbai] : []),
 	],
 	[publicProvider()]
@@ -76,8 +79,10 @@ const AppLayout = ({ children, session }: any) => {
 							</div>
 							{children}
 
+							<Toaster />
+
 							<footer className="text-center text-gray-400 border-t border-gray-800 pt-5 text-sm">
-								<p>Copyright </p>
+								<p>Copyright © 2023 beyondClub</p>
 							</footer>
 						</main>
 					</div>

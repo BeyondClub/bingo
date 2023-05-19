@@ -29,9 +29,15 @@ const BuyButton = ({ contract_address, limit }: { contract_address: string; limi
 						updateRecords();
 					},
 				});
-			} catch (e) {}
+			} catch (e: { message: string }) {
+				if (e.message.includes('user rejected transaction')) {
+					toast.error('Transaction cancelled by user.');
+				} else toast.error(e.message);
+			}
 
 			setLoading(false);
+		} else {
+			toast('Please connect your wallet first.');
 		}
 	};
 
