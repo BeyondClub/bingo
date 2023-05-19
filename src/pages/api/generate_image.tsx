@@ -1,4 +1,4 @@
-import { db } from '@/libs/db';
+import pool from '@/libs/pool';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -9,20 +9,13 @@ const xPositions = [baseX, baseX + 85, baseX + 85 * 2 + 10, baseX + 85 * 3 + 15,
 const yPositions = [baseY, baseY + 73, baseY + 143, baseY + 220, baseY + 295];
 
 const getImage = async () => {
-	const bingo = await db.bingo.findFirst({
-		where: {
-			bingo_id: '44317054-0d63-45d4-ae5f-e1bd55962638',
-		},
-	});
+	const query = "SELECT * FROM bingo WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'";
+	const result = await pool.query(query);
+	const bingo = result.rows;
 
-	const tasks = await db.bingo_tasks.findMany({
-		where: {
-			bingo_id: '44317054-0d63-45d4-ae5f-e1bd55962638',
-		},
-		orderBy: {
-			grid_number: 'asc',
-		},
-	});
+	const query_s = "SELECT * FROM bingo_tasks WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'";
+	const result_s = await pool.query(query_s);
+	const tasks = result_s.rows;
 
 	if (bingo) {
 		registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
