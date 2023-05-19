@@ -1,5 +1,5 @@
 import { db } from '@/libs/db';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
 
 const baseX = 70;
 const baseY = 140;
@@ -8,6 +8,14 @@ const xPositions = [baseX, baseX + 85, baseX + 85 * 2 + 10, baseX + 85 * 3 + 15,
 const yPositions = [baseY, baseY + 73, baseY + 143, baseY + 220, baseY + 295];
 
 const getImage = async () => {
+	registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
+		family: 'CustomFont',
+	});
+
+	registerFont('./public/assets/fonts/Karmatic Arcade.ttf', {
+		family: 'ScoreFont',
+	});
+
 	const bingo = await db.bingo.findFirst({
 		where: {
 			bingo_id: '44317054-0d63-45d4-ae5f-e1bd55962638',
@@ -208,16 +216,14 @@ const getImage = async () => {
 
 	const canvas = createCanvas(500, 500);
 	const ctx = canvas.getContext('2d');
-	const image = await loadImage(
-		'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Frame+1000002882(1).png'
-	);
+	const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
 	ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
 	/*
 	 *	List out bingo tasks on the image
 	 */
 
-	ctx.font = ' 14px Arial';
+	ctx.font = '10px CustomFont';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'center';
 	const lineHeight = 15;
@@ -235,7 +241,7 @@ const getImage = async () => {
 	 *	Show Score on the bingo card
 	 */
 
-	ctx.font = 'bold 14px Arial';
+	ctx.font = 'bold 14px ScoreFont';
 	ctx.fillText(bingo?.score ? String(bingo?.score) : '0', 290, 95);
 
 	/*
@@ -603,7 +609,11 @@ const getImage = async () => {
 const Page = async () => {
 	// lets pass some of the details to generate this image!
 	const image = await getImage();
-	return <img src={image} />;
+	return (
+		<div className="grid place-items-center">
+			<img src={image} className="rounded-md" />
+		</div>
+	);
 };
 
 export default Page;
