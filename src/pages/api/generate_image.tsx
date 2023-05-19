@@ -237,6 +237,7 @@ const getImage = async () => {
 		 */
 
 		ctx.font = 'bold 14px ScoreFont';
+		//@ts-ignore
 		ctx.fillText(bingo?.score ? String(bingo?.score) : '0', 290, 95);
 
 		/*
