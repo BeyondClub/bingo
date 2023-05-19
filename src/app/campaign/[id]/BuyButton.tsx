@@ -29,7 +29,7 @@ const BuyButton = ({ contract_address, limit }: { contract_address: string; limi
 						updateRecords();
 					},
 				});
-			} catch (e: { message: string }) {
+			} catch (e: any) {
 				if (e.message.includes('user rejected transaction')) {
 					toast.error('Transaction cancelled by user.');
 				} else toast.error(e.message);
