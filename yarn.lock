@@ -720,6 +720,11 @@
     react-remove-scroll "^2.5.5"
     react-textarea-autosize "8.3.4"
 
+"@mantine/hooks@^6.0.11":
+  version "6.0.11"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-6.0.11.tgz#1f31cc04aaaf1c24509452a263984647a2b494cf"
+  integrity sha512-WM24bEqtnfPikks+92wllvHodwSBuU0tcF+IiCumyQBQTbhLWCVNHaUXYsL/bKFEZVOOwgEO4dITaxqFkdVBxA==
+
 "@mantine/styles@6.0.10":
   version "6.0.10"
   resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-6.0.10.tgz#49118fb732320141584f7d09cdca9d69e1b9468a"
@@ -2639,7 +2644,7 @@ caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001449, caniuse-lite@^1.0.300014
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001487.tgz#d882d1a34d89c11aea53b8cdc791931bdab5fe1b"
   integrity sha512-83564Z3yWGqXsh2vaH/mhXfEM0wX+NlBCm1jYHOb97TrTWJEmPTccZgeLTPBUUb0PNVo+oomb7wkimZBIERClA==
 
-canvas@^2.6.1:
+canvas@^2.11.2:
   version "2.11.2"
   resolved "https://registry.yarnpkg.com/canvas/-/canvas-2.11.2.tgz#553d87b1e0228c7ac0fc72887c3adbac4abbd860"
   integrity sha512-ItanGBMrmRV7Py2Z+Xhs7cT+FNt5K0vPL4p9EZ/UX/Mu7hFbkxSjKF2KVtPwX7UYWp7dRKnrTvReflgrItJbdw==
