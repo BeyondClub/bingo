@@ -1,3 +1,4 @@
+import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -9,6 +10,8 @@ const xPositions = [baseX, baseX + 85, baseX + 85 * 2 + 10, baseX + 85 * 3 + 15,
 const yPositions = [baseY, baseY + 73, baseY + 143, baseY + 220, baseY + 295];
 
 const getImage = async () => {
+	const bingoId = '44317054-0d63-45d4-ae5f-e1bd55962638';
+
 	const query = "SELECT * FROM bingo WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'";
 	const result = await pool.query(query);
 	const bingo = result.rows;
@@ -43,21 +46,21 @@ const getImage = async () => {
 				},
 			},
 			{
-				text: 'Stake with \n Lido',
+				text: tasks[2]?.task_name ?? '',
 				position: {
 					x: xPositions[2],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: 'Run 1 \n Superfluid \n Stream',
+				text: tasks[3]?.task_name ?? '',
 				position: {
 					x: xPositions[3],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: 'Hold \n ENS',
+				text: tasks[4]?.task_name ?? '',
 				position: {
 					x: xPositions[4],
 					y: yPositions[0],
@@ -65,35 +68,35 @@ const getImage = async () => {
 			},
 			// Second Row
 			{
-				text: 'Lend \n 0.1 ETH \n  on Aave',
+				text: tasks[5]?.task_name ?? '',
 				position: {
 					x: xPositions[0],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: 'Donate on \n Gitcoin',
+				text: tasks[6]?.task_name ?? '',
 				position: {
 					x: xPositions[1],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: 'Buy 1 NFT \n on OpenSea',
+				text: tasks[7]?.task_name ?? '',
 				position: {
 					x: xPositions[2],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: '3 Vote \n on Snapshot',
+				text: tasks[8]?.task_name ?? '',
 				position: {
 					x: xPositions[3],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: 'Buy 1 music \n NFT on  \n Sound',
+				text: tasks[9]?.task_name ?? '',
 				position: {
 					x: xPositions[4],
 					y: yPositions[1],
@@ -101,14 +104,14 @@ const getImage = async () => {
 			},
 			// Third Row
 			{
-				text: 'Lend \n 0.1 ETH \n  on Aave',
+				text: tasks[10]?.task_name ?? '',
 				position: {
 					x: xPositions[0],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: 'Donate on \n Gitcoin',
+				text: tasks[11]?.task_name ?? '',
 				position: {
 					x: xPositions[1],
 					y: yPositions[2],
@@ -122,14 +125,14 @@ const getImage = async () => {
 				},
 			},
 			{
-				text: '3 Vote \n on Snapshot',
+				text: tasks[13]?.task_name ?? '',
 				position: {
 					x: xPositions[3],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: 'Buy 1 music \n NFT on  \n Sound',
+				text: tasks[14]?.task_name ?? '',
 				position: {
 					x: xPositions[4],
 					y: yPositions[2],
@@ -137,35 +140,35 @@ const getImage = async () => {
 			},
 			// Fourth Row
 			{
-				text: 'Lend \n 0.1 ETH \n  on Aave',
+				text: tasks[15]?.task_name ?? '',
 				position: {
 					x: xPositions[0],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: 'Donate on \n Gitcoin',
+				text: tasks[16]?.task_name ?? '',
 				position: {
 					x: xPositions[1],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: '1tx \n on Polygon',
+				text: tasks[17]?.task_name ?? '',
 				position: {
 					x: xPositions[2],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: '3 Vote \n on Snapshot',
+				text: tasks[18]?.task_name ?? '',
 				position: {
 					x: xPositions[3],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: 'Buy 1 music \n NFT on  \n Sound',
+				text: tasks[19]?.task_name ?? '',
 				position: {
 					x: xPositions[4],
 					y: yPositions[3],
@@ -173,35 +176,35 @@ const getImage = async () => {
 			},
 			// Fourth Row
 			{
-				text: 'Lend \n 0.1 ETH \n  on Aave',
+				text: tasks[20]?.task_name ?? '',
 				position: {
 					x: xPositions[0],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: 'Donate on \n Gitcoin',
+				text: tasks[21]?.task_name ?? '',
 				position: {
 					x: xPositions[1],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: '1tx \n on Polygon',
+				text: tasks[22]?.task_name ?? '',
 				position: {
 					x: xPositions[2],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: '3 Vote \n on Snapshot',
+				text: tasks[23]?.task_name ?? '',
 				position: {
 					x: xPositions[3],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: 'Buy 1 music \n NFT on  \n Sound',
+				text: tasks[24]?.task_name ?? '',
 				position: {
 					x: xPositions[4],
 					y: yPositions[4],
@@ -598,10 +601,12 @@ const getImage = async () => {
 		const dataUrl = canvas.toDataURL();
 		const base64 = dataUrl.split(',')[1];
 
-		// res.setHeader('Content-Type', 'image/png');
-		// res.send(Buffer.from(dataUrl.split(',')[1], 'base64'));
+		const hash = await uploadImage(`data:image/png;base64,${base64}`);
 
-		return `data:image/png;base64,${base64}`;
+		const updateQuery = `UPDATE bingo SET image='${hash}' WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'`;
+		await pool.query(updateQuery);
+
+		return hash;
 	}
 
 	return ``;

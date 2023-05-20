@@ -75,7 +75,9 @@ const AppLayout = ({ children, session }: any) => {
 								<Link href="/" passHref>
 									<img src="/assets/logo.svg" alt="" />
 								</Link>
-								<ConnectButton />
+								<div className="connect">
+									<ConnectButton accountStatus={'address'} />
+								</div>
 							</div>
 							{children}
 

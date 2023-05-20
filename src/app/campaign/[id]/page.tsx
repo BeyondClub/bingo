@@ -4,6 +4,7 @@ import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
+import ContractAddressCopy from './ContractAddressCopy';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
 	ssr: false,
@@ -98,7 +99,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<h5 className="font-medium text-2xl my-2 mt-5">Contract Detail</h5>
 						{/* @ts-ignore */}
 						<ShowDetails label="Network">{NETWORK[campaign.network].name}</ShowDetails>
-						<ShowDetails label="Contract Address">0xaf30...6c78</ShowDetails>
+						<ShowDetails label="Contract Address">
+							<ContractAddressCopy contract_address={campaign.contract_address!} />
+						</ShowDetails>
 						<ShowDetails label="Mint limit per address">{campaign.mint_limit}</ShowDetails>
 						<ShowDetails label="Secondary Royalty">10%</ShowDetails>
 						<ShowDetails label="Campaign Duration">2022/12/01 - 2022/12/20</ShowDetails>

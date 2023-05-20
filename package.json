@@ -12,12 +12,15 @@
     "@emotion/react": "^11.11.0",
     "@mantine/core": "^6.0.10",
     "@mantine/hooks": "^6.0.11",
+    "@pinata/sdk": "^2.1.0",
     "@prisma/client": "^4.14.0",
+    "@radix-ui/react-icons": "^1.3.0",
     "@rainbow-me/rainbowkit": "^1.0.0",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.2.0",
     "@types/node": "20.1.4",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "@unlock-protocol/unlock-js": "^0.37.2",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "canvas": "^2.11.2",
@@ -30,6 +33,7 @@
     "pg": "^8.11.0",
     "postcss": "8.4.23",
     "react": "18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
     "siwe": "^2.1.4",
@@ -41,6 +45,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.6.6",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "prisma": "^4.14.0"
   }
 }

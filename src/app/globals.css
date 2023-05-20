@@ -45,3 +45,17 @@ body {
 .primary_button[disabled] svg{
   stroke: #000;
 }
+
+
+.connect > div > button{
+  background: transparent !important;
+  border: 1px solid !important;
+  border-radius: 20px !important;
+  padding: 0 2rem !important;
+  color: #fff !important
+}
+
+.connect > div > button > div {
+  border: 0px !important;
+  color: #fff !important
+}
