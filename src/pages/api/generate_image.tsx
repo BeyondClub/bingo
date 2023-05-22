@@ -228,7 +228,8 @@ const getImage = async () => {
 		const lineHeight = 15;
 
 		for (const data of imageGridData) {
-			let lines = data.text.split('\n');
+			let lines = data.text.replace('\\n', '\n').split('\n');
+
 			let y = data.position.y;
 			for (let i = 0; i < lines.length; i++) {
 				ctx.fillText(lines[i], data.position.x, y);

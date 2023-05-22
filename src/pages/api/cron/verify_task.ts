@@ -2,6 +2,7 @@ import { db } from "@/libs/db";
 import { makeApiRequest } from "@/libs/helpers";
 import { farcasterVerification } from "@/libs/verification/farcasterVerification";
 import { gitpoapVerification } from "@/libs/verification/gitpoapVerification";
+import { lensVerification } from "@/libs/verification/lensVerification";
 import { poapVerification } from "@/libs/verification/poapVerification";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -84,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             // Make sure the task validation is preconfigured
 
-            const preconfigured = ['poap', 'gitpoap', 'farcaster'];
+            const preconfigured = ['poap', 'gitpoap', 'farcaster', 'lens'];
 
             if (preconfigured.includes(task_config.task_type)) {
 
@@ -98,6 +99,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "gitpoap") {
                     const response = await gitpoapVerification(bingo.wallet_address);
+                    if (response.length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+                if (task_config.task_type === "lens") {
+                    const response = await lensVerification(bingo.wallet_address);
                     if (response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
