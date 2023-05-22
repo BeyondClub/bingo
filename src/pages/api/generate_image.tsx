@@ -1,5 +1,6 @@
 import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
+import { bingo } from '@prisma/client';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -10,13 +11,13 @@ const xPositions = [baseX, baseX + 85, baseX + 85 * 2 + 10, baseX + 85 * 3 + 15,
 const yPositions = [baseY, baseY + 73, baseY + 143, baseY + 220, baseY + 295];
 
 const getImage = async () => {
-	const bingoId = '44317054-0d63-45d4-ae5f-e1bd55962638';
-
-	const query = "SELECT * FROM bingo WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'";
+	const query = 'SELECT * FROM bingo WHERE redraw = true LIMIT 1';
 	const result = await pool.query(query);
-	const bingo = result.rows;
+	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
-	const query_s = "SELECT * FROM bingo_tasks WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'";
+	if (!bingo) return null;
+
+	const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}'`;
 	const result_s = await pool.query(query_s);
 	const tasks = result_s.rows;
 
@@ -603,13 +604,13 @@ const getImage = async () => {
 
 		const hash = await uploadImage(`data:image/png;base64,${base64}`);
 
-		const updateQuery = `UPDATE bingo SET image='${hash}' WHERE bingo_id = '44317054-0d63-45d4-ae5f-e1bd55962638'`;
+		const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
 		await pool.query(updateQuery);
 
 		return hash;
 	}
 
-	return ``;
+	return null;
 };
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {

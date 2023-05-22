@@ -109,7 +109,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				</div>
 				<div className="col-span-6 grid place-items-center">
 					<img
-						src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Bingo_card_-_B%26W.jpg"
+						src="https://gateway.pinata.cloud/ipfs/QmUczjuE81M9pHu23pnZmX3bB9qd6e4vTakdgaKtNPiujE"
 						className="rounded-lg"
 						style={{ maxHeight: '500px' }}
 						alt=""
