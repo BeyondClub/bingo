@@ -1,13 +1,16 @@
+import { GraphQueryConfig } from "@/constants/graphQuery.config";
 import { db } from "@/libs/db";
 import { makeApiRequest } from "@/libs/helpers";
+import { ethBalanceVerification } from "@/libs/verification/ethBalanceVerification";
 import { farcasterVerification } from "@/libs/verification/farcasterVerification";
 import { gitpoapVerification } from "@/libs/verification/gitpoapVerification";
+import { graphVerification } from "@/libs/verification/graphVerification";
 import { lensVerification } from "@/libs/verification/lensVerification";
+import { nftCountVerification } from "@/libs/verification/nftcountVerification";
 import { poapVerification } from "@/libs/verification/poapVerification";
+import { tokenBalanceVerification } from "@/libs/verification/tokenBalanceVerification";
+import { txHistoryVerification } from "@/libs/verification/txHistoryVerification";
 import { NextApiRequest, NextApiResponse } from "next";
-
-
-
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -85,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             // Make sure the task validation is preconfigured
 
-            const preconfigured = ['poap', 'gitpoap', 'farcaster', 'lens'];
+            const preconfigured = ['poap', 'gitpoap', 'nft_count', 'farcaster', 'lens', 'eth_balance', 'token_balance', 'tx_history', 'ens', 'uniswap_liquidity'];
 
             if (preconfigured.includes(task_config.task_type)) {
 
@@ -99,6 +102,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "gitpoap") {
                     const response = await gitpoapVerification(bingo.wallet_address);
+                    if (response.length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+
+                if (task_config.task_type === "ens") {
+                    const response = await tokenBalanceVerification({
+                        wallet: bingo.wallet_address,
+                        tokenContractAddress: "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85"
+                    });
+
+                    if (response && response >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+
+                if (task_config.task_type === "tx_history") {
+                    const response = await txHistoryVerification({
+                        wallet: bingo.wallet_address,
+                        network: task_config.response_condition ?? "mainnet"
+                    });
+                    if (response.length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+                if (task_config.task_type === "nft_count") {
+                    const response = await nftCountVerification(bingo.wallet_address);
                     if (response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
@@ -118,30 +151,88 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 }
 
-            }
-            else {
-                if (!task_config.api_url?.startsWith('https://') && !task_config.api_url?.startsWith('http://')) {
-                    console.log("Invalid URL")
-                    return
-                }
+                if (task_config.task_type === "eth_balance") {
+                    const response = await ethBalanceVerification({
+                        wallet: bingo.wallet_address,
+                        network: task_config.response_condition ?? "mainnet"
+                    });
 
-                const response = await makeApiRequest({
-                    url: task_config.api_url!,
-                    method: task_config.api_method ?? "POST",
-                    headers: task_config.headers,
-                    body: req_body
-                });
-
-
-                if (task_config.response_condition == "array_length") {
-                    if (task_config.response_variable) {
-                        if (response.data[task_config.response_variable].length >= Number(task_config.response_value)) {
-                            console.log("TASK COMPLETED!!!")
-                            await taskCompleted()
-                        }
+                    if (response && response >= Number(task_config.response_value)) {
+                        await taskCompleted()
                     }
                 }
 
+
+                if (task_config.task_type === "token_balance") {
+                    const response = await tokenBalanceVerification({
+                        wallet: bingo.wallet_address,
+                        tokenContractAddress: task_config.response_condition ?? "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+                    });
+
+                    if (response && response >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+
+                if (task_config.task_type === "uniswap_liquidity") {
+                    const response = await tokenBalanceVerification({
+                        wallet: bingo.wallet_address,
+                        tokenContractAddress: "0xc36442b4a4522e871399cd717abdd847ab11fe88"
+                    });
+
+                    if (response && response >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+            }
+            else {
+
+                // Let's check if the graph is preconfigured.
+
+                if (Object.entries(GraphQueryConfig).map(([key, value]) => key).includes(task_config.task_type)) {
+
+                    const theGraphConfig = GraphQueryConfig[task_config.task_type as keyof typeof GraphQueryConfig];
+
+                    const response = await graphVerification({
+                        wallet: bingo.wallet_address,
+                        query: theGraphConfig.req_body,
+                        endpoint: theGraphConfig.api_url
+                    });
+
+                    if (response && theGraphConfig.response_condition === "array_length" && response[theGraphConfig.response_variable].length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+
+                }
+                else {
+
+
+
+                    if (!task_config.api_url?.startsWith('https://') && !task_config.api_url?.startsWith('http://')) {
+                        console.log("Invalid URL")
+                        return
+                    }
+
+                    const response = await makeApiRequest({
+                        url: task_config.api_url!,
+                        method: task_config.api_method ?? "POST",
+                        headers: task_config.headers,
+                        body: req_body
+                    });
+
+
+                    if (task_config.response_condition == "array_length") {
+                        if (task_config.response_variable) {
+                            if (response.data[task_config.response_variable].length >= Number(task_config.response_value)) {
+                                console.log("TASK COMPLETED!!!")
+                                await taskCompleted()
+                            }
+                        }
+                    }
+
+                }
 
             }
 
@@ -149,6 +240,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
 
-    return res.status(200).json({ ok: '' });
+    return res.status(200).json({ status: 'completed' });
 
 }

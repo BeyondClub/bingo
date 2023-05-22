@@ -1,4 +1,5 @@
 import { db } from '@/libs/db';
+import ListTasks from './ListTasks';
 
 const getBingo = async (params: any) => {
 	const { contract, tokenId } = params;
@@ -16,7 +17,13 @@ const getBingo = async (params: any) => {
 		},
 	});
 
-	return { contract, tokenId, bingo };
+	const tasks = await db.bingo_tasks.findMany({
+		where: {
+			bingo_id: bingo?.bingo_id,
+		},
+	});
+
+	return { contract, tokenId, bingo, campaign, tasks };
 };
 
 const page = async ({ params }: any) => {
@@ -25,9 +32,23 @@ const page = async ({ params }: any) => {
 	console.log(bingo);
 
 	return (
-		<div>
-			<img src={`https://gateway.pinata.cloud/ipfs/${bingo?.bingo?.image}`} />
-		</div>
+		<>
+			<link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+			<div className="grid md:grid-cols-2 gap-5 press_start">
+				<img src={`https://gateway.pinata.cloud/ipfs/${bingo?.bingo?.image}`} className="rounded-md" />
+
+				<div className="text-white">
+					<h1 className="text-3xl font-bold">{bingo?.campaign?.name}</h1>
+					{bingo?.bingo?.token_id ? <p>#{Number(bingo?.bingo?.token_id)}</p> : null}
+
+					<p>{Number(bingo?.bingo?.score)}</p>
+
+					<p className="mb-5">Owner: {bingo?.bingo?.wallet_address}</p>
+
+					<ListTasks tasks={bingo.tasks} />
+				</div>
+			</div>
+		</>
 	);
 };
 

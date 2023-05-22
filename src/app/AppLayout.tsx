@@ -73,7 +73,7 @@ const AppLayout = ({ children, session }: any) => {
 						<main className="mx-auto container px-5 sm:px-6 md:px-5 relative pt-5 space-y-5 pb-10 min-h-screen ">
 							<div className="flex justify-between">
 								<Link href="/" passHref>
-									<img src="/assets/logo.svg" alt="" />
+									<img src="/assets/LFbingo.svg" alt="" />
 								</Link>
 								<div className="connect">
 									<ConnectButton accountStatus={'address'} />

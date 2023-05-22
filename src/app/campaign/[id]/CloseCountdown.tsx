@@ -1,3 +1,5 @@
+'use client';
+
 import Countdown from 'react-countdown';
 
 const lite_renderer = ({ days, hours, minutes, seconds, completed, layout }: any) => {

@@ -6,12 +6,26 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
-const BuyButton = ({ contract_address, limit }: { contract_address: string; limit?: number }) => {
+const BuyButton = ({
+	contract_address,
+	limit,
+	end_date,
+}: {
+	contract_address: string;
+	limit?: number;
+	end_date: Date | null;
+}) => {
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
 
 	const claimNFT = async () => {
+		// convert end date to getTime() and compare it with now time to check campaign expired
+
+		if (end_date && new Date().getTime() > new Date(end_date).getTime()) {
+			toast.error('Campaign expired');
+			return;
+		}
 		//@ts-ignore
 		if (address) {
 			setLoading(true);

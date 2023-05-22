@@ -250,7 +250,7 @@ const getImage = async () => {
 		 */
 
 		const checkMark = await loadImage(
-			'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Group+(3).svg'
+			'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Bingo+Verified+Badge-01.jpg'
 		);
 
 		const verifiedXPositions = [baseX + 21, baseX + 114, baseX + 205, baseX + 295, baseX + 384];

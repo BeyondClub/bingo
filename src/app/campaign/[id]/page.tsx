@@ -2,6 +2,7 @@ import { NETWORK } from '@/constants';
 import { db } from '@/libs/db';
 import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
+import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
@@ -85,11 +86,17 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					{campaign.end_at ? (
 						<div>
 							<h6 className="text-sm text-gray-400">Closes In</h6>
-							{/* <div>{campaign.end_at ? <CloseCountdown date={campaign.end_at} /> : null}</div> */}
+							<div>
+								{campaign.end_at ? <CloseCountdown layout="lite" date={campaign.end_at} /> : null}
+							</div>
 						</div>
 					) : null}
 
-					<BuyButton contract_address={campaign.contract_address!} limit={Number(campaign.mint_limit)} />
+					<BuyButton
+						contract_address={campaign.contract_address!}
+						limit={Number(campaign.mint_limit)}
+						end_date={campaign.end_at}
+					/>
 
 					<div className="md:w-3/4">
 						<h5 className="font-medium text-2xl my-2 mt-5">Bingo Detail</h5>
@@ -103,8 +110,11 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							<ContractAddressCopy contract_address={campaign.contract_address!} />
 						</ShowDetails>
 						<ShowDetails label="Mint limit per address">{campaign.mint_limit}</ShowDetails>
-						<ShowDetails label="Secondary Royalty">10%</ShowDetails>
-						<ShowDetails label="Campaign Duration">2022/12/01 - 2022/12/20</ShowDetails>
+						{/* <ShowDetails label="Secondary Royalty">10%</ShowDetails> */}
+						<ShowDetails label="Campaign Duration">
+							{dayjs(campaign.start_at).format('YYYY/MM/DD')} -{' '}
+							{dayjs(campaign.end_at).format('YYYY/MM/DD')}
+						</ShowDetails>
 					</div>
 				</div>
 				<div className="col-span-6 grid place-items-center">
