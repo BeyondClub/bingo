@@ -1,6 +1,7 @@
+import { gridName } from '@/constants/gridName';
 import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
-import { bingo } from '@prisma/client';
+import { bingo, bingo_tasks } from '@prisma/client';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -11,15 +12,34 @@ const xPositions = [baseX, baseX + 85, baseX + 85 * 2 + 10, baseX + 85 * 3 + 15,
 const yPositions = [baseY, baseY + 73, baseY + 143, baseY + 220, baseY + 295];
 
 const getImage = async () => {
-	const query = 'SELECT * FROM bingo WHERE redraw = true LIMIT 1';
+	//
+	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
 	const result = await pool.query(query);
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
-	if (!bingo) return null;
+	if (!bingo) return 'not found';
 
-	const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}'`;
+	const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}' ORDER by grid_number asc`;
 	const result_s = await pool.query(query_s);
-	const tasks = result_s.rows;
+	const tasks: bingo_tasks[] = result_s.rows;
+
+	console.log(tasks);
+
+	const taskIds = [];
+
+	for (const task of tasks) {
+		taskIds.push(`'${task.campaign_task_id}'`);
+	}
+
+	const query_conf = `SELECT task_type,campaign_task_id,response_condition,response_value FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
+	const result_conf = await pool.query(query_conf);
+	const task_configs = result_conf.rows;
+
+	const task_config: any = {};
+
+	for (const tsconfig of task_configs) {
+		task_config[tsconfig.campaign_task_id] = tsconfig;
+	}
 
 	if (bingo) {
 		registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
@@ -30,38 +50,68 @@ const getImage = async () => {
 			family: 'ScoreFont',
 		});
 
+		const getName = (index: number) => {
+			let name = '';
+
+			// return tasks[index]?.task_name ?? '';
+			if (!tasks[index]?.campaign_task_id) {
+				console.log(index, tasks[index]);
+				return ' ';
+			}
+
+			//@ts-ignore
+
+			name = gridName[task_config[`${tasks[index].campaign_task_id}`]?.task_type ?? '']?.replace(
+				'[N]',
+				task_config[tasks[index].campaign_task_id].response_value
+			);
+
+			if (!name) {
+				//@ts-ignore
+				return gridName[
+					task_config[`${tasks[index].campaign_task_id}`]
+						? `${task_config[`${tasks[index].campaign_task_id}`]?.task_type}_${
+								task_config[`${tasks[index].campaign_task_id}`]?.response_condition
+						  }`
+						: ''
+				]?.replace('[N]', task_config[tasks[index].campaign_task_id].response_value);
+			}
+
+			return name;
+		};
+
 		const imageGridData = [
 			// First Row
 			{
-				text: tasks[0]?.task_name ?? '',
+				text: getName(0),
 				position: {
 					x: xPositions[0],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: tasks[1]?.task_name ?? '',
+				text: getName(1),
 				position: {
 					x: xPositions[1],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: tasks[2]?.task_name ?? '',
+				text: getName(2),
 				position: {
 					x: xPositions[2],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: tasks[3]?.task_name ?? '',
+				text: getName(3),
 				position: {
 					x: xPositions[3],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: tasks[4]?.task_name ?? '',
+				text: getName(4),
 				position: {
 					x: xPositions[4],
 					y: yPositions[0],
@@ -69,35 +119,35 @@ const getImage = async () => {
 			},
 			// Second Row
 			{
-				text: tasks[5]?.task_name ?? '',
+				text: getName(5),
 				position: {
 					x: xPositions[0],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: tasks[6]?.task_name ?? '',
+				text: getName(6),
 				position: {
 					x: xPositions[1],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: tasks[7]?.task_name ?? '',
+				text: getName(7),
 				position: {
 					x: xPositions[2],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: tasks[8]?.task_name ?? '',
+				text: getName(8),
 				position: {
 					x: xPositions[3],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: tasks[9]?.task_name ?? '',
+				text: getName(9),
 				position: {
 					x: xPositions[4],
 					y: yPositions[1],
@@ -105,14 +155,14 @@ const getImage = async () => {
 			},
 			// Third Row
 			{
-				text: tasks[10]?.task_name ?? '',
+				text: getName(10),
 				position: {
 					x: xPositions[0],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: tasks[11]?.task_name ?? '',
+				text: getName(11),
 				position: {
 					x: xPositions[1],
 					y: yPositions[2],
@@ -126,14 +176,14 @@ const getImage = async () => {
 				},
 			},
 			{
-				text: tasks[13]?.task_name ?? '',
+				text: getName(13),
 				position: {
 					x: xPositions[3],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: tasks[14]?.task_name ?? '',
+				text: getName(14),
 				position: {
 					x: xPositions[4],
 					y: yPositions[2],
@@ -141,35 +191,35 @@ const getImage = async () => {
 			},
 			// Fourth Row
 			{
-				text: tasks[15]?.task_name ?? '',
+				text: getName(15),
 				position: {
 					x: xPositions[0],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: tasks[16]?.task_name ?? '',
+				text: getName(16),
 				position: {
 					x: xPositions[1],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: tasks[17]?.task_name ?? '',
+				text: getName(17),
 				position: {
 					x: xPositions[2],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: tasks[18]?.task_name ?? '',
+				text: getName(18),
 				position: {
 					x: xPositions[3],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: tasks[19]?.task_name ?? '',
+				text: getName(19),
 				position: {
 					x: xPositions[4],
 					y: yPositions[3],
@@ -177,35 +227,35 @@ const getImage = async () => {
 			},
 			// Fourth Row
 			{
-				text: tasks[20]?.task_name ?? '',
+				text: getName(20),
 				position: {
 					x: xPositions[0],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: tasks[21]?.task_name ?? '',
+				text: getName(21),
 				position: {
 					x: xPositions[1],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: tasks[22]?.task_name ?? '',
+				text: getName(22),
 				position: {
 					x: xPositions[2],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: tasks[23]?.task_name ?? '',
+				text: getName(23),
 				position: {
 					x: xPositions[3],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: tasks[24]?.task_name ?? '',
+				text: getName(24),
 				position: {
 					x: xPositions[4],
 					y: yPositions[4],

@@ -60,7 +60,7 @@ const getSiweMessageOptions: GetSiweMessageOptions = () => ({
 	statement: 'Sign in to the Bingo app',
 });
 
-const myCache = createEmotionCache({ key: 'beyondclub' });
+const myCache = createEmotionCache({ key: 'lfbingo' });
 
 const AppLayout = ({ children, session }: any) => {
 	return (
@@ -84,7 +84,7 @@ const AppLayout = ({ children, session }: any) => {
 							<Toaster />
 
 							<footer className="text-center text-gray-400 border-t border-gray-800 pt-5 text-sm">
-								<p>Copyright © 2023 beyondClub</p>
+								<p>Copyright © 2023 lfbingo</p>
 							</footer>
 						</main>
 					</div>

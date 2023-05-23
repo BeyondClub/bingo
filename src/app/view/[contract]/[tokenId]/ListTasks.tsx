@@ -10,7 +10,7 @@ const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
 	}
 
 	return (
-		<div className="text-white">
+		<div className="text-white relative">
 			<table className="nes-table is-bordered is-dark">
 				<thead>
 					<tr>
@@ -22,7 +22,7 @@ const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
 				<tbody>
 					{tasks.map((task) => (
 						<tr key={task.bingo_task_id}>
-							<td className="text-white capitalize">{task.task_name.replace('\\n', ' ')}</td>
+							<td className="text-white capitalize text-xs">{task.task_name.replace('\\n', ' ')}</td>
 							<td className="text-white flex justify-center">
 								{task.task_status ? (
 									<CheckIcon className="text-green-500" />
@@ -30,7 +30,7 @@ const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
 									<Cross1Icon className="text-gray-200" />
 								)}
 							</td>
-							<td className="text-white text-sm">
+							<td className="text-white text-xs">
 								{task.last_processed ? dayjs(task.last_processed).format('DD MMM YY hh:mm A') : null}
 							</td>
 						</tr>

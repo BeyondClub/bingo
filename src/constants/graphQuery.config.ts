@@ -63,4 +63,28 @@ export const GraphQueryConfig = {
     response_variable: 'results',
     response_condition: 'array_length',
   },
+  aave_lend: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/HB1Z2EAw4rtPRYVb2Nz8QGFLHCpym6ByBX6vbCViuE9F`,
+    req_body: `query($wallet: String){
+            results: deposits( first: 51 where:{
+              account:$wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  compound_lend: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/6tGbL7WBx287EZwGUvvcQdL6m67JGMJrma3JSTtt5SV7`,
+    req_body: `query($wallet: String){
+            results: deposits( first: 51 where:{
+              account:$wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
 }
