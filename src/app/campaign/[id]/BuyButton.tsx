@@ -36,8 +36,17 @@ const BuyButton = ({
 					wallet_address: address,
 					mintNFTCount: quantity,
 					onTransactionCompleted: async (tx_hash: string) => {
+						toast('NFT Minted Successfully!');
+
 						const updateRecords = async () => {
 							toast("Waiting for transaction to be mined. It'll take a few minutes.");
+
+							const response = await fetch(
+								`/api/bingo_purchase?contract=${contract_address}&tx=${tx_hash}`
+							);
+							const response_data = await response.json();
+							console.log(response_data);
+
 							setTimeout(() => updateRecords(), 10000);
 						};
 						updateRecords();

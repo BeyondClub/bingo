@@ -1,72 +1,123 @@
 import { db } from "@/libs/db";
+import { graphVerification } from "@/libs/verification/graphVerification";
+import { campaigns_tasks } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import { generateImage } from "./generate_image";
+
+const fetchData = async ({ contract }: { contract: string | string[] }) => {
+    try {
+
+        const responseD = await graphVerification({
+            wallet: contract as string,
+            query: `query($wallet: String) {
+		keys(
+			where: {
+			 lock: $wallet
+			}
+      orderBy: tokenId
+		) {
+			tokenId
+    	owner
+		}
+	}`,
+            endpoint: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/mumbai-v2'
+        });
+
+        console.log(responseD)
+
+        return responseD.keys;
+
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const { contract } = req.query;
 
+    if (!contract) return res.status(400).json({ message: 'Contract address is required' });
 
+    const keys = await fetchData({ contract });
 
-    // things to do after the purchase is completed?
+    if (!keys) return res.status(400).json({ message: 'No keys found' });
 
-    // lets call from the graph api req
+    for (const key of keys) {
 
-    // 1. Check if the tx is confirmed.
-    // 2. Get the token id minted. make sure the tokenid does not exist on db along with the campaign id
-    // 3. From the campaigns generate 24 tasks for user accounts
-    // 4. Insert the tasks to the bingo tasks table
+        // check if the owner changed. and based on that update the task status?
 
-
-    // check if the tokenid exist on the db
-
-    //
-
-
-    // get the campaign from the contract address ?
-
-    const campaign = await db.campaigns.findFirst({
-        where: {
-            contract_address: req.body.contract_address
-        }
-    });
-    if (campaign) {
-
-        // take 24 order by random
-        const campaign_tasks = await db.$queryRawUnsafe(
-            `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24`,
-        )
-
-
-        // lets create a bingo record and bingo tasks record
-
-        const bingo = await db.bingo.create({
-            data: {
-                wallet_address: '23',
-                token_id: "1",
-                score: "0",
-                image: null,
-                campaign_id: campaign?.campaign_id,
-                redraw: true
+        const campaign = await db.campaigns.findFirst({
+            where: {
+                contract_address: contract as string
             }
         });
 
+        if (campaign) {
 
-        const bingoTasks = [];
+            const bingoExist = await db.bingo.count({
+                where: {
+                    token_id: key.tokenId,
+                    campaign_id: campaign?.campaign_id
+                }
+            });
 
-        for (const [task, index] of campaign_tasks) {
-            bingoTasks.push({
-                bingo_id: bingo.bingo_id,
-                grid_number: index + 1,
-                campaign_task_id: task.campaign_task_id,
-            })
+
+            if (bingoExist === 0) {
+
+                const campaign_tasks: campaigns_tasks[] = await db.$queryRawUnsafe(
+                    `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24`,
+                )
+
+
+                const bingo = await db.bingo.create({
+                    data: {
+                        wallet_address: key.owner,
+                        token_id: key.tokenId,
+                        score: "0",
+                        image: "https://bafybeieq5dbhvehr7fzwfjayhxk4n5u3ubcx4yk6ue34qe5oxwq7qhlssq.ipfs.w3s.link/Bingo-01%203%20(1).png",
+                        campaign_id: campaign?.campaign_id,
+                        redraw: true
+                    }
+                });
+
+
+                const bingoTasks = [];
+                for (let index = 0; index < campaign_tasks.length; index++) {
+                    const task = campaign_tasks[index];
+
+                    bingoTasks.push({
+                        bingo_id: bingo.bingo_id,
+                        task_name: '',
+                        grid_number: index + 1,
+                        campaign_task_id: task.campaign_task_id,
+                    })
+                }
+
+                await db.bingo_tasks.createMany({
+                    data: bingoTasks
+                });
+
+                const response = await generateImage({ bingo });
+
+                if (response) {
+
+                    await db.bingo.update({
+                        where: {
+                            bingo_id: bingo.bingo_id
+                        },
+                        data: {
+                            image: response.image
+                        }
+                    });
+
+                }
+
+            }
+
         }
-
-
-        // lets create the bingo tasks
-        await db.bingo_tasks.createMany({
-            //@ts-ignore
-            data: bingoTasks
-        });
     }
 
 
+    return res.status(200).json({ message: 'success' });
 
 }

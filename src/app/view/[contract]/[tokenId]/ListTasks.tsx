@@ -22,7 +22,9 @@ const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
 				<tbody>
 					{tasks.map((task) => (
 						<tr key={task.bingo_task_id}>
-							<td className="text-white capitalize text-xs">{task.task_name.replace('\\n', ' ')}</td>
+							<td className="text-white capitalize text-xs">
+								{task.task_name ? task.task_name.replace('\\n', ' ') : 'Fetched from campaign tasks'}
+							</td>
 							<td className="text-white flex justify-center">
 								{task.task_status ? (
 									<CheckIcon className="text-green-500" />

@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { gridName } from '@/constants/gridName';
 import { ScoreValidation } from '@/libs/bingo';
 import uploadImage from '@/libs/pinata';
@@ -5,7 +7,6 @@ import pool from '@/libs/pool';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
-import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 
 const baseX = 250;
@@ -14,15 +15,8 @@ const baseY = 690;
 const xPositions = [baseX, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.9, baseX + 400 * 3.8];
 const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
 
-const getImage = async () => {
-	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
-	const result = await pool.query(query);
-	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
-	if (!bingo) return 'not found';
-
-	GlobalFonts.registerFromPath('./fonts/pixel_arial_11/PIXEARG_.TTF', 'PixelFont');
-	GlobalFonts.registerFromPath('./fonts/Karmatic Arcade.ttf', 'ScoreFont');
+export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 	const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}' ORDER by grid_number asc`;
 	const result_s = await pool.query(query_s);
@@ -82,16 +76,15 @@ const getImage = async () => {
 
 			if (!name) {
 				//@ts-ignore
-				return gridName[
+				name = gridName[
 					task_config[`${tasks[index].campaign_task_id}`]
-						? `${task_config[`${tasks[index].campaign_task_id}`]?.task_type}_${
-								task_config[`${tasks[index].campaign_task_id}`]?.response_condition
-						  }`
+						? `${task_config[`${tasks[index].campaign_task_id}`]?.task_type}_${task_config[`${tasks[index].campaign_task_id}`]?.response_condition
+						}`
 						: ''
 				]?.replace('[N]', task_config[tasks[index].campaign_task_id].response_value);
 			}
 
-			return name;
+			return name ?? '';
 		};
 
 		const imageGridData = [
@@ -687,8 +680,21 @@ const getImage = async () => {
 
 		return hash;
 	}
+}
 
-	return null;
+
+
+const getImage = async () => {
+	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
+	const result = await pool.query(query);
+	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
+
+	if (!bingo) return 'not found';
+
+
+	const response = await generateImage({ bingo });
+
+	return response;
 };
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
