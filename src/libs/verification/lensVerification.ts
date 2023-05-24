@@ -16,23 +16,22 @@ const query = `
 
 export const lensVerification = async (wallet: string) => {
 
-    const variables = {
-        request: {
-            ownedBy: wallet,
-        },
-    };
+  const variables = {
+    request: {
+      ownedBy: wallet,
+    },
+  };
 
-    try {
-        const response = await axios.post(endpoint, {
-            query,
-            variables,
-        });
+  try {
+    const response = await axios.post(endpoint, {
+      query,
+      variables,
+    });
 
-        console.log(response.data);
 
-        return response.data.data.profiles.items;
-    } catch (error) {
-        console.error(error);
-    }
+    return response.data.data.profiles.items;
+  } catch (error) {
+    console.error(error);
+  }
 
 }

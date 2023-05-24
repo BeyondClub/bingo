@@ -70,7 +70,6 @@ const getImage = async () => {
 
 			// return tasks[index]?.task_name ?? '';
 			if (!tasks[index]?.campaign_task_id) {
-				console.log(index, tasks[index]);
 				return ' ';
 			}
 

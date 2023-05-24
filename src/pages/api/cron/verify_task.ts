@@ -211,7 +211,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
                     if (!task_config.api_url?.startsWith('https://') && !task_config.api_url?.startsWith('http://')) {
-                        console.log("Invalid URL")
                         return
                     }
 
@@ -226,7 +225,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (task_config.response_condition == "array_length") {
                         if (task_config.response_variable) {
                             if (response.data[task_config.response_variable].length >= Number(task_config.response_value)) {
-                                console.log("TASK COMPLETED!!!")
                                 await taskCompleted()
                             }
                         }

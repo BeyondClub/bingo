@@ -29,8 +29,6 @@ const getBingo = async (params: any) => {
 const page = async ({ params }: any) => {
 	const bingo = await getBingo(params);
 
-	console.log(bingo);
-
 	return (
 		<>
 			<link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />

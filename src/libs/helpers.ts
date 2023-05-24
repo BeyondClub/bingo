@@ -42,7 +42,6 @@ export const makeApiRequest = async ({
             data: body ?? null
         };
 
-        console.log(options)
 
         const response = await axios(options);
         return response.data;
