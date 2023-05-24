@@ -15,6 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 4. Insert the tasks to the bingo tasks table
 
 
+    // check if the tokenid exist on the db
+
+    //
+
+
     // get the campaign from the contract address ?
 
     const campaign = await db.campaigns.findFirst({
@@ -45,11 +50,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
         const bingoTasks = [];
-        //@ts-ignore
-        for (const task of campaign_tasks) {
+
+        for (const [task, index] of campaign_tasks) {
             bingoTasks.push({
                 bingo_id: bingo.bingo_id,
-                grid_number: 1,
+                grid_number: index + 1,
                 campaign_task_id: task.campaign_task_id,
             })
         }

@@ -1,104 +1,711 @@
-// @ts-nocheck
-import { createCanvas, GlobalFonts, loadImage } from "@napi-rs/canvas";
-import { webcrypto } from "node:crypto";
-import { performance } from "node:perf_hooks";
+import { gridName } from '@/constants/gridName';
+import pool from '@/libs/pool';
+import { bingo, bingo_tasks, campaigns } from '@prisma/client';
+// import { createCanvas, loadImage, registerFont } from 'canvas';
+import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 
-GlobalFonts.registerFromPath("../assets/inter-medium.ttf", "inter");
+import { ScoreValidation } from '@/libs/bingo';
+import { NextApiRequest, NextApiResponse } from 'next';
+import path from 'path';
 
-/**
- * @typedef {import('@vercel/node').VercelRequest} Request
- * @typedef {import('@vercel/node').VercelResponse} Response
- */
+const baseX = 250;
+const baseY = 690;
 
-function createTexture(width, height, repeat, draw) {
-    let canvas = createCanvas(width, height);
-    let ctx = canvas.getContext("2d");
-    draw(ctx);
-    return ctx.createPattern(canvas, repeat ? "repeat" : "no-repeat");
-}
+const xPositions = [baseX, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.9, baseX + 400 * 3.8];
+const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
 
-function ease(x) {
-    return 1 - Math.sqrt(1 - Math.pow(x, 2));
-}
+const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-function createNoise(width, height, intensity) {
-    return createTexture(width, height, true, (ctx) => {
-        let pixels = ctx.createImageData(width, height);
-        let noise = new Uint8Array(width * height);
-        webcrypto.getRandomValues(noise);
-        for (let i = 0; i < pixels.data.length; i += 4) {
-            pixels.data[i + 3] = ease((noise[i >> 2] * intensity) / 255) * 255;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = 'c13d186a-3485-40a8-ae4f-a0c378599623' LIMIT 1`;
+    const result = await pool.query(query);
+    const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
+
+
+    if (!bingo) return 'not found';
+
+    const fontPath = path.join(__dirname, '../../../../public/assets/fonts/pixel_arial_11/PIXEARG_.ttf');
+    const pressPath = path.join(__dirname, '../../../../public/assets/fonts/PressStart2P-Regular.ttf');
+    const ScorefontPath = path.join(__dirname, '../../../../public/assets/fonts/Karmatic Arcade.ttf');
+
+    GlobalFonts.registerFromPath(fontPath, 'PixelFont');
+    GlobalFonts.registerFromPath(pressPath, 'PixelFont2');
+    GlobalFonts.registerFromPath(ScorefontPath, 'ScoreFont');
+
+
+    const fonts = GlobalFonts.families.filter(i => i.family.includes('PixelFont'))
+
+
+
+    const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}' ORDER by grid_number asc`;
+    const result_s = await pool.query(query_s);
+    const tasks: bingo_tasks[] = result_s.rows;
+
+    const campaign_query = `SELECT * FROM campaigns  WHERE campaign_id = '${bingo?.campaign_id}' LIMIT 1`;
+    const campaign_result = await pool.query(campaign_query);
+    const campaign: campaigns | null = campaign_result.rows.length > 0 ? campaign_result.rows[0] : null;
+
+    const updatedScore = ScoreValidation({
+        eachBingo: Number(campaign?.each_bingo),
+        eachCompletion: Number(campaign?.each_completion),
+        tasks: tasks
+    })
+
+
+
+    const taskIds = [];
+
+    for (const task of tasks) {
+        taskIds.push(`'${task.campaign_task_id}'`);
+    }
+
+    const query_conf = `SELECT task_type,campaign_task_id,response_condition,response_value FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
+    const result_conf = await pool.query(query_conf);
+    const task_configs = result_conf.rows;
+
+    const task_config: any = {};
+
+    for (const tsconfig of task_configs) {
+        task_config[tsconfig.campaign_task_id] = tsconfig;
+    }
+
+    if (bingo) {
+
+
+        const getName = (index: number) => {
+            let name = '';
+
+
+            if (!tasks[index]?.campaign_task_id) {
+                return tasks[index]?.task_name ?? ''
+
+            }
+
+            //@ts-ignore
+
+            name = gridName[task_config[`${tasks[index].campaign_task_id}`]?.task_type ?? '']?.replace(
+                '[N]',
+                task_config[tasks[index].campaign_task_id].response_value
+            );
+
+            if (!name) {
+                //@ts-ignore
+                return gridName[
+                    task_config[`${tasks[index].campaign_task_id}`]
+                        ? `${task_config[`${tasks[index].campaign_task_id}`]?.task_type}_${task_config[`${tasks[index].campaign_task_id}`]?.response_condition
+                        }`
+                        : ''
+                ]?.replace('[N]', task_config[tasks[index].campaign_task_id].response_value);
+            }
+
+            return name;
+        };
+
+        const imageGridData = [
+            // First Row
+            {
+                text: getName(0),
+                position: {
+                    x: xPositions[0],
+                    y: yPositions[0],
+                },
+            },
+            {
+                text: getName(1),
+                position: {
+                    x: xPositions[1],
+                    y: yPositions[0],
+                },
+            },
+            {
+                text: getName(2),
+                position: {
+                    x: xPositions[2],
+                    y: yPositions[0],
+                },
+            },
+            {
+                text: getName(3),
+                position: {
+                    x: xPositions[3],
+                    y: yPositions[0],
+                },
+            },
+            {
+                text: getName(4),
+                position: {
+                    x: xPositions[4],
+                    y: yPositions[0],
+                },
+            },
+            // Second Row
+            {
+                text: getName(5),
+                position: {
+                    x: xPositions[0],
+                    y: yPositions[1],
+                },
+            },
+            {
+                text: getName(6),
+                position: {
+                    x: xPositions[1],
+                    y: yPositions[1],
+                },
+            },
+            {
+                text: getName(7),
+                position: {
+                    x: xPositions[2],
+                    y: yPositions[1],
+                },
+            },
+            {
+                text: getName(8),
+                position: {
+                    x: xPositions[3],
+                    y: yPositions[1],
+                },
+            },
+            {
+                text: getName(9),
+                position: {
+                    x: xPositions[4],
+                    y: yPositions[1],
+                },
+            },
+            // Third Row
+            {
+                text: getName(10),
+                position: {
+                    x: xPositions[0],
+                    y: yPositions[2],
+                },
+            },
+            {
+                text: getName(11),
+                position: {
+                    x: xPositions[1],
+                    y: yPositions[2],
+                },
+            },
+            {
+                text: '',
+                position: {
+                    x: xPositions[2],
+                    y: yPositions[2],
+                },
+            },
+            {
+                text: getName(13),
+                position: {
+                    x: xPositions[3],
+                    y: yPositions[2],
+                },
+            },
+            {
+                text: getName(14),
+                position: {
+                    x: xPositions[4],
+                    y: yPositions[2],
+                },
+            },
+            // Fourth Row
+            {
+                text: getName(15),
+                position: {
+                    x: xPositions[0],
+                    y: yPositions[3],
+                },
+            },
+            {
+                text: getName(16),
+                position: {
+                    x: xPositions[1],
+                    y: yPositions[3],
+                },
+            },
+            {
+                text: getName(17),
+                position: {
+                    x: xPositions[2],
+                    y: yPositions[3],
+                },
+            },
+            {
+                text: getName(18),
+                position: {
+                    x: xPositions[3],
+                    y: yPositions[3],
+                },
+            },
+            {
+                text: getName(19),
+                position: {
+                    x: xPositions[4],
+                    y: yPositions[3],
+                },
+            },
+            // Fourth Row
+            {
+                text: getName(20),
+                position: {
+                    x: xPositions[0],
+                    y: yPositions[4],
+                },
+            },
+            {
+                text: getName(21),
+                position: {
+                    x: xPositions[1],
+                    y: yPositions[4],
+                },
+            },
+            {
+                text: getName(22),
+                position: {
+                    x: xPositions[2],
+                    y: yPositions[4],
+                },
+            },
+            {
+                text: getName(23),
+                position: {
+                    x: xPositions[3],
+                    y: yPositions[4],
+                },
+            },
+            {
+                text: getName(24),
+                position: {
+                    x: xPositions[4],
+                    y: yPositions[4],
+                },
+            },
+        ];
+
+        const canvas = createCanvas(2048, 2488);
+        const ctx = canvas.getContext('2d');
+        const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+
+
+
+        /*
+         *	List out bingo tasks on the image
+         */
+
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.font = 'normal 28px PixelFont2';
+        const lineHeight = 70;
+
+        for (const data of imageGridData) {
+            let lines = data.text.replace('\\n', '\n').split('\n');
+
+            let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
+            for (let i = 0; i < lines.length; i++) {
+                ctx.fillText(lines[i], data.position.x, y);
+                y += lineHeight;
+            }
         }
-        ctx.putImageData(pixels, 0, 0);
-    });
-}
 
-/**
- * @param req {Request}
- * @param res {Response}
- */
+        /*
+         *	Show Score on the bingo card
+         */
 
-export default async (req, res) => {
-    const canvas = createCanvas(300, 300);
-    const ctx = canvas.getContext("2d");
+        ctx.font = '400 54px ScoreFont';
+        //@ts-ignore
+        ctx.fillText(updatedScore ? String(updatedScore) : '0', 1120, 470);
 
-    const { name = "World" } = req.query;
+        /*
+         *	Check mark for the completed tasks
+         */
 
-    ctx.save();
+        const checkMark = await loadImage(
+            'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Bingo+Verified+Badge-01.jpg'
+        );
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 300, 300);
+        const verifiedXPositions = [
+            baseX + 121,
+            baseX + 121 * 4.1,
+            baseX + 121 * 7.2,
+            baseX + 121 * 10.3,
+            baseX + 121 * 13.3,
+        ];
+        const verifiedYPositions = [
+            baseY - 130,
+            baseY + 130 * 1.8,
+            baseY + 130 * 4.7,
+            baseY + 130 * 7.5,
+            baseY + 130 * 11,
+        ];
 
-    const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const verifiedTasks = [
+            {
+                x: verifiedXPositions[0],
+                y: verifiedYPositions[0],
+            },
+            {
+                x: verifiedXPositions[1],
+                y: verifiedYPositions[0],
+            },
+            {
+                x: verifiedXPositions[2],
+                y: verifiedYPositions[0],
+            },
+            {
+                x: verifiedXPositions[3],
+                y: verifiedYPositions[0],
+            },
+            {
+                x: verifiedXPositions[4],
+                y: verifiedYPositions[0],
+            },
 
+            {
+                x: verifiedXPositions[0],
+                y: verifiedYPositions[1],
+            },
+            {
+                x: verifiedXPositions[1],
+                y: verifiedYPositions[1],
+            },
+            {
+                x: verifiedXPositions[2],
+                y: verifiedYPositions[1],
+            },
+            {
+                x: verifiedXPositions[3],
+                y: verifiedYPositions[1],
+            },
+            {
+                x: verifiedXPositions[4],
+                y: verifiedYPositions[1],
+            },
+            {
+                x: verifiedXPositions[0],
+                y: verifiedYPositions[2],
+            },
+            {
+                x: verifiedXPositions[1],
+                y: verifiedYPositions[2],
+            },
+            {
+                x: verifiedXPositions[2],
+                y: verifiedYPositions[2],
+            },
+            {
+                x: verifiedXPositions[3],
+                y: verifiedYPositions[2],
+            },
+            {
+                x: verifiedXPositions[4],
+                y: verifiedYPositions[2],
+            },
+            {
+                x: verifiedXPositions[0],
+                y: verifiedYPositions[3],
+            },
+            {
+                x: verifiedXPositions[1],
+                y: verifiedYPositions[3],
+            },
+            {
+                x: verifiedXPositions[2],
+                y: verifiedYPositions[3],
+            },
+            {
+                x: verifiedXPositions[3],
+                y: verifiedYPositions[3],
+            },
+            {
+                x: verifiedXPositions[4],
+                y: verifiedYPositions[3],
+            },
+            {
+                x: verifiedXPositions[0],
+                y: verifiedYPositions[4],
+            },
+            {
+                x: verifiedXPositions[1],
+                y: verifiedYPositions[4],
+            },
+            {
+                x: verifiedXPositions[2],
+                y: verifiedYPositions[4],
+            },
+            {
+                x: verifiedXPositions[3],
+                y: verifiedYPositions[4],
+            },
+            {
+                x: verifiedXPositions[4],
+                y: verifiedYPositions[4],
+            },
+        ];
 
-    ctx.restore();
+        for (const index in verifiedTasks) {
+            const task = verifiedTasks[index];
+            if (tasks[index] && tasks[index].task_status) ctx.drawImage(checkMark, task.x, task.y, 80, 80);
+        }
 
-    ctx.save();
-    ctx.filter = "blur(25px)";
-    ctx.fillStyle = "rgba(123,22,0,0.5)";
-    ctx.beginPath();
-    ctx.arc(200, 175, 100, 0, 2 * Math.PI);
-    ctx.fill();
+        /*
+         *	Generate Lines - Diagonal, Horizontal, Vertical for the completed tasks
+         */
 
-    ctx.restore();
+        const generateLine = ({ moveTo, lineTo, color = 'red ' }: any) => {
+            ctx.beginPath();
+            ctx.moveTo(moveTo.x, moveTo.y); // Starting point of the line
+            ctx.lineTo(lineTo.x, lineTo.y); // Ending point of the line
+            ctx.strokeStyle = color; // Set the color of the line to red
+            ctx.lineWidth = 15; // Set the width of the line to 5 pixels
+            ctx.stroke(); // Draw the line
+        };
 
-    ctx.save();
+        // Diagonal
 
-    ctx.font = "30px inter";
-    ctx.rotate(0.2);
-    ctx.fillText(`${name}!`, 50, 100);
+        if (
+            tasks[0] &&
+            tasks[6] &&
+            // tasks[12] &&
+            tasks[18] &&
+            tasks[24] &&
+            tasks[0].task_status &&
+            tasks[6].task_status &&
+            // tasks[12].task_status &&
+            tasks[18].task_status &&
+            tasks[24].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 208, y: 657 },
+                lineTo: { x: 1852, y: 2295 },
+            });
+        }
 
-    // Draw line under text
-    var text = ctx.measureText(`${name}!`);
-    ctx.strokeStyle = "rgba(0,0,0,0.5)";
-    ctx.beginPath();
-    ctx.lineTo(50, 102);
-    ctx.lineTo(50 + text.width, 102);
-    ctx.stroke();
+        if (
+            tasks[4] &&
+            tasks[8] &&
+            // tasks[12] &&
+            tasks[16] &&
+            tasks[20] &&
+            tasks[4].task_status &&
+            tasks[8].task_status &&
+            // tasks[12].task_status &&
+            tasks[16].task_status &&
+            tasks[20].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 1865.65, y: 645.64 },
+                lineTo: { x: 219.65, y: 2253 },
+            });
+        }
 
-    ctx.restore();
-    ctx.save();
+        // Horizontal Lines
 
-    performance.mark("start");
-    // ctx.globalCompositeOperation = 'lighter';
-    ctx.fillStyle = createNoise(100, 100, 0.5);
-    ctx.fillRect(0, 0, 300, 300);
-    performance.measure("generate noise", "start");
+        if (
+            tasks[0] &&
+            tasks[1] &&
+            tasks[2] &&
+            tasks[3] &&
+            tasks[4] &&
+            tasks[0].task_status &&
+            tasks[1].task_status &&
+            tasks[2].task_status &&
+            tasks[3].task_status &&
+            tasks[4].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 157, y: 728.5 },
+                lineTo: { x: 1899, y: 728.5 },
+            });
+        }
 
-    ctx.restore();
+        if (
+            tasks[5] &&
+            tasks[6] &&
+            tasks[7] &&
+            tasks[8] &&
+            tasks[9] &&
+            tasks[5].task_status &&
+            tasks[6].task_status &&
+            tasks[7].task_status &&
+            tasks[8].task_status &&
+            tasks[9].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 157, y: 1089.5 },
+                lineTo: { x: 1899, y: 1089.5 },
+            });
+        }
 
-    // Pull out all of the measurements.
-    console.log(performance.getEntriesByType("measure"));
+        if (
+            tasks[10] &&
+            tasks[11] &&
+            // tasks[12] &&
+            tasks[13] &&
+            tasks[14] &&
+            tasks[10].task_status &&
+            tasks[11].task_status &&
+            // tasks[12].task_status &&
+            tasks[13].task_status &&
+            tasks[14].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 157, y: 1474 },
+                lineTo: { x: 1899, y: 1474 },
+            });
+        }
 
-    // Finally, clean up the entries.
-    performance.clearMarks();
-    performance.clearMeasures();
+        if (
+            tasks[15] &&
+            tasks[16] &&
+            tasks[17] &&
+            tasks[18] &&
+            tasks[19] &&
+            tasks[15].task_status &&
+            tasks[16].task_status &&
+            tasks[17].task_status &&
+            tasks[18].task_status &&
+            tasks[19].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 157, y: 1844 },
+                lineTo: { x: 1899, y: 1844 },
+            });
+        }
 
-    const format = "jpeg";
+        if (
+            tasks[20] &&
+            tasks[21] &&
+            tasks[22] &&
+            tasks[23] &&
+            tasks[24] &&
+            tasks[20].task_status &&
+            tasks[21].task_status &&
+            tasks[22].task_status &&
+            tasks[23].task_status &&
+            tasks[24].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 157, y: 2213 },
+                lineTo: { x: 1899, y: 2213 },
+            });
+        }
 
-    res.setHeader("content-type", `image/${format}`);
-    return res.send(await canvas.encode(format, 80));
-    // return res.json({ message: await canvas.toDataURL() });
+        // Vertical Lines
+
+        if (
+            tasks[0] &&
+            tasks[5] &&
+            tasks[10] &&
+            tasks[15] &&
+            tasks[20] &&
+            tasks[0].task_status &&
+            tasks[5].task_status &&
+            tasks[10].task_status &&
+            tasks[15].task_status &&
+            tasks[20].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 270, y: 656 },
+                lineTo: { x: 270, y: 2295 },
+            });
+        }
+
+        if (
+            tasks[1] &&
+            tasks[6] &&
+            tasks[11] &&
+            tasks[16] &&
+            tasks[21] &&
+            tasks[1].task_status &&
+            tasks[6].task_status &&
+            tasks[11].task_status &&
+            tasks[16].task_status &&
+            tasks[21].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 654, y: 656 },
+                lineTo: { x: 654, y: 2295 },
+            });
+        }
+
+        if (
+            tasks[2] &&
+            tasks[7] &&
+            // tasks[12] &&
+            tasks[17] &&
+            tasks[22] &&
+            tasks[2].task_status &&
+            tasks[7].task_status &&
+            // tasks[12].task_status &&
+            tasks[17].task_status &&
+            tasks[22].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 1015, y: 656 },
+                lineTo: { x: 1015, y: 2295 },
+            });
+        }
+
+        if (
+            tasks[3] &&
+            tasks[8] &&
+            tasks[13] &&
+            tasks[18] &&
+            tasks[23] &&
+            tasks[3].task_status &&
+            tasks[8].task_status &&
+            tasks[13].task_status &&
+            tasks[18].task_status &&
+            tasks[23].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 1394, y: 656 },
+                lineTo: { x: 1399, y: 2295 },
+            });
+        }
+
+        if (
+            tasks[4] &&
+            tasks[9] &&
+            tasks[14] &&
+            tasks[19] &&
+            tasks[24] &&
+            tasks[4].task_status &&
+            tasks[9].task_status &&
+            tasks[14].task_status &&
+            tasks[19].task_status &&
+            tasks[24].task_status
+        ) {
+            generateLine({
+                moveTo: { x: 1769, y: 656 },
+                lineTo: { x: 1769, y: 2295 },
+            });
+        }
+
+        const dataUrl = canvas.toDataURL();
+        const base64 = dataUrl.split(',')[1];
+
+        const format = "jpeg";
+
+        res.setHeader("content-type", `image/${format}`);
+        res.send(await canvas.encode(format, 80));
+
+        // return res.status(200).json({ message: dataUrl });
+
+        // const hash = await uploadImage(`data:image/png;base64,${base64}`);
+
+        // const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
+        // await pool.query(updateQuery);
+
+        // return hash;
+    }
+
+    return res.status(200).json({ message: 'no bingo' });
 };
+
+
+
+export default Handler;

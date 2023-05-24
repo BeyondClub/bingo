@@ -1,11 +1,12 @@
 import { gridName } from '@/constants/gridName';
+import { ScoreValidation } from '@/libs/bingo';
 import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
-import { bingo, bingo_tasks } from '@prisma/client';
-// import { createCanvas, loadImage, registerFont } from 'canvas';
-import { createCanvas, loadImage } from '@napi-rs/canvas';
+import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
+import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 import { NextApiRequest, NextApiResponse } from 'next';
+import path from 'path';
 
 const baseX = 250;
 const baseY = 690;
@@ -14,18 +15,18 @@ const xPositions = [baseX, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.9, ba
 const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
 
 const getImage = async () => {
-	//
 	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
 	const result = await pool.query(query);
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
 	if (!bingo) return 'not found';
 
+	GlobalFonts.registerFromPath('./fonts/pixel_arial_11/PIXEARG_.TTF', 'PixelFont');
+	GlobalFonts.registerFromPath('./fonts/Karmatic Arcade.ttf', 'ScoreFont');
+
 	const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}' ORDER by grid_number asc`;
 	const result_s = await pool.query(query_s);
 	const tasks: bingo_tasks[] = result_s.rows;
-
-	console.log(tasks);
 
 	const taskIds = [];
 
@@ -37,6 +38,16 @@ const getImage = async () => {
 	const result_conf = await pool.query(query_conf);
 	const task_configs = result_conf.rows;
 
+	const campaign_query = `SELECT * FROM campaigns WHERE campaign_id = '${bingo?.campaign_id}' LIMIT 1`;
+	const campaign_result = await pool.query(campaign_query);
+	const campaign: campaigns | null = campaign_result.rows.length > 0 ? campaign_result.rows[0] : null;
+
+	const updatedScore = ScoreValidation({
+		eachBingo: Number(campaign?.each_bingo),
+		eachCompletion: Number(campaign?.each_completion),
+		tasks: tasks,
+	});
+
 	const task_config: any = {};
 
 	for (const tsconfig of task_configs) {
@@ -44,13 +55,15 @@ const getImage = async () => {
 	}
 
 	if (bingo) {
-		// registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
-		// 	family: 'PixelFont',
-		// });
+		const fontPath = path.join(__dirname, '../../../../public/assets/fonts/pixel_arial_11/PIXEARG_.ttf');
+		const pressPath = path.join(__dirname, '../../../../public/assets/fonts/PressStart2P-Regular.ttf');
+		const ScorefontPath = path.join(__dirname, '../../../../public/assets/fonts/Karmatic Arcade.ttf');
 
-		// registerFont('./public/assets/fonts/Karmatic Arcade.ttf', {
-		// 	family: 'ScoreFont',
-		// });
+		GlobalFonts.registerFromPath(fontPath, 'PixelFont');
+		GlobalFonts.registerFromPath(pressPath, 'PixelFont2');
+		GlobalFonts.registerFromPath(ScorefontPath, 'ScoreFont');
+
+		const fonts = GlobalFonts.families.filter((i) => i.family.includes('PixelFont'));
 
 		const getName = (index: number) => {
 			let name = '';
@@ -274,7 +287,7 @@ const getImage = async () => {
 		 *	List out bingo tasks on the image
 		 */
 
-		ctx.font = '38px PixelFont';
+		ctx.font = 'normal 28px PixelFont2';
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
 		const lineHeight = 70;
@@ -282,7 +295,8 @@ const getImage = async () => {
 		for (const data of imageGridData) {
 			let lines = data.text.replace('\\n', '\n').split('\n');
 
-			let y = data.position.y;
+			let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
+
 			for (let i = 0; i < lines.length; i++) {
 				ctx.fillText(lines[i], data.position.x, y);
 				y += lineHeight;
@@ -293,9 +307,9 @@ const getImage = async () => {
 		 *	Show Score on the bingo card
 		 */
 
-		ctx.font = 'bold 54px ScoreFont';
+		ctx.font = '400 54px ScoreFont';
 		//@ts-ignore
-		ctx.fillText(bingo?.score ? String(bingo?.score) : '0', 1120, 470);
+		ctx.fillText(updatedScore ? String(updatedScore) : '0', 1120, 470);
 
 		/*
 		 *	Check mark for the completed tasks
@@ -669,7 +683,7 @@ const getImage = async () => {
 
 		const hash = await uploadImage(`data:image/png;base64,${base64}`);
 
-		const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
+		const updateQuery = `UPDATE bingo SET image='${hash}' , score = '${updatedScore}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
 		await pool.query(updateQuery);
 
 		return hash;
