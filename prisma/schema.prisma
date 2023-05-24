@@ -31,23 +31,24 @@ model bingo_tasks {
 }
 
 model campaigns {
-  campaign_id      String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name             String
-  network          Decimal           @default(137) @db.Decimal
-  symbol           String
-  description      String?
-  price            Decimal?          @default(0) @db.Decimal
-  currency         String?
-  size             Decimal           @default(5) @db.Decimal
-  start_at         DateTime?         @db.Timestamptz(6)
-  end_at           DateTime?         @db.Timestamptz(6)
-  mint_limit       Decimal           @default(1) @db.Decimal
-  bingo_size       Decimal           @default(5) @db.Decimal
-  each_bingo       Decimal           @default(1) @db.Decimal
-  each_completion  Decimal           @default(1) @db.Decimal
-  contract_address String?
-  bingo            bingo[]
-  campaigns_tasks  campaigns_tasks[]
+  campaign_id       String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String
+  network           Decimal           @default(137) @db.Decimal
+  symbol            String
+  description       String?
+  price             Decimal?          @default(0) @db.Decimal
+  currency          String?
+  size              Decimal           @default(5) @db.Decimal
+  start_at          DateTime?         @db.Timestamptz(6)
+  end_at            DateTime?         @db.Timestamptz(6)
+  mint_limit        Decimal           @default(1) @db.Decimal
+  bingo_size        Decimal           @default(5) @db.Decimal
+  each_bingo        Decimal           @default(1) @db.Decimal
+  each_completion   Decimal           @default(1) @db.Decimal
+  contract_address  String?
+  reset_on_transfer Boolean           @default(false)
+  bingo             bingo[]
+  campaigns_tasks   campaigns_tasks[]
 }
 
 model campaigns_tasks {

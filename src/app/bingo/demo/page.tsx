@@ -12,8 +12,7 @@ const xPositions = [baseX, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.9, ba
 const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
 
 const getImage = async () => {
-	//
-	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
+	const query = `SELECT * FROM bingo WHERE bingo_id = 'c13d186a-3485-40a8-ae4f-a0c378599623' LIMIT 1`;
 	const result = await pool.query(query);
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
@@ -665,6 +664,8 @@ const getImage = async () => {
 		const dataUrl = canvas.toDataURL();
 		const base64 = dataUrl.split(',')[1];
 
+		return `data:image/png;base64,${base64}`;
+
 		const hash = await uploadImage(`data:image/png;base64,${base64}`);
 
 		const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
@@ -679,9 +680,11 @@ const getImage = async () => {
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const image = await getImage();
 
-	return res.json({
-		image,
-	});
+	return (
+		<>
+			<img src={image} />
+		</>
+	);
 };
 
 export default Handler;

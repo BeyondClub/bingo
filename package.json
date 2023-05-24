@@ -23,7 +23,7 @@
     "@unlock-protocol/unlock-js": "^0.37.2",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
-    "canvas": "^2.11.2",
+    "canvas": "^2.6.1",
     "dayjs": "^1.11.7",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",

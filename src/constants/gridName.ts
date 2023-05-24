@@ -10,10 +10,10 @@ export const gridName = {
     compound_lend: 'lend on \n Compound',
 
 
-    "poap": 'Hold [N]  \n POAP',
-    "gitpoap": 'Hold [N]  \n GitPoap',
-    ens: 'Hold [N] \n ENS',
-    lens: 'Hold [N] \n Lens',
+    "poap": 'Hold \n [N] POAP',
+    "gitpoap": 'Hold \n  [N] GitPoap',
+    ens: 'Hold \n [N] ENS',
+    lens: 'Hold \n [N] Lens',
     farcaster: 'Hold \n Farcaster \n account',
 
     nft_count: 'Hold \n [N] NFT',
