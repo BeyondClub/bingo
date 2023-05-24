@@ -2,7 +2,8 @@ import { gridName } from '@/constants/gridName';
 import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
 import { bingo, bingo_tasks } from '@prisma/client';
-import { createCanvas, loadImage, registerFont } from 'canvas';
+// import { createCanvas, loadImage, registerFont } from 'canvas';
+import { createCanvas, loadImage } from '@napi-rs/canvas';
 
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -43,13 +44,13 @@ const getImage = async () => {
 	}
 
 	if (bingo) {
-		registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
-			family: 'PixelFont',
-		});
+		// registerFont('./public/assets/fonts/pixel_arial_11/PIXEARG_.TTF', {
+		// 	family: 'PixelFont',
+		// });
 
-		registerFont('./public/assets/fonts/Karmatic Arcade.ttf', {
-			family: 'ScoreFont',
-		});
+		// registerFont('./public/assets/fonts/Karmatic Arcade.ttf', {
+		// 	family: 'ScoreFont',
+		// });
 
 		const getName = (index: number) => {
 			let name = '';
