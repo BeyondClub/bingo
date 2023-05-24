@@ -3,6 +3,7 @@ import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
 import { bingo, bingo_tasks } from '@prisma/client';
 import { createCanvas, loadImage, registerFont } from 'canvas';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const baseX = 250;
