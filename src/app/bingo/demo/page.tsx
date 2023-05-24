@@ -1,9 +1,7 @@
 import { gridName } from '@/constants/gridName';
-import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
 import { bingo, bingo_tasks } from '@prisma/client';
 import { createCanvas, loadImage, registerFont } from 'canvas';
-import { NextApiRequest, NextApiResponse } from 'next';
 
 const baseX = 250;
 const baseY = 690;
@@ -665,26 +663,17 @@ const getImage = async () => {
 		const base64 = dataUrl.split(',')[1];
 
 		return `data:image/png;base64,${base64}`;
-
-		const hash = await uploadImage(`data:image/png;base64,${base64}`);
-
-		const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
-		await pool.query(updateQuery);
-
-		return hash;
 	}
 
 	return null;
 };
 
-const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const Handler = async () => {
 	const image = await getImage();
 
-	return (
-		<>
-			<img src={image} />
-		</>
-	);
+	if (!image) return <p>Image not loaded!</p>;
+
+	return <img src={image} />;
 };
 
 export default Handler;
