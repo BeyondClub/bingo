@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
+import YourBingo from './YourBingo';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
 	ssr: false,
@@ -118,14 +119,14 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					</div>
 				</div>
 				<div className="col-span-6 grid place-items-center">
-					<img
-						src="https://gateway.pinata.cloud/ipfs/QmUczjuE81M9pHu23pnZmX3bB9qd6e4vTakdgaKtNPiujE"
-						className="rounded-lg"
-						style={{ maxHeight: '500px' }}
-						alt=""
-					/>
+					<img src="/assets/demo.png" className="rounded-lg" style={{ maxHeight: '500px' }} alt="" />
 				</div>
 			</section>
+
+			{campaign?.contract_address ? (
+				<YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
+			) : null}
+
 			{leaderboard.length > 0 ? (
 				<div className="grid place-content-center text-center mb-20">
 					<h2 className="font-medium text-3xl my-10">Leaderboard</h2>

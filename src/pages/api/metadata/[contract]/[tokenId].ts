@@ -24,12 +24,15 @@ const MetadataHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         name: getCampaign?.name,
         description: getCampaign?.description,
         image: `ipfs://${getBingo?.image}`,
-        attributes: [
-            {
-                trait_type: 'Score',
-                value: getBingo?.score
-            }
-        ]
+        attributes: {
+            score: getBingo?.score
+        }
+        // attributes: [
+        //     {
+        //         trait_type: 'Score',
+        //         value: getBingo?.score
+        //     }
+        // ]
     });
 }
 
