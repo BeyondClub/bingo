@@ -87,4 +87,16 @@ export const GraphQueryConfig = {
     response_variable: 'results',
     response_condition: 'array_length',
   },
+  yearn_deposit: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/3CDiQ2hSrftreri8FLqsVAVTv9QNkEBszGZiDdmL4UQJ`,
+    req_body: `query($wallet: String){
+            results: deposits( first: 51 where:{
+              from: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
 }

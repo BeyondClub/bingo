@@ -1,4 +1,5 @@
 import { NETWORK } from '@/constants';
+import { CurrencyConfig } from '@/constants/currency.config';
 import { db } from '@/libs/db';
 import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
@@ -75,7 +76,10 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<div>
 							<h6 className="text-sm text-gray-400">Price</h6>
 							<p className="my-2">
-								{campaign.price ? Number(campaign.price) : 'FREE'} {campaign.currency}
+								{campaign.price ? Number(campaign.price) : 'FREE'}{' '}
+								{campaign.currency
+									? CurrencyConfig[campaign.currency as keyof typeof CurrencyConfig]
+									: null}
 							</p>
 						</div>
 						<div>
@@ -147,14 +151,14 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						</thead>
 						<tbody>
 							{leaderboard.map((score, index) => (
-								<tr key={score.address}>
-									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400 text-left">
+								<tr key={score.address} className="hover:text-gray-100 text-slate-500">
+									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8   text-left">
 										#{index + 1}
 									</td>
-									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400 text-left">
+									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8   text-left">
 										{score.address}
 									</td>
-									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400 text-right">
+									<td className=" border-slate-100 dark:border-slate-700 p-2 pl-8   text-right">
 										{score.score}
 									</td>
 								</tr>

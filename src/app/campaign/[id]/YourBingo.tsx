@@ -65,7 +65,7 @@ const YourBingo = ({ contract_address, campaign_id }: { contract_address: string
 
 	return (
 		<div className="my-20">
-			<h2 className="font-medium text-center text-3xl my-10">Your Bingo</h2>
+			<h2 className="font-medium text-center text-3xl my-10">Your BINGOs</h2>
 
 			{!loading && tokenDetails.length == 0 && <p>You don{"'"}t have any NFTs</p>}
 

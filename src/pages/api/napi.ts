@@ -11,12 +11,12 @@ import path from 'path';
 const baseX = 250;
 const baseY = 690;
 
-const xPositions = [baseX, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.9, baseX + 400 * 3.8];
+const xPositions = [baseX + 27, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.87, baseX + 400 * 3.8];
 const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = 'c13d186a-3485-40a8-ae4f-a0c378599623' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = '317b8686-9f9b-457f-acf7-020942b46725' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
@@ -39,6 +39,8 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const query_s = `SELECT * FROM bingo_tasks WHERE bingo_id = '${bingo.bingo_id}' ORDER by grid_number asc`;
     const result_s = await pool.query(query_s);
     const tasks: bingo_tasks[] = result_s.rows;
+
+    console.log(tasks)
 
     const campaign_query = `SELECT * FROM campaigns  WHERE campaign_id = '${bingo?.campaign_id}' LIMIT 1`;
     const campaign_result = await pool.query(campaign_query);
@@ -80,6 +82,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             }
 
+            console.log(tasks[index]?.campaign_task_id)
             //@ts-ignore
 
             name = gridName[task_config[`${tasks[index].campaign_task_id}`]?.task_type ?? '']?.replace(
@@ -89,7 +92,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             if (!name) {
                 //@ts-ignore
-                return gridName[
+                name = gridName[
                     task_config[`${tasks[index].campaign_task_id}`]
                         ? `${task_config[`${tasks[index].campaign_task_id}`]?.task_type}_${task_config[`${tasks[index].campaign_task_id}`]?.response_condition
                         }`
@@ -97,7 +100,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 ]?.replace('[N]', task_config[tasks[index].campaign_task_id].response_value);
             }
 
-            return name;
+            return name ?? '';
         };
 
         const imageGridData = [
@@ -297,7 +300,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
-        ctx.font = 'normal 28px PixelFont2';
+        ctx.font = 'normal 40px PixelFont';
         const lineHeight = 70;
 
         for (const data of imageGridData) {

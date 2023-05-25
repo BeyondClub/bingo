@@ -1,5 +1,6 @@
 'use client';
 
+import { defaultChainId } from '@/constants/chain.config';
 import { purchaseNFT } from '@/libs/unlock';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
@@ -16,6 +17,8 @@ const BuyButton = ({
 	limit?: number;
 	end_date: Date | null;
 }) => {
+	const [txHash, setTxHash] = useState<string | null>(null);
+
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
@@ -37,6 +40,7 @@ const BuyButton = ({
 					wallet_address: address,
 					mintNFTCount: quantity,
 					onTransactionCompleted: async (tx_hash: string) => {
+						setTxHash(tx_hash);
 						toast('NFT Minted Successfully!');
 
 						toast("Waiting for transaction to be mined. It'll take a few minutes.");
@@ -82,10 +86,13 @@ const BuyButton = ({
 						</Button>
 						<NumberInput
 							hideControls
-							className="text-center"
+							className="text-center quantity_input"
 							style={{
 								width: '44px',
 								textAlign: 'center',
+								background: 'transparent !important',
+								color: '#fff !important',
+								border: '0px',
 							}}
 							value={quantity}
 							onChange={(value) => setQuantity(Number(value))}
@@ -114,6 +121,21 @@ const BuyButton = ({
 			>
 				Buy Now
 			</Button>
+
+			{txHash ? (
+				<a
+					className="text-center block"
+					target="_BLANK"
+					rel="noreferrer noopener"
+					href={
+						defaultChainId === 80001
+							? 'https://mumbai.polygonscan.com/tx/' + txHash
+							: 'https://polygonscan.com/tx/' + txHash
+					}
+				>
+					View Transaction
+				</a>
+			) : null}
 		</>
 	);
 };

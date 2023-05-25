@@ -73,3 +73,9 @@ body {
   border: 0px !important;
   color: #fff !important
 }
+
+.quantity_input input{
+  background: transparent !important;
+  border: 0px solid !important;
+  color: #fff !important
+}
