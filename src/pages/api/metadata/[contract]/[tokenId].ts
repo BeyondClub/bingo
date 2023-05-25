@@ -27,12 +27,6 @@ const MetadataHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         attributes: {
             score: getBingo?.score
         }
-        // attributes: [
-        //     {
-        //         trait_type: 'Score',
-        //         value: getBingo?.score
-        //     }
-        // ]
     });
 }
 

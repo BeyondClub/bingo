@@ -1,14 +1,16 @@
 const axios = require('axios');
 
 
-export const graphVerification = async ({ wallet, query, endpoint }: {
+export const graphVerification = async ({ wallet, query, endpoint, extra_variables = {} }: {
     wallet: string,
     query: string,
-    endpoint: string
+    endpoint: string,
+    extra_variables?: any
 }) => {
 
     const variables = {
         wallet: wallet.toLocaleLowerCase(),
+        ...extra_variables
     };
 
     try {

@@ -35,7 +35,7 @@ const page = async ({ params }: any) => {
 			<div className="grid md:grid-cols-2 gap-5 press_start">
 				<div>
 					<div className="grid place-items-center">
-						<img src={`https://gateway.pinata.cloud/ipfs/${bingo?.bingo?.image}`} className="rounded-md" />
+						<img src={`https://w3s.link/ipfs/${bingo?.bingo?.image}`} className="rounded-md" />
 					</div>
 					<div className="mt-5">
 						<h1 className="text-3xl font-bold">{bingo?.campaign?.name}</h1>

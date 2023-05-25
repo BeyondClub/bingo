@@ -82,6 +82,7 @@ export const purchaseNFT = async ({ lock, signature, wallet_address, onTransacti
             })
         },
         (error, hash) => {
+            console.log({ error });
             console.log({ hash });
 
             if (onTransactionCompleted && hash) {

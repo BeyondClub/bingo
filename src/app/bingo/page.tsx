@@ -15,11 +15,7 @@ const Page = async () => {
 
 	return (
 		<div className="grid place-items-center min-h-screen text-white">
-			{image ? (
-				<img src={`https://gateway.pinata.cloud/ipfs/${image}`} className="rounded-md" alt="" />
-			) : (
-				'Loading...'
-			)}
+			{image ? <img src={`https://w3s.link/ipfs/${image}`} className="rounded-md" alt="" /> : 'Loading...'}
 		</div>
 	);
 };
