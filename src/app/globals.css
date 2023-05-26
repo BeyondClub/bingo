@@ -6,7 +6,6 @@
   font-family: 'Press Start 2P';
   src: url('/assets/fonts/PressStart2P-Regular.ttf') format('truetype')
 }
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -29,6 +28,7 @@ html{
 body {
   color: #fff;
   background: #000;
+  font-family: 'Inter' !important;
 }
 
 .press_start{
@@ -78,4 +78,9 @@ body {
   background: transparent !important;
   border: 0px solid !important;
   color: #fff !important
+}
+
+.faq_item  button span{
+  color: #fff !important
+
 }

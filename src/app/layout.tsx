@@ -13,6 +13,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={inter.className}>
+				<link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet" />
+
 				<AppLayout>{children}</AppLayout>
 			</body>
 		</html>
