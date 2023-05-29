@@ -2,12 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { gridName } from '@/constants/gridName';
 import { ScoreValidation } from '@/libs/bingo';
-import uploadImage from '@/libs/pinata';
 import pool from '@/libs/pool';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 
+import { ipfsUpload } from '@/libs/w3storage';
 import path from 'path';
 
 const baseX = 250;
@@ -674,7 +674,9 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		const dataUrl = canvas.toDataURL();
 		const base64 = dataUrl.split(',')[1];
 
-		const hash = await uploadImage(`data:image/png;base64,${base64}`);
+		const hash = await ipfsUpload({
+			payload: `${base64}`
+		})
 
 		const updateQuery = `UPDATE bingo SET image='${hash}' , score = '${updatedScore}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
 		await pool.query(updateQuery);

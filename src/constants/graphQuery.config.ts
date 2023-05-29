@@ -99,4 +99,19 @@ export const GraphQueryConfig = {
     response_variable: 'results',
     response_condition: 'array_length',
   },
+  rocketpool: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/S9ihna8D733WTEShJ1KctSTCvY1VJ7gdVwhUujq4Ejo`,
+    req_body: `query($wallet: String){
+            results: stakers(first: 5, where:{
+              id: $wallet
+            }) {
+              id
+              rETHBalance
+              avgEntry
+              AvgEntryTime
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
 }
