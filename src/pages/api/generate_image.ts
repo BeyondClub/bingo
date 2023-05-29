@@ -51,7 +51,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 	if (bingo) {
 
-		const fontPath = path.join(process.cwd(), 'public/assets/fonts/pixel_arial_11/PIXEARG_.ttf');
+		const fontPath = path.join(process.cwd(), 'public/assets/fonts/pixearg_.ttf');
 		const pressPath = path.join(process.cwd(), 'public/assets/fonts/PressStart2P-Regular.ttf');
 		const ScorefontPath = path.join(process.cwd(), 'public/assets/fonts/Karmatic Arcade.ttf');
 
