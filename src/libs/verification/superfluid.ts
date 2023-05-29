@@ -1,8 +1,11 @@
 const axios = require('axios');
 
-
-// endpoint for mumbai testnet
-const endpoint = 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai';
+const endpoint = {
+  137: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic',
+  80001: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai',
+  10: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+  42161: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-one',
+}
 
 const query = `
   query checkStream($sender: String!) {
@@ -21,13 +24,13 @@ const query = `
   }
 `;
 
-const superfluidStreams = async (wallet: string) => {
+export const superfluidStreams = async (wallet: string, network = 137) => {
   const variables = {
     sender: wallet,
   };
 
   try {
-    const response = await axios.post(endpoint, {
+    const response = await axios.post(endpoint[network as keyof typeof endpoint], {
       query,
       variables,
     });
