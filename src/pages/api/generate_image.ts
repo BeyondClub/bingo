@@ -7,6 +7,7 @@ import pool from '@/libs/pool';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
+
 import path from 'path';
 
 const baseX = 250;
@@ -49,15 +50,15 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 	}
 
 	if (bingo) {
-		const fontPath = path.join(__dirname, '../../../../public/assets/fonts/pixel_arial_11/PIXEARG_.ttf');
-		const pressPath = path.join(__dirname, '../../../../public/assets/fonts/PressStart2P-Regular.ttf');
-		const ScorefontPath = path.join(__dirname, '../../../../public/assets/fonts/Karmatic Arcade.ttf');
+
+		const fontPath = path.join(process.cwd(), 'public/assets/fonts/pixel_arial_11/PIXEARG_.ttf');
+		const pressPath = path.join(process.cwd(), 'public/assets/fonts/PressStart2P-Regular.ttf');
+		const ScorefontPath = path.join(process.cwd(), 'public/assets/fonts/Karmatic Arcade.ttf');
 
 		GlobalFonts.registerFromPath(fontPath, 'PixelFont');
 		GlobalFonts.registerFromPath(pressPath, 'PixelFont2');
 		GlobalFonts.registerFromPath(ScorefontPath, 'ScoreFont');
 
-		const fonts = GlobalFonts.families.filter((i) => i.family.includes('PixelFont'));
 
 		const getName = (index: number) => {
 			let name = '';
