@@ -67,7 +67,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 			<section className="grid grid-cols-1 md:grid-cols-12 gap-5 my-10">
 				<div className="col-span-6">
 					<h2 className="font-medium text-3xl">{campaign.name}</h2>
-					<p className="my-2">test.eth</p>
+					{/* <p className="my-2">test.eth</p> */}
 					<p className="my-4 text-gray-300">{campaign.description}</p>
 
 					<h5 className="font-medium text-xl">Open Edition (Randomly-generated)</h5>

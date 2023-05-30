@@ -1,10 +1,12 @@
 'use client';
 
+import { gridName } from '@/constants/gridName';
 import { bingo_tasks } from '@prisma/client';
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons';
+
 import dayjs from 'dayjs';
 
-const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
+const ListTasks = ({ tasks, taskNames }: { tasks: bingo_tasks[] | null; taskNames?: any }) => {
 	if (!tasks) {
 		return null;
 	}
@@ -23,7 +25,8 @@ const ListTasks = ({ tasks }: { tasks: bingo_tasks[] | null }) => {
 					{tasks.map((task) => (
 						<tr key={task.bingo_task_id}>
 							<td className="text-white capitalize text-xs">
-								{task.task_name ? task.task_name.replace('\\n', ' ') : 'Fetched from campaign tasks'}
+								{gridName[taskNames[task.campaign_task_id] as keyof typeof gridName] ??
+									taskNames[task.campaign_task_id]}
 							</td>
 							<td className="text-white flex justify-center">
 								{task.task_status ? (
