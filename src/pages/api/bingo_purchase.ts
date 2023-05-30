@@ -99,6 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const response = await generateImage({ bingo });
 
+
                 if (response) {
 
                     await db.bingo.update({
@@ -106,7 +107,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             bingo_id: bingo.bingo_id
                         },
                         data: {
-                            image: response.image
+                            image: response
                         }
                     });
 

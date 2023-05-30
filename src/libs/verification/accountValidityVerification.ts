@@ -13,9 +13,23 @@ export const txHistoryVerification = async ({ wallet, network = "mainnet" }: {
 
     try {
         const provider = new ethers.providers.InfuraProvider(network);
-        const transactionCount = await provider.getTransactionCount(wallet);
+        try {
+            // Get transaction count for the Ethereum address
+            const transactionCount = await provider.getTransactionCount(wallet);
 
-        return transactionCount;
+            console.log()
+
+            if (transactionCount > 0) {
+
+
+            } else {
+                console.log('No transactions found for the given address.');
+            }
+        } catch (error) {
+            console.error('Error fetching transaction details:', error);
+        }
+
+
     } catch (error) {
         console.error(error);
         return []

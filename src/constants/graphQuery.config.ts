@@ -99,7 +99,7 @@ export const GraphQueryConfig = {
     response_variable: 'results',
     response_condition: 'array_length',
   },
-  rocketpool: {
+  rocketpool_stake: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/S9ihna8D733WTEShJ1KctSTCvY1VJ7gdVwhUujq4Ejo`,
     req_body: `query($wallet: String){
             results: stakers(first: 5, where:{
@@ -109,6 +109,30 @@ export const GraphQueryConfig = {
               rETHBalance
               avgEntry
               AvgEntryTime
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  curve_liquidity: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/GAGwGKc4ArNKKq9eFTcwgd1UGymvqhTier9Npqo1YvZB`,
+    req_body: `query($wallet: String){
+            results: deposits(first: 50, where:{
+              from: $wallet
+            }){
+              from
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  sushiswap_liquidity: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/7h1x51fyT5KigAhXd8sdE3kzzxQDJxxz1y66LTFiC3mS`,
+    req_body: `query($wallet: String){
+            results: deposits(first: 50, where:{
+              from: $wallet
+            }){
+              from
             }
         }`,
     response_variable: 'results',

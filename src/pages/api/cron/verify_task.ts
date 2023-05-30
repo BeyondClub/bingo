@@ -133,7 +133,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         wallet: bingo.wallet_address,
                         network: task_config.response_condition ?? "mainnet"
                     });
-                    if (response.length >= Number(task_config.response_value)) {
+                    if (Number(response) >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }
