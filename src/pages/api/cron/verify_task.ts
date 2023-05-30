@@ -26,6 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         take: 3
     })
 
+    console.log(tasks)
 
     for (const task of tasks) {
 
@@ -50,9 +51,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
         if (task_config && bingo) {
-
+            let completed = false;
             const taskCompleted = async () => {
                 // 1. update the task status to completed
+
+                completed = true;
 
                 await db.bingo_tasks.update({
                     where: {
@@ -242,7 +245,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             }
 
-
+            if (completed === false) {
+                await db.bingo_tasks.update({
+                    where: {
+                        bingo_task_id: task.bingo_task_id,
+                    },
+                    data: {
+                        last_processed: new Date()
+                    }
+                })
+            }
         }
     }
 
