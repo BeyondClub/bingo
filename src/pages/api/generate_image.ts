@@ -688,7 +688,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 
 const getImage = async () => {
-	const query = 'SELECT * FROM bingo  WHERE redraw = true LIMIT 1';
+	const query = 'SELECT * FROM bingo WHERE redraw = true LIMIT 1';
 	const result = await pool.query(query);
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
