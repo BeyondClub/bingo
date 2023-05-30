@@ -50,7 +50,6 @@ const BuyButton = ({
 								`/api/bingo_purchase?contract=${contract_address}&tx=${tx_hash}`
 							);
 							const response_data = await response.json();
-							console.log(response_data);
 
 							setTimeout(() => updateRecords(), 10000);
 						};

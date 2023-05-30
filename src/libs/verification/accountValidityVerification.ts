@@ -1,34 +1,23 @@
-import { ethers } from "ethers";
-
-/*
-*  Supported network values: homestead, goerli, sepolia , arbitrum, arbitrum-goerli, matic, maticmum, optimism, optimism-goerli
-*  https://docs.ethers.org/v5/api/providers/api-providers/
-*/
+import axios from "axios";
 
 
-export const txHistoryVerification = async ({ wallet, network = "mainnet" }: {
-    wallet: string,
-    network?: string
+
+export const accountValidityVerification = async ({ wallet }: {
+    wallet: string
 }) => {
 
     try {
-        const provider = new ethers.providers.InfuraProvider(network);
-        try {
-            // Get transaction count for the Ethereum address
-            const transactionCount = await provider.getTransactionCount(wallet);
+        const debankRecord = await axios.get(`https://api.debank.com/user?id=${wallet}`)
 
-            console.log()
+        const bornAt = Number(debankRecord.data.data.user.desc.born_at) * 1000
+        const providedDate = new Date(bornAt);
+        const currentDate = new Date();
 
-            if (transactionCount > 0) {
+        //@ts-ignore
+        const timeDiff = currentDate - providedDate;
+        const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-
-            } else {
-                console.log('No transactions found for the given address.');
-            }
-        } catch (error) {
-            console.error('Error fetching transaction details:', error);
-        }
-
+        return daysDiff;
 
     } catch (error) {
         console.error(error);

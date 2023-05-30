@@ -1,9 +1,9 @@
-import { txHistoryVerification } from "@/libs/verification/accountValidityVerification";
+import { accountValidityVerification } from "@/libs/verification/accountValidityVerification";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const txh = await txHistoryVerification({
+    const txh = await accountValidityVerification({
         wallet: "0xf1996154c34e3dc77b26437a102231785e9ad7fe"
     })
 
