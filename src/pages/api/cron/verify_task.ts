@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             // Make sure the task validation is preconfigured
 
-            const preconfigured = ['poap', 'gitpoap', 'nft_count', 'farcaster', 'lens', 'eth_balance', 'token_balance', 'tx_history', 'ens', 'uniswap_liquidity', 'account_created'];
+            const preconfigured = ['poap', 'gitpoap', 'nft_count', 'farcaster', 'lens', 'eth_balance', 'token_balance', 'tx_history', 'ens', 'uniswap_liquidity', 'account_created', 'snapshot_vote'];
 
             if (preconfigured.includes(task_config.task_type)) {
 
@@ -108,6 +108,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (task_config.task_type === "gitpoap") {
                     const response = await gitpoapVerification(bingo.wallet_address);
                     if (response.length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+                if (task_config.task_type === "snapshot_vote") {
+
+                    const config = await GraphQueryConfig.snapshot_vote
+
+                    const response = await graphVerification({
+                        wallet: bingo.wallet_address,
+                        query: config.req_body,
+                        endpoint: config.api_url
+                    });
+
+                    if (response.results.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }

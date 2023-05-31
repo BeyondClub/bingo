@@ -140,4 +140,18 @@ export const GraphQueryConfig = {
     response_variable: 'results',
     response_condition: 'array_length',
   },
+  snapshot_vote: {
+    api_url: `https://hub.snapshot.org/graphql`,
+    req_body: gql`query Votes($wallet: String!)
+{
+	results: votes(
+    first: 1
+    where: {voter: $wallet}
+  ) {
+    id
+  }
+}`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
 }
