@@ -10,16 +10,32 @@ export const metadata = {
 	icons: {
 		icon: '/assets/favicon.ico',
 	},
-	'twitter:card': 'summary_large_image',
-	'twitter:site': '@beyondclub_xyz',
-	'twitter:title': 'LFBingo',
-	'twitter:description': 'Bingo',
-	'twitter:image': 'https://www.lfbingo.xyz/assets/og.png',
-	'og:url': 'https://www.lfbingo.xyz',
-	'og:type': 'website',
-	'og:title': 'LFBingo',
-	'og:description': 'Bingo',
-	'og:image': 'https://www.lfbingo.xyz/assets/og.png',
+	twitter: {
+		card: 'summary_large_image',
+		site: '@beyondclub_xyz',
+		title: 'LFBingo',
+		description: 'Bingo',
+		image: 'https://www.lfbingo.xyz/assets/og.png',
+	},
+	opengraph: {
+		url: 'https://www.lfbingo.xyz',
+		type: 'website',
+		title: 'LFBingo',
+		description: 'Bingo',
+		images: [
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 800,
+				height: 600,
+			},
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 1800,
+				height: 1600,
+				alt: 'LFBingo',
+			},
+		],
+	},
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
