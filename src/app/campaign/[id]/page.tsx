@@ -105,8 +105,8 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 
 					<div className="md:w-3/4">
 						<h5 className="font-medium text-2xl my-2 mt-5">Bingo Detail</h5>
-						<ShowDetails label="1 Bingo">{campaign.each_completion} points</ShowDetails>
-						<ShowDetails label="1 Grid completion">{campaign.each_completion} points</ShowDetails>
+						<ShowDetails label="1 Bingo">{Number(campaign.each_completion)} points</ShowDetails>
+						<ShowDetails label="1 Grid completion">{Number(campaign.each_completion)} points</ShowDetails>
 
 						<h5 className="font-medium text-2xl my-2 mt-5">Contract Detail</h5>
 						{/* @ts-ignore */}
@@ -114,7 +114,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<ShowDetails label="Contract Address">
 							<ContractAddressCopy contract_address={campaign.contract_address!} />
 						</ShowDetails>
-						<ShowDetails label="Mint limit per address">{campaign.mint_limit}</ShowDetails>
+						<ShowDetails label="Mint limit per address">{Number(campaign.mint_limit)}</ShowDetails>
 						{/* <ShowDetails label="Secondary Royalty">10%</ShowDetails> */}
 						<ShowDetails label="Campaign Duration">
 							{dayjs(campaign.start_at).format('YYYY/MM/DD')} -{' '}
