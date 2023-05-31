@@ -696,14 +696,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.setHeader("content-type", `image/${format}`);
         res.send(await canvas.encode(format, 80));
 
-        // return res.status(200).json({ message: dataUrl });
 
-        // const hash = await uploadImage(`data:image/png;base64,${base64}`);
-
-        // const updateQuery = `UPDATE bingo SET image='${hash}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
-        // await pool.query(updateQuery);
-
-        // return hash;
     }
 
     return res.status(200).json({ message: 'no bingo' });

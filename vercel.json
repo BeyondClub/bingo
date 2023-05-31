@@ -6,7 +6,11 @@
     },
     {
       "path": "/api/cron/generate_image",
-      "schedule": "* * * * *"
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/clear_paused",
+      "schedule": "1 0 * * *"
     }
   ]
 }

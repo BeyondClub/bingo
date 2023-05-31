@@ -1,8 +1,8 @@
 'use client';
 
-import Countdown from 'react-countdown';
+import Countdown, { CountdownRenderProps } from 'react-countdown';
 
-const lite_renderer = ({ days, hours, minutes, seconds, completed, layout }: any) => {
+const lite_renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps) => {
 	if (completed) {
 		return <div>Campaign expired</div>;
 	} else {
@@ -20,7 +20,7 @@ const lite_renderer = ({ days, hours, minutes, seconds, completed, layout }: any
 	}
 };
 
-const CountDownData = ({ value, label }: any) => {
+const CountDownData = ({ value, label }: { value: number; label: string }) => {
 	if (['days', 'hours'].includes(label) && value == 0) return null;
 
 	return (
@@ -31,7 +31,7 @@ const CountDownData = ({ value, label }: any) => {
 	);
 };
 
-const details_renderer = ({ days, hours, minutes, seconds, completed, layout }: any) => {
+const details_renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps) => {
 	if (completed) {
 		return <div>Campaign expired</div>;
 	} else {

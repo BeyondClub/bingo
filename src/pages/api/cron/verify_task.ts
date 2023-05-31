@@ -19,7 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const tasks = await db.bingo_tasks.findMany({
         where: {
-            task_status: false
+            task_status: false,
+            paused_verification: false
         },
         orderBy: {
             last_processed: "desc"
@@ -27,7 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         take: 3
     })
 
-    console.log(tasks)
 
     for (const task of tasks) {
 
@@ -257,12 +257,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             if (completed === false) {
+
+                const retryNextDay = [
+                    'account_created',
+                    ...Object.entries(GraphQueryConfig).map(([key, value]) => key)
+                ]
+
                 await db.bingo_tasks.update({
                     where: {
                         bingo_task_id: task.bingo_task_id,
                     },
                     data: {
-                        last_processed: new Date()
+                        last_processed: new Date(),
+                        paused_verification: retryNextDay.includes(task_config.task_type) ? true : null
                     }
                 })
             }

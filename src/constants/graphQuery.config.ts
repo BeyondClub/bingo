@@ -1,8 +1,10 @@
+import { gql } from 'graphql-request';
 
 export const GraphQueryConfig = {
   opensea_buyer: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/AwoxEZbiWLvv6e3QdvdMZw4WDURdGbvPfHmZRc8Dpfz9`,
-    req_body: `query($wallet: String){
+    req_body: gql`
+        query($wallet: String){
             results: trades(where:{
                 buyer: $wallet
               }){
@@ -14,7 +16,7 @@ export const GraphQueryConfig = {
   },
   opensea_seller: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/AwoxEZbiWLvv6e3QdvdMZw4WDURdGbvPfHmZRc8Dpfz9`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: trades(where:{
                 seller: $wallet
               }){
@@ -26,7 +28,7 @@ export const GraphQueryConfig = {
   },
   uniswap_swap: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/ELUcwgpm14LKPLrBRuVvPvNKHQ9HvwmtKgKSH6123cr7`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: swaps( first: 51 where:{
               from:$wallet
 
@@ -39,7 +41,7 @@ export const GraphQueryConfig = {
   },
   sushiswap_swap: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/7h1x51fyT5KigAhXd8sdE3kzzxQDJxxz1y66LTFiC3mS`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: swaps( first: 51 where:{
               from:$wallet
 
@@ -52,7 +54,7 @@ export const GraphQueryConfig = {
   },
   curve_swap: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/GAGwGKc4ArNKKq9eFTcwgd1UGymvqhTier9Npqo1YvZB`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: swaps( first: 51 where:{
               from:$wallet
 
@@ -65,7 +67,7 @@ export const GraphQueryConfig = {
   },
   aave_lend: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/HB1Z2EAw4rtPRYVb2Nz8QGFLHCpym6ByBX6vbCViuE9F`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: deposits( first: 51 where:{
               account:$wallet
             }){
@@ -77,7 +79,7 @@ export const GraphQueryConfig = {
   },
   compound_lend: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/6tGbL7WBx287EZwGUvvcQdL6m67JGMJrma3JSTtt5SV7`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: deposits( first: 51 where:{
               account:$wallet
             }){
@@ -89,7 +91,7 @@ export const GraphQueryConfig = {
   },
   yearn_deposit: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/3CDiQ2hSrftreri8FLqsVAVTv9QNkEBszGZiDdmL4UQJ`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: deposits( first: 51 where:{
               from: $wallet
             }){
@@ -101,7 +103,7 @@ export const GraphQueryConfig = {
   },
   rocketpool_stake: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/S9ihna8D733WTEShJ1KctSTCvY1VJ7gdVwhUujq4Ejo`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: stakers(first: 5, where:{
               id: $wallet
             }) {
@@ -116,7 +118,7 @@ export const GraphQueryConfig = {
   },
   curve_liquidity: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/GAGwGKc4ArNKKq9eFTcwgd1UGymvqhTier9Npqo1YvZB`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: deposits(first: 50, where:{
               from: $wallet
             }){
@@ -128,7 +130,7 @@ export const GraphQueryConfig = {
   },
   sushiswap_liquidity: {
     api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/7h1x51fyT5KigAhXd8sdE3kzzxQDJxxz1y66LTFiC3mS`,
-    req_body: `query($wallet: String){
+    req_body: gql`query($wallet: String){
             results: deposits(first: 50, where:{
               from: $wallet
             }){

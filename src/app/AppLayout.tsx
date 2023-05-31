@@ -62,7 +62,7 @@ const getSiweMessageOptions: GetSiweMessageOptions = () => ({
 
 const myCache = createEmotionCache({ key: 'lfbingo' });
 
-const AppLayout = ({ children, session }: any) => {
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
 			{/* <SessionProvider refetchInterval={0} session={session}> */}

@@ -45,7 +45,7 @@ const getCampaign = async (id: string) => {
 	};
 };
 
-const ShowDetails = ({ label, children }: any) => {
+const ShowDetails = ({ label, children }: { label: string; children: React.ReactNode }) => {
 	return (
 		<div className="flex justify-between my-2">
 			<h6 className="">{label}</h6>

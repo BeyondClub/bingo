@@ -20,14 +20,15 @@ model bingo {
 }
 
 model bingo_tasks {
-  bingo_task_id    String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  bingo_id         String    @db.Uuid
-  grid_number      Decimal   @db.Decimal
-  task_name        String?
-  task_status      Boolean   @default(false)
-  campaign_task_id String    @db.Uuid
-  last_processed   DateTime? @db.Timestamp(6)
-  bingo            bingo     @relation(fields: [bingo_id], references: [bingo_id], onDelete: NoAction, onUpdate: NoAction)
+  bingo_task_id       String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  bingo_id            String    @db.Uuid
+  grid_number         Decimal   @db.Decimal
+  task_name           String?
+  task_status         Boolean   @default(false)
+  campaign_task_id    String    @db.Uuid
+  last_processed      DateTime? @db.Timestamp(6)
+  paused_verification Boolean?  @default(false)
+  bingo               bingo     @relation(fields: [bingo_id], references: [bingo_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model campaigns {

@@ -3,7 +3,7 @@ import { db } from '@/libs/db';
 import GenerateImage from './GenerateImage';
 import ListTasks from './ListTasks';
 
-const getBingo = async (params: any) => {
+const getBingo = async (params: { contract: string; tokenId: string }) => {
 	const { contract, tokenId } = params;
 
 	const campaign = await db.campaigns.findFirst({
