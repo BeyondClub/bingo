@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
+import Explore from './Explore';
+import Perks from './Perks';
 import YourBingo from './YourBingo';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
@@ -131,6 +133,8 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				<YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
 			) : null}
 
+			<Perks />
+
 			{leaderboard.length > 0 ? (
 				<div className="grid place-content-center text-center mb-20">
 					<h2 className="font-medium text-3xl my-10">Leaderboard</h2>
@@ -167,6 +171,8 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					</table>
 				</div>
 			) : null}
+
+			<Explore address={campaign.contract_address as string} />
 		</div>
 	);
 };

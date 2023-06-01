@@ -3,6 +3,7 @@ const axios = require('axios');
 export const loyaltyProgramId = "5645707254165167475";
 
 const apiKey = process.env.LUNIVERSE_ACCESS_TOKEN;
+const WEB3_ENGINE_API = process.env.LUNIVERSE_WEB3_ENGINE_ACCESS_TOKEN;
 
 /*
 * Function to generate the access token from access key and secret key on Luniverse
@@ -11,22 +12,45 @@ const apiKey = process.env.LUNIVERSE_ACCESS_TOKEN;
 export async function getToken() {
     try {
         const response = await axios.post('https://api.luniverse.io/svc/v2/auth-tokens', {
-            accessKey: process.env.LUNIVERSE_ACCESS_KEY,
-            secretKey: process.env.LUNIVERSE_SECRET_KEY
+            accessKey: process.env.LUNIVERSE_ACCESS_KEY_1,
+            secretKey: process.env.LUNIVERSE_SECRET_KEY_1
         }, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
-        const token = response.data.token;
-        console.log('Token:', token);
-        return token;
+        console.log(response)
+        return response.data;
+
 
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
+
+export const getWeb3EngineToken = async () => {
+    const options = {
+        method: 'POST',
+        url: 'https://web3.luniverse.io/v1/auth-token',
+        headers: {
+            accept: 'application/json',
+            'X-NODE-ID': process.env.LUNIVERSE_NODE_ID,
+            'X-Key-ID': process.env.LUNIVERSE_KEY_ID,
+            'X-Key-Secret': process.env.LUNIVERSE_KEY_SECRET
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
 
 
 /*
@@ -117,8 +141,33 @@ export const getAccountBalance = async (userIdentifier: string) => {
     try {
         const response = await axios.get(url, { headers });
         console.log(response.data);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error(error);
+    }
+};
+
+
+export const listNftTransferByContract = async (contractAddress: string) => {
+    const options = {
+        method: 'POST',
+        url: 'https://web3.luniverse.io/v1/polygon/mumbai/nft/listNftTransferByContract',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            Authorization: `Bearer ${WEB3_ENGINE_API}`
+        },
+        data: {
+            contractAddress,
+            disableCount: true,
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        return response.data.data;
+    } catch (error) {
+        console.error(error);
+        return null;
     }
 };
