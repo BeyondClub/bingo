@@ -10,15 +10,15 @@ const fetchData = async ({ contract }: { contract: string | string[] }) => {
         const responseD = await graphVerification({
             wallet: contract as string,
             query: `query($wallet: String) {
-		keys(
-			where: {
-			 lock: $wallet
-			}
-      orderBy: tokenId
-		) {
-			tokenId
-    	owner
-		}
+            keys(
+                where: {
+                lock: $wallet
+                }
+             orderBy: tokenId
+            ) {
+                tokenId
+            owner
+            }
 	}`,
             endpoint: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/mumbai-v2'
         });
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const bingo = await db.bingo.create({
                     data: {
-                        wallet_address: key.owner,
+                        wallet_address: key.owner.toLocaleLowerCase(),
                         token_id: key.tokenId,
                         score: "0",
                         image: "https://bafybeieq5dbhvehr7fzwfjayhxk4n5u3ubcx4yk6ue34qe5oxwq7qhlssq.ipfs.w3s.link/Bingo-01%203%20(1).png",

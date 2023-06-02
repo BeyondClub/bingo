@@ -7,6 +7,7 @@ import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 
+import { getTotalScore } from '@/libs/loyalty';
 import { ipfsUpload } from '@/libs/w3storage';
 import path from 'path';
 
@@ -680,6 +681,8 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 		const updateQuery = `UPDATE bingo SET image='${hash}' , score = '${updatedScore}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
 		await pool.query(updateQuery);
+
+		await getTotalScore(bingo.wallet_address)
 
 		return hash;
 	}

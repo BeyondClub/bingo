@@ -123,6 +123,8 @@ export const spendPoints = async ({ orderIdentifier, userIdentifier, amount, des
         return response.data;
     } catch (error) {
         console.error(error);
+
+        return null;
     }
 };
 

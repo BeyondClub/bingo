@@ -65,3 +65,9 @@ model campaigns_tasks {
   response_value     String?
   campaigns          campaigns @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+model perks_redeemed {
+  perk_id         String   @id @db.Uuid
+  wallet_address  String?
+  points_redeemed Decimal? @default(0) @db.Decimal
+}

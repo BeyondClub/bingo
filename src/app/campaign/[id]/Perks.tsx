@@ -45,24 +45,30 @@ const PerkCard = ({
 		<div>
 			<Modal opened={opened} onClose={close} title={title}>
 				<div>
-					<h3 className="text-xl font-medium">Perk claimed!</h3>
+					{claimResponse === null ? (
+						<p>loading...</p>
+					) : (
+						<>
+							<h3 className="text-xl font-medium">Perk claimed!</h3>
 
-					<p className="text-gray-500">You have successfully claimed the perk</p>
-					<div className="my-10">
-						<CopyToClipboard text={'WAGMI'} onCopy={() => toast('Copied to clipboard')}>
-							<span className="border-4 rounded-md text-center border-dotted p-2 my-5">
-								Code: <span className="font-medium">WAGMI</span>
-							</span>
-						</CopyToClipboard>
-					</div>
-					<a
-						href="https://www.medusa.express/coffee-mug"
-						target="_BLANK"
-						rel="noreferrer noopener"
-						className="bg-gray-900 text-white  text-center rounded-md block py-3 w-full mt-5"
-					>
-						Go to Store
-					</a>
+							<p className="text-gray-500">You have successfully claimed the perk</p>
+							<div className="my-10">
+								<CopyToClipboard text={claimResponse.code} onCopy={() => toast('Copied to clipboard')}>
+									<span className="border-4 rounded-md text-center border-dotted p-2 my-5">
+										Code: <span className="font-medium">{claimResponse.code}</span>
+									</span>
+								</CopyToClipboard>
+							</div>
+							<a
+								href="https://www.medusa.express/coffee-mug"
+								target="_BLANK"
+								rel="noreferrer noopener"
+								className="bg-gray-900 text-white  text-center rounded-md block py-3 w-full mt-5"
+							>
+								Go to Store
+							</a>
+						</>
+					)}
 				</div>
 			</Modal>
 
