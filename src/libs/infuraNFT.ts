@@ -6,6 +6,7 @@ const auth = new Auth({
     projectId: process.env.INFURA_API_KEY,
     secretId: process.env.INFURA_API_KEY_SECRET,
     privateKey: process.env.WALLET_PRIVATE_KEY,
+    rpcUrl:process.env.RPC_URL,
     chainId: 80001,
 });
 
