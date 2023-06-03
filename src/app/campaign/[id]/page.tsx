@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
 import Explore from './Explore';
+import MyBingo from './MyBingo';
 import Perks from './Perks';
-import YourBingo from './YourBingo';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
 	ssr: false,
@@ -78,7 +78,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<div>
 							<h6 className="text-sm text-gray-400">Price</h6>
 							<p className="my-2">
-								{campaign.price ? Number(campaign.price) : 'FREE'}{' '}
+								{campaign.price && Number(campaign.price) != 0 ? Number(campaign.price) : 'FREE'}{' '}
 								{campaign.currency
 									? CurrencyConfig[campaign.currency as keyof typeof CurrencyConfig]
 									: null}
@@ -100,6 +100,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					) : null}
 
 					<BuyButton
+						campaign_id={campaign.campaign_id!}
 						contract_address={campaign.contract_address!}
 						limit={Number(campaign.mint_limit)}
 						end_date={campaign.end_at}
@@ -129,8 +130,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				</div>
 			</section>
 
+			{/* <YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} /> */}
 			{campaign?.contract_address ? (
-				<YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
+				<MyBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
 			) : null}
 
 			<Perks />
