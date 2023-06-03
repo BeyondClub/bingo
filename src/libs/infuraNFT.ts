@@ -38,3 +38,33 @@ export const mint = async (contractAddress: string, walletAddress: string, metad
     const minted = await _mint.wait();
     console.log(`Status: ${minted.status}\n NFT minted on ${minted.blockHash} with ${minted.confirmations} confirmation!`);
 }
+
+export const deployContract = async() => {
+    try {
+
+        const collectionMetadata = Metadata.openSeaCollectionLevelStandard({
+        name: 'BINGO',
+        description: "beyondClub's dynamic BINGO NFT",
+        image: await sdk.storeFile({
+          metadata: 'https://bafkreibqx5ny7lcrfxl4gbprwaqsgdllkcj6r2gvpir5agaffzpbra3vt4.ipfs.nftstorage.link/',
+        }),
+        external_link: 'https://beyondclub.xyz',
+      });
+
+      console.log('collectionMetadata ----', collectionMetadata);
+      const storeMetadata = await sdk.storeMetadata({ metadata: collectionMetadata });
+      console.log('storeMetadata', storeMetadata);
+
+      const newContract = await sdk.deploy({
+        template: TEMPLATES.ERC721Mintable,
+        params: {
+          name: 'BINGO',
+          symbol: 'BINGO',
+          contractURI:storeMetadata,
+        },
+      });
+      console.log(`Contract address is: ${newContract.contractAddress}`);
+    } catch (error) {
+      console.log(error);
+    }
+};
