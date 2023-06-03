@@ -18,7 +18,7 @@ const sdk = new SDK(auth);
 // either we search in the json returned below or we use the contract abi to call the method
 
 export const getCollectionsByWallet = async (walletAddress: string) => {
-    const result = await sdk.api.getToken({
+    const result = await sdk.api.getCollectionsByWallet({
         walletAddress: walletAddress,
     });
     console.log('collections:', result);
