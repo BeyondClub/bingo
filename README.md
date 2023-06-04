@@ -45,8 +45,8 @@ Higher-tier members can enjoy a range of advantages, including enhanced token-ga
 Polygon : Deployed contract on Polygon Mumbai
 Consensys : Utilized Infura’s ERC721 contract template to be a based of BINGO NFT
 Luniverse : 
-  - RPC provider.
-  - The loyalty points can be stored on a blockchain, which can then be used by users to withdraw perks. The score can be viewed and verified on the blockchain.
+  - RPC provider
+  - The loyalty points are stored on a blockchain, which can be used by users to claim perks. The score can be viewed and verified on the blockchain.
   - Activity: Retrieve recent NFT transfers from the contract using the Web3 engine.
   - Webhook: use of the Luniverse webhook to reset the Bingo game when an NFT is transferred to a new account.
 
