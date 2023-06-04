@@ -2,7 +2,9 @@ import { db } from "@/libs/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { campaign_id, tokens } = req.query
+    const { campaign_id, tokens, address } = req.query
+
+
     if (tokens) {
 
         const token = await db.bingo.findMany({
@@ -13,9 +15,10 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             where: {
                 campaign_id: campaign_id as string,
-                token_id: {
-                    in: (tokens as string).split(',')
-                }
+                wallet_address: (address as string).toLowerCase(),
+                // token_id: {
+                //     in: (tokens as string).split(',')
+                // },
             }
         })
 

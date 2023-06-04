@@ -12,11 +12,11 @@ const baseX = 250;
 const baseY = 690;
 
 const xPositions = [baseX + 27, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.87, baseX + 400 * 3.8];
-const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
+const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 5.4];
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = '317b8686-9f9b-457f-acf7-020942b46725' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = 'c6fc6e3d-507f-444f-b962-9ee00c315983' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 

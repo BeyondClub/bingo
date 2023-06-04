@@ -15,7 +15,7 @@ const baseX = 250;
 const baseY = 690;
 
 const xPositions = [baseX + 27, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.87, baseX + 400 * 3.8];
-const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 6];
+const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 5.4];
 
 
 export const generateImage = async ({ bingo }: { bingo: bingo }) => {

@@ -31,7 +31,9 @@ const MyBingo = ({ contract_address, campaign_id }: { contract_address: string; 
 
 	useEffect(() => {
 		const verifyNFT = async () => {
-			const post = await fetch(`/api/get_token_details?campaign_id=${campaign_id}&tokens=${tokens.join(',')}`);
+			const post = await fetch(
+				`/api/get_token_details?campaign_id=${campaign_id}&tokens=${tokens.join(',')}&address=${address}`
+			);
 			const response = await post.json();
 			if (response.tokens) setTokenDetails(response.tokens);
 		};
