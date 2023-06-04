@@ -55,7 +55,10 @@ const PerkCard = ({
 							<div className="my-10">
 								<CopyToClipboard text={claimResponse.code} onCopy={() => toast('Copied to clipboard')}>
 									<span className="border-4 rounded-md text-center border-dotted p-2 my-5">
-										Code: <span className="font-medium">{claimResponse.code}</span>
+										Code:
+										<span className="font-medium">
+											{claimResponse.code ?? 'Polygon APAC Hackathon'}
+										</span>
 									</span>
 								</CopyToClipboard>
 							</div>
