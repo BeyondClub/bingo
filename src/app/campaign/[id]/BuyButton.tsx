@@ -4,6 +4,7 @@ import { defaultChainId } from '@/constants/chain.config';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import Confetti from 'react-confetti';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
@@ -19,6 +20,7 @@ const BuyButton = ({
 	end_date: Date | null;
 }) => {
 	const [txHash, setTxHash] = useState<string | null>(null);
+	const [minted, setMinted] = useState(false);
 
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
@@ -49,6 +51,7 @@ const BuyButton = ({
 					}),
 				});
 
+				setMinted(true);
 				const data = await response.json();
 				setTxHash(data.mint.events[0].transactionHash);
 			} catch (e: any) {
@@ -66,6 +69,15 @@ const BuyButton = ({
 
 	return (
 		<>
+			<Confetti
+				style={{ pointerEvents: 'none' }}
+				numberOfPieces={minted ? 500 : 0}
+				recycle={false}
+				onConfettiComplete={(confetti) => {
+					setMinted(false);
+				}}
+			/>
+
 			{limit !== 1 ? (
 				<>
 					<div className="text-gray-400 mt-5 text-sm">Quantity</div>
