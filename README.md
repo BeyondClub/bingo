@@ -43,8 +43,8 @@ Protocols can launch tiered membership NFTs based on on-chain quests or off-chai
 Higher-tier members can enjoy a range of advantages, including enhanced token-gated access, increased utility, and even the potential for exclusive airdrops.
 
 ## Projects we use
-Polygon : Deployed contract on Polygon Mumbai : https://mumbai.polygonscan.com/address/0x9772Df6B2C8069aBD7287F9D385D9B9D53767b0C
-Consensys : Utilized Infura’s ERC721 contract template to be a based of BINGO NFT : https://github.com/BeyondClub/bingo/blob/main/src/libs/infuraNFT.ts
+Polygon : Deployed contract on Polygon Mumbai : https://mumbai.polygonscan.com/address/0x9772Df6B2C8069aBD7287F9D385D9B9D53767b0C </br>
+Consensys : Utilized Infura’s ERC721 contract template to be a based of BINGO NFT : https://github.com/BeyondClub/bingo/blob/main/src/libs/infuraNFT.ts </br>
 Luniverse : https://github.com/BeyondClub/bingo/blob/main/src/libs/luniverse.ts
   - RPC provider
   - The loyalty points are stored on a blockchain, which can be used by users to claim perks. The score can be viewed and verified on the blockchain.
