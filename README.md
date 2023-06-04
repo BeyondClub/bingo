@@ -3,10 +3,12 @@
 ## Overview
 ![1654841656](https://github.com/BeyondClub/bingo/assets/90386676/28336a33-65d3-49d8-9978-91b710132102)
 
-LFBINGO is an onchain activity BINGO as dynamic NFT to flex how degens you are.
-By minting LFBINGO’s NFT, onchain activities on each grid of the bingo NFTs will be randomly generated. 
-Our system will track your wallet activity and reflect it on your bingo card. We'll query on-chain data and update your score every 24 hours.
+LFBINGO is an onchain activity BINGO as dynamic NFT to flex how degens you are. </br>
+By minting LFBINGO’s NFT, onchain activities on each grid of the bingo NFTs will be randomly generated. </br>
+Our system will track your wallet activity and reflect it on your bingo card. We'll query on-chain data and update your score every 24 hours. </br>
 Any protocol can use it as gamified user acquisition/engagement campaigns, as well as collaborative campaigns with other protocols. Chains like Polygon can use it to increase the engagement of protocols on top of them as well.
+</br></br>
+Try LFBINGO here and check how degen you are! https://www.lfbingo.xyz/campaign/294e5393-4311-4003-8422-42eb8af28090
 
 ## Challenge
 How can we create a gamified and collaborative community engagement campaigns that increases and sustain long-term engagement?
