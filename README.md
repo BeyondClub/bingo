@@ -1,7 +1,8 @@
 # LFBINGO
 
 ## Overview
-![1654841656.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cb2d460d-a3e2-45c8-9150-99659fd5928f/1654841656.png)
+![1654841656](https://github.com/BeyondClub/bingo/assets/90386676/f027cf13-3e56-44ea-b628-598579226d20)
+
 LFBINGO is an onchain activity BINGO as dynamic NFT to flex how degens you are.
 By minting LFBINGO’s NFT, onchain activities on each grid of the bingo NFTs will be randomly generated. 
 Our system will track your wallet activity and reflect it on your bingo card. We'll query on-chain data and update your score every 24 hours.
@@ -33,7 +34,7 @@ Not only one protocol uses it for user acquisition or engagement, but also proto
 3. Chain’s User acquisition/engagement for protocols on top of them
 
 ## Future Update
-![3 (6).png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/39f328a5-1c55-48bd-9f8b-57df9db29182/3_(6).png)
+![3 (6)](https://github.com/BeyondClub/bingo/assets/90386676/e3ab451c-e21f-43ab-9ca2-ecb13ceaef80)
 
 The functionalities of dynamic NFT based on on-chain activity can be directly applied as dynamic membership NFT.
 By expanding the functionality, we are planning to build a no-code Dynamic membership NFT builder, with which protocols can use to increase long-term engagement and become more valuable.
