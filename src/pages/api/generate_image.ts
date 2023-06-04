@@ -682,7 +682,12 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		const updateQuery = `UPDATE bingo SET image='${hash}' , score = '${updatedScore}', redraw = false WHERE bingo_id = '${bingo.bingo_id}'`;
 		await pool.query(updateQuery);
 
-		await getTotalScore(bingo.wallet_address)
+		try {
+			await getTotalScore(bingo.wallet_address)
+		}
+		catch (e) {
+			console.log(e)
+		}
 
 		return hash;
 	}
