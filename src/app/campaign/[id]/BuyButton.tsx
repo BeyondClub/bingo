@@ -1,6 +1,7 @@
 'use client';
 
 import { defaultChainId } from '@/constants/chain.config';
+import { purchaseNFT } from '@/libs/unlock';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
@@ -38,22 +39,29 @@ const BuyButton = ({
 			setLoading(true);
 
 			try {
-				const response = await fetch('/api/mint_nft', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
+				const purchase = await purchaseNFT({
+					lock: contract_address!,
+					wallet_address: address,
+					mintNFTCount: quantity,
+					onTransactionCompleted: async (tx_hash: string) => {
+						setTxHash(tx_hash);
+						toast('NFT Minted Successfully!');
+
+						toast("Waiting for transaction to be mined. It'll take a few minutes.");
+
+						const updateRecords = async () => {
+							const response = await fetch(
+								`/api/bingo_purchase?contract=${contract_address}&tx=${tx_hash}`
+							);
+							const response_data = await response.json();
+
+							setTimeout(() => updateRecords(), 10000);
+						};
+						updateRecords();
 					},
-					body: JSON.stringify({
-						campaign_id: campaign_id,
-						address: address,
-						contract_address,
-						quantity,
-					}),
 				});
 
 				setMinted(true);
-				const data = await response.json();
-				setTxHash(data.mint.events[0].transactionHash);
 			} catch (e: any) {
 				console.log(e);
 				if (e.message.includes('user rejected transaction')) {

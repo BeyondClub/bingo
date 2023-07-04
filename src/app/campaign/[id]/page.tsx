@@ -7,9 +7,8 @@ import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
-import Explore from './Explore';
-import MyBingo from './MyBingo';
-import Perks from './Perks';
+import TotalMinted from './TotalMinted';
+import YourBingo from './YourBingo';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
 	ssr: false,
@@ -84,10 +83,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 									: null}
 							</p>
 						</div>
-						<div>
-							<h6 className="text-sm text-gray-400">Total Minted</h6>
-							<p className="my-2">1000</p>
-						</div>
+						<TotalMinted contract_address={campaign.contract_address!} />
 					</div>
 
 					{campaign.end_at ? (
@@ -130,12 +126,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				</div>
 			</section>
 
-			{/* <YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} /> */}
 			{campaign?.contract_address ? (
-				<MyBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
+				<YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
 			) : null}
-
-			<Perks />
 
 			{leaderboard.length > 0 ? (
 				<div className="grid place-content-center text-center mb-20">
@@ -173,8 +166,6 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					</table>
 				</div>
 			) : null}
-
-			<Explore address={campaign.contract_address as string} />
 		</div>
 	);
 };

@@ -5,12 +5,8 @@
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/cron/generate_image",
+      "path": "/api/generate_image",
       "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/cron/clear_paused",
-      "schedule": "1 0 * * *"
     }
   ]
 }

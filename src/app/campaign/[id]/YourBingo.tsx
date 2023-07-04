@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react';
 
 import { graphVerification } from '@/libs/verification/graphVerification';
+import { Button } from '@mantine/core';
+import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 import ListToken from './ListToken';
 
 const YourBingo = ({ contract_address, campaign_id }: { contract_address: string; campaign_id: string }) => {
+	const [refreshLoading, setRefreshLoading] = useState(false);
+
 	const [loading, setLoading] = useState(false);
 	const [tokens, setTokens] = useState([]);
 	const [tokenDetails, setTokenDetails] = useState([]);
@@ -70,6 +74,40 @@ const YourBingo = ({ contract_address, campaign_id }: { contract_address: string
 			{!loading && tokenDetails.length == 0 && <p>You don{"'"}t have any NFTs</p>}
 
 			{loading && <p>Loading...</p>}
+
+			{!loading && tokenDetails.length != 0 && (
+				<>
+					<Button
+						loading={refreshLoading}
+						onClick={async () => {
+							setRefreshLoading(true);
+
+							const response = await fetch(`/api/refresh_task`, {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({
+									address: address,
+									campaign_id: campaign_id,
+								}),
+							});
+
+							const data = await response.json();
+
+							toast(data.message);
+
+							setRefreshLoading(false);
+						}}
+						size="md"
+						radius={'md'}
+						className="text-center my-5 block primary_button"
+						variant="subtle"
+					>
+						Refresh Bingo Grid
+					</Button>
+				</>
+			)}
 
 			<div className="grid md:grid-cols-3 gap-10">
 				{tokenDetails.map((token) => {

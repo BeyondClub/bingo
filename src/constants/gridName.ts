@@ -7,8 +7,13 @@ export const gridName = {
 
     "1inch_swap": 'swap \n [N] times on \n 1inch',
     curve_swap: 'swap \n [N] times on \n Curve',
+    dodoex_swap: 'swap \n [N] times on \n Dodoex',
     sushiswap_swap: 'swap \n [N] times on \n Sushiswap',
     snapshot_vote: 'vote on \n Snapshot',
+
+    hopprotocol_exchange: 'transfer \n [N] times on \n HopProtocol',
+    connextnetwork_bridge: 'transfer \n [N] times on \n ConnextNetwork',
+    deposit_pooltogether: 'Deposit \n [N] times on \n PoolTogether',
 
     aave_lend: 'lend on \n Aave',
     compound_lend: 'lend on \n Compound',
@@ -24,6 +29,9 @@ export const gridName = {
     nft_count: 'Hold \n [N] NFT',
     opensea_buyer: 'Buy [N] NFT \n on Opensea',
     opensea_seller: 'Sell [N] NFT \n on Opensea',
+
+    nftx_buy: 'Buy [N] NFT \n on NFTX',
+    nftx_sell: 'Sell [N] NFT \n on NFTX',
 
 
     eth_balance: 'Hold \n [N] ETH',
