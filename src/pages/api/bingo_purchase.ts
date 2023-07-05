@@ -23,7 +23,6 @@ const fetchData = async ({ contract }: { contract: string | string[] }) => {
             endpoint: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/mumbai-v2'
         });
 
-        console.log(responseD)
 
         return responseD.keys;
 

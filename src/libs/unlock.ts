@@ -36,27 +36,7 @@ const getClientProvider = async (web3auth_provider: any) => {
 }
 
 
-// const purchase = await purchaseNFT({
-//     lock: contract_address!,
-//     wallet_address: address,
-//     mintNFTCount: quantity,
-//     onTransactionCompleted: async (tx_hash: string) => {
-//         setTxHash(tx_hash);
-//         toast('NFT Minted Successfully!');
 
-//         toast("Waiting for transaction to be mined. It'll take a few minutes.");
-
-//         const updateRecords = async () => {
-//             const response = await fetch(
-//                 `/api/bingo_purchase?contract=${contract_address}&tx=${tx_hash}`
-//             );
-//             const response_data = await response.json();
-
-//             setTimeout(() => updateRecords(), 10000);
-//         };
-//         updateRecords();
-//     },
-// });
 export const purchaseNFT = async ({ lock, signature, wallet_address, onTransactionCompleted, mintNFTCount = 1, web3auth_provider }: {
     lock: string,
     signature?: string,

@@ -9,7 +9,6 @@ import '@rainbow-me/rainbowkit/styles.css';
 import Link from 'next/link';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { polygonMumbai } from 'wagmi/chains';
-// import { arbitrum, mainnet, optimism, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 import { Toaster } from 'sonner';
@@ -20,7 +19,8 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 		// polygon,
 		// optimism,
 		// arbitrum,
-		...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [polygonMumbai] : []),
+		polygonMumbai,
+		// ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [polygonMumbai] : []),
 	],
 	[publicProvider()]
 );

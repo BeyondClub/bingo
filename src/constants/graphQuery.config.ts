@@ -143,14 +143,86 @@ export const GraphQueryConfig = {
   snapshot_vote: {
     api_url: `https://hub.snapshot.org/graphql`,
     req_body: gql`query Votes($wallet: String!)
-{
-	results: votes(
-    first: 1
-    where: {voter: $wallet}
-  ) {
-    id
-  }
-}`,
+    {
+      results: votes(
+        first: 1
+        where: {voter: $wallet}
+      ) {
+        id
+      }
+    }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  dodoex_swap: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/GxV9XL6Wnjz75z919NPNdrLhEkqDR99PweUY3oh7Lh94`,
+    req_body: gql`query($wallet: String){
+            results: transactions(first: 101, where:{
+              from: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  hopprotocol_exchange: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/Cjv3tykF4wnd6m9TRmQV7weiLjizDnhyt6x2tTJB42Cy`,
+    req_body: gql`query($wallet: String){
+            results: transfers(first: 101, where:{
+              from: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  connextnetwork_bridge: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/DfD1tZSmDtjCGC2LeYEQbVzj9j8kNqKAQEsYL27Vg6Sw`,
+    req_body: gql`query($wallet: String){
+            results: destinationTransfers(first: 101, where:{
+              originSender: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  deposit_pooltogether: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/6v8a77TMhCrSECtSdTAAitCnrqg7cqHuYSDfwoFLhDe2`,
+    req_body: gql`query($wallet: String){
+            results: prizePoolAccounts(first: 101, where:{
+              account: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  nftx_buy: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/4gZf3atMXjYDh4g48Zr83NFX3rkvZED86VqMNhgEXgLc`,
+    req_body: gql`query($wallet: String){
+            results: deposits(first: 101, where:{
+              user: $wallet
+            }){
+              id
+            }
+        }`,
+    response_variable: 'results',
+    response_condition: 'array_length',
+  },
+  nftx_sell: {
+    api_url: `https://gateway.thegraph.com/api/${process.env.GRAPH_API}/subgraphs/id/4gZf3atMXjYDh4g48Zr83NFX3rkvZED86VqMNhgEXgLc`,
+    req_body: gql`query($wallet: String){
+            results: withdrawals(first: 101, where:{
+              user: $wallet
+            }){
+              id
+            }
+        }`,
     response_variable: 'results',
     response_condition: 'array_length',
   },
