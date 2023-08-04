@@ -5,6 +5,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 
 import { ScoreValidation } from '@/libs/bingo';
+import { getPoapImage } from '@/libs/verification/poapVerification';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 
@@ -16,10 +17,9 @@ const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY 
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = 'c6fc6e3d-507f-444f-b962-9ee00c315983' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = '07ca3dd3-8046-4842-a32f-c5f3245c3d92' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
-
 
     if (!bingo) return 'not found';
 
@@ -40,7 +40,6 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const result_s = await pool.query(query_s);
     const tasks: bingo_tasks[] = result_s.rows;
 
-    console.log(tasks)
 
     const campaign_query = `SELECT * FROM campaigns  WHERE campaign_id = '${bingo?.campaign_id}' LIMIT 1`;
     const campaign_result = await pool.query(campaign_query);
@@ -73,8 +72,10 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (bingo) {
 
 
-        const getName = (index: number) => {
+        const getName = async (index: number) => {
             let name = '';
+
+            // check if the task_type contains any image url.
 
 
             if (!tasks[index]?.campaign_task_id) {
@@ -82,7 +83,17 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             }
 
-            console.log(tasks[index]?.campaign_task_id)
+            //@ts-ignore
+            if (tasks[index].campaign_task_id?.task_type === "poap_verify") {
+                // lets get the poap image first
+
+                //@ts-ignore
+                const imageUrl = await getPoapImage(tasks[index].campaign_task_id?.response_value)
+
+                return imageUrl;
+
+            }
+
             //@ts-ignore
 
             name = gridName[task_config[`${tasks[index].campaign_task_id}`]?.task_type ?? '']?.replace(
@@ -106,35 +117,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const imageGridData = [
             // First Row
             {
-                text: getName(0),
+                text: await getName(0),
                 position: {
                     x: xPositions[0],
                     y: yPositions[0],
                 },
             },
             {
-                text: getName(1),
+                text: await getName(1),
                 position: {
                     x: xPositions[1],
                     y: yPositions[0],
                 },
             },
             {
-                text: getName(2),
+                text: await getName(2),
                 position: {
                     x: xPositions[2],
                     y: yPositions[0],
                 },
             },
             {
-                text: getName(3),
+                text: await getName(3),
                 position: {
                     x: xPositions[3],
                     y: yPositions[0],
                 },
             },
             {
-                text: getName(4),
+                text: await getName(4),
                 position: {
                     x: xPositions[4],
                     y: yPositions[0],
@@ -142,35 +153,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Second Row
             {
-                text: getName(5),
+                text: await getName(5),
                 position: {
                     x: xPositions[0],
                     y: yPositions[1],
                 },
             },
             {
-                text: getName(6),
+                text: await getName(6),
                 position: {
                     x: xPositions[1],
                     y: yPositions[1],
                 },
             },
             {
-                text: getName(7),
+                text: await getName(7),
                 position: {
                     x: xPositions[2],
                     y: yPositions[1],
                 },
             },
             {
-                text: getName(8),
+                text: await getName(8),
                 position: {
                     x: xPositions[3],
                     y: yPositions[1],
                 },
             },
             {
-                text: getName(9),
+                text: await getName(9),
                 position: {
                     x: xPositions[4],
                     y: yPositions[1],
@@ -178,14 +189,14 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Third Row
             {
-                text: getName(10),
+                text: await getName(10),
                 position: {
                     x: xPositions[0],
                     y: yPositions[2],
                 },
             },
             {
-                text: getName(11),
+                text: await getName(11),
                 position: {
                     x: xPositions[1],
                     y: yPositions[2],
@@ -199,14 +210,14 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             },
             {
-                text: getName(13),
+                text: await getName(13),
                 position: {
                     x: xPositions[3],
                     y: yPositions[2],
                 },
             },
             {
-                text: getName(14),
+                text: await getName(14),
                 position: {
                     x: xPositions[4],
                     y: yPositions[2],
@@ -214,35 +225,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Fourth Row
             {
-                text: getName(15),
+                text: await getName(15),
                 position: {
                     x: xPositions[0],
                     y: yPositions[3],
                 },
             },
             {
-                text: getName(16),
+                text: await getName(16),
                 position: {
                     x: xPositions[1],
                     y: yPositions[3],
                 },
             },
             {
-                text: getName(17),
+                text: await getName(17),
                 position: {
                     x: xPositions[2],
                     y: yPositions[3],
                 },
             },
             {
-                text: getName(18),
+                text: await getName(18),
                 position: {
                     x: xPositions[3],
                     y: yPositions[3],
                 },
             },
             {
-                text: getName(19),
+                text: await getName(19),
                 position: {
                     x: xPositions[4],
                     y: yPositions[3],
@@ -250,35 +261,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Fourth Row
             {
-                text: getName(20),
+                text: await getName(20),
                 position: {
                     x: xPositions[0],
                     y: yPositions[4],
                 },
             },
             {
-                text: getName(21),
+                text: await getName(21),
                 position: {
                     x: xPositions[1],
                     y: yPositions[4],
                 },
             },
             {
-                text: getName(22),
+                text: await getName(22),
                 position: {
                     x: xPositions[2],
                     y: yPositions[4],
                 },
             },
             {
-                text: getName(23),
+                text: await getName(23),
                 position: {
                     x: xPositions[3],
                     y: yPositions[4],
                 },
             },
             {
-                text: getName(24),
+                text: await getName(24),
                 position: {
                     x: xPositions[4],
                     y: yPositions[4],
@@ -298,12 +309,21 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
          *	List out bingo tasks on the image
          */
 
+
+
+
         ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
         ctx.font = 'normal 40px PixelFont';
         const lineHeight = 70;
 
         for (const data of imageGridData) {
+
+            if (data.text !== "" && data.text.startsWith("https://")) {
+                const sponser = await loadImage(data.text);
+                ctx.drawImage(sponser, data.position.x - 140, data.position.y - 90, 290, 290);
+            }
+
             let lines = data.text.replace('\\n', '\n').split('\n');
 
             let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
