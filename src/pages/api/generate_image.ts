@@ -3,8 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { gridName } from '@/constants/gridName';
 import { ScoreValidation } from '@/libs/bingo';
 import pool from '@/libs/pool';
+import { getPoapImage } from '@/libs/verification/poapVerification';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 import { bingo, bingo_tasks, campaigns } from '@prisma/client';
+
 
 
 import { ipfsUpload } from '@/libs/w3storage';
@@ -60,7 +62,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		GlobalFonts.registerFromPath(ScorefontPath, 'ScoreFont');
 
 
-		const getName = (index: number) => {
+		const getName = async (index: number) => {
 			let name = '';
 
 			// return tasks[index]?.task_name ?? '';
@@ -74,6 +76,17 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 				'[N]',
 				task_config[tasks[index].campaign_task_id].response_value
 			);
+
+
+			//@ts-ignore
+			if (tasks[index].campaign_task_id?.task_type === "poap_verify") {
+
+				//@ts-ignore
+				const imageUrl = await getPoapImage(tasks[index].campaign_task_id?.response_value)
+
+				return imageUrl;
+
+			}
 
 			if (!name) {
 				//@ts-ignore
@@ -91,35 +104,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		const imageGridData = [
 			// First Row
 			{
-				text: getName(0),
+				text: await getName(0),
 				position: {
 					x: xPositions[0],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: getName(1),
+				text: await getName(1),
 				position: {
 					x: xPositions[1],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: getName(2),
+				text: await getName(2),
 				position: {
 					x: xPositions[2],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: getName(3),
+				text: await getName(3),
 				position: {
 					x: xPositions[3],
 					y: yPositions[0],
 				},
 			},
 			{
-				text: getName(4),
+				text: await getName(4),
 				position: {
 					x: xPositions[4],
 					y: yPositions[0],
@@ -127,35 +140,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Second Row
 			{
-				text: getName(5),
+				text: await getName(5),
 				position: {
 					x: xPositions[0],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: getName(6),
+				text: await getName(6),
 				position: {
 					x: xPositions[1],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: getName(7),
+				text: await getName(7),
 				position: {
 					x: xPositions[2],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: getName(8),
+				text: await getName(8),
 				position: {
 					x: xPositions[3],
 					y: yPositions[1],
 				},
 			},
 			{
-				text: getName(9),
+				text: await getName(9),
 				position: {
 					x: xPositions[4],
 					y: yPositions[1],
@@ -163,14 +176,14 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Third Row
 			{
-				text: getName(10),
+				text: await getName(10),
 				position: {
 					x: xPositions[0],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: getName(11),
+				text: await getName(11),
 				position: {
 					x: xPositions[1],
 					y: yPositions[2],
@@ -184,14 +197,14 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 				},
 			},
 			{
-				text: getName(13),
+				text: await getName(13),
 				position: {
 					x: xPositions[3],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: getName(14),
+				text: await getName(14),
 				position: {
 					x: xPositions[4],
 					y: yPositions[2],
@@ -199,35 +212,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Fourth Row
 			{
-				text: getName(15),
+				text: await getName(15),
 				position: {
 					x: xPositions[0],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: getName(16),
+				text: await getName(16),
 				position: {
 					x: xPositions[1],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: getName(17),
+				text: await getName(17),
 				position: {
 					x: xPositions[2],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: getName(18),
+				text: await getName(18),
 				position: {
 					x: xPositions[3],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: getName(19),
+				text: await getName(19),
 				position: {
 					x: xPositions[4],
 					y: yPositions[3],
@@ -235,35 +248,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Fourth Row
 			{
-				text: getName(20),
+				text: await getName(20),
 				position: {
 					x: xPositions[0],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: getName(21),
+				text: await getName(21),
 				position: {
 					x: xPositions[1],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: getName(22),
+				text: await getName(22),
 				position: {
 					x: xPositions[2],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: getName(23),
+				text: await getName(23),
 				position: {
 					x: xPositions[3],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: getName(24),
+				text: await getName(24),
 				position: {
 					x: xPositions[4],
 					y: yPositions[4],
@@ -289,6 +302,11 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			let lines = data.text.replace('\\n', '\n').split('\n');
 
 			let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
+
+			if (data.text !== "" && data.text.startsWith("https://")) {
+				const sponser = await loadImage(data.text);
+				ctx.drawImage(sponser, data.position.x - 140, data.position.y - 90, 290, 290);
+			}
 
 			for (let i = 0; i < lines.length; i++) {
 				ctx.fillText(lines[i], data.position.x, y);

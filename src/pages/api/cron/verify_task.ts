@@ -8,7 +8,7 @@ import { gitpoapVerification } from "@/libs/verification/gitpoapVerification";
 import { graphVerification } from "@/libs/verification/graphVerification";
 import { lensVerification } from "@/libs/verification/lensVerification";
 import { nftCountVerification } from "@/libs/verification/nftcountVerification";
-import { poapVerification } from "@/libs/verification/poapVerification";
+import { poapEventVerification, poapVerification } from "@/libs/verification/poapVerification";
 import { superfluidStreams } from "@/libs/verification/superfluid";
 import { tokenBalanceVerification } from "@/libs/verification/tokenBalanceVerification";
 import { txHistoryVerification } from "@/libs/verification/txHistoryVerification";
@@ -100,6 +100,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (task_config.task_type === "poap") {
                     const response = await poapVerification(bingo.wallet_address);
                     if (response.length >= Number(task_config.response_value)) {
+                        await taskCompleted()
+                    }
+                }
+
+                if (task_config.task_type === "poap_verify") {
+                    const response = await poapEventVerification(bingo.wallet_address, task_config.response_value!);
+
+                    if (response) {
                         await taskCompleted()
                     }
                 }

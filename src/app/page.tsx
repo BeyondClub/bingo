@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import FAQList from './FAQList';
 
 export default function Home() {
 	return (
@@ -68,7 +67,7 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className="my-20">
+			{/* <section className="my-20">
 				<h2 className="font-medium text-4xl text-center mb-20">Frequently Asked Questions</h2>
 
 				<div className="grid place-items-center">
@@ -76,7 +75,7 @@ export default function Home() {
 						<FAQList />
 					</div>
 				</div>
-			</section>
+			</section> */}
 
 			<div className="space-y-10 md:space-y-0 md:flex justify-between place-items-center my-24">
 				<div>

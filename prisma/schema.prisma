@@ -48,6 +48,7 @@ model campaigns {
   each_completion   Decimal           @default(1) @db.Decimal
   contract_address  String?
   reset_on_transfer Boolean           @default(false)
+  grid_image        String            @default("https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png")
   bingo             bingo[]
   campaigns_tasks   campaigns_tasks[]
 }
@@ -64,4 +65,10 @@ model campaigns_tasks {
   response_condition String?
   response_value     String?
   campaigns          campaigns @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model perks_redeemed {
+  perk_id         String   @id @db.Uuid
+  wallet_address  String?
+  points_redeemed Decimal? @default(0) @db.Decimal
 }
