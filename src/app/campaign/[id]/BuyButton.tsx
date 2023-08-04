@@ -4,10 +4,14 @@ import { defaultChainId } from '@/constants/chain.config';
 import { purchaseNFT } from '@/libs/unlock';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import Confetti from 'react-confetti';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
+
+const Confetti = dynamic(() => import('react-confetti'), {
+	ssr: false,
+});
 
 const BuyButton = ({
 	campaign_id,

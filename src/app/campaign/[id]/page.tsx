@@ -64,7 +64,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 	const leaderboard = data.scoreboard;
 
 	return (
-		<div>
+		<div className="">
 			<section className="grid grid-cols-1 md:grid-cols-12 gap-5 my-10">
 				<div className="col-span-6">
 					<h2 className="font-medium text-3xl">{campaign.name}</h2>
