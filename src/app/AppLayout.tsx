@@ -70,7 +70,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 				{/* <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}> */}
 				<RainbowKitProvider appInfo={demoAppInfo} chains={chains} modalSize={'compact'}>
 					<div className="bg-[#010314] text-[#f8f8f9] ">
-						<main className="mx-auto container px-5 sm:px-6 md:px-5 relative pt-5 space-y-5 pb-10 min-h-screen ">
+						<main className="mx-auto container px-5 sm:px-6 md:px-5  pt-5 space-y-5 pb-10 min-h-screen ">
 							<div className="flex justify-between">
 								<Link href="/" passHref>
 									<img src="/assets/LFbingo.svg" alt="" />
