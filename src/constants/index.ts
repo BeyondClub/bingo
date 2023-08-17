@@ -3,6 +3,10 @@ export const NETWORK = {
         name: 'Polygon',
         explorer: 'https://polygonscan.com/'
     },
+    8453: {
+        name: 'Base',
+        explorer: 'https://basescan.org/'
+    },
     80001: {
         name: 'Polygon Mumbai',
         explorer: 'https://mumbai.polygonscan.com/'

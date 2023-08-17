@@ -31,7 +31,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		taskIds.push(`'${task.campaign_task_id}'`);
 	}
 
-	const query_conf = `SELECT task_type,campaign_task_id,response_condition,response_value FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
+	const query_conf = `SELECT task_type,campaign_task_id,response_condition,response_value,task_image FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
 	const result_conf = await pool.query(query_conf);
 	const task_configs = result_conf.rows;
 
@@ -77,6 +77,9 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 				task_config[tasks[index].campaign_task_id].response_value
 			);
 
+			if (task_config[tasks[index].campaign_task_id].task_image) {
+				return task_config[tasks[index].campaign_task_id].task_image
+			}
 
 			//@ts-ignore
 			if (tasks[index].campaign_task_id?.task_type === "poap_verify") {
@@ -712,7 +715,6 @@ const getImage = async () => {
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
 	if (!bingo) return 'not found';
-
 
 	const response = await generateImage({ bingo });
 

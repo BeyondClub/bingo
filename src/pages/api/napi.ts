@@ -4,6 +4,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 // import { createCanvas, loadImage, registerFont } from 'canvas';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 
+import { CampaignCheckMark, CampaignImages } from '@/constants/campaigns/images';
 import { ScoreValidation } from '@/libs/bingo';
 import { getPoapImage } from '@/libs/verification/poapVerification';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -13,13 +14,15 @@ const baseX = 250;
 const baseY = 690;
 
 const xPositions = [baseX + 27, baseX + 400, baseX + 400 * 1.9, baseX + 400 * 2.87, baseX + 400 * 3.8];
-const yPositions = [baseY, baseY + 380, baseY + 380 * 2, baseY + 273 * 4, baseY + 273 * 5.4];
+const yPositions = [baseY, baseY + 370, baseY + 370 * 2, baseY + 273 * 4, baseY + 273 * 5.4];
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = '07ca3dd3-8046-4842-a32f-c5f3245c3d92' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = 'bffb6756-a6f9-41c1-a96c-6022a4340593' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
+
+    console.log(bingo)
 
     if (!bingo) return 'not found';
 
@@ -59,7 +62,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         taskIds.push(`'${task.campaign_task_id}'`);
     }
 
-    const query_conf = `SELECT task_type,campaign_task_id,response_condition,response_value FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
+    const query_conf = `SELECT task_type,campaign_task_id,task_image,response_condition,response_value FROM campaigns_tasks WHERE campaign_task_id IN (${taskIds})`;
     const result_conf = await pool.query(query_conf);
     const task_configs = result_conf.rows;
 
@@ -69,19 +72,27 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         task_config[tsconfig.campaign_task_id] = tsconfig;
     }
 
+    console.log(task_config)
+
     if (bingo) {
 
 
         const getName = async (index: number) => {
             let name = '';
+            console.log("_____________________________")
+            console.log(tasks[index])
+            console.log("_____________________________")
 
             // check if the task_type contains any image url.
 
+            if (task_config[tasks[index]?.campaign_task_id]?.task_image) {
+                return task_config[tasks[index].campaign_task_id].task_image
+            }
 
             if (!tasks[index]?.campaign_task_id) {
                 return tasks[index]?.task_name ?? ''
-
             }
+
 
             //@ts-ignore
             if (tasks[index].campaign_task_id?.task_type === "poap_verify") {
@@ -89,7 +100,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
                 //@ts-ignore
                 const imageUrl = await getPoapImage(tasks[index].campaign_task_id?.response_value)
-
+                console.log(imageUrl)
                 return imageUrl;
 
             }
@@ -113,6 +124,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             return name ?? '';
         };
+
 
         const imageGridData = [
             // First Row
@@ -210,14 +222,14 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             },
             {
-                text: await getName(13),
+                text: await getName(12),
                 position: {
                     x: xPositions[3],
                     y: yPositions[2],
                 },
             },
             {
-                text: await getName(14),
+                text: await getName(13),
                 position: {
                     x: xPositions[4],
                     y: yPositions[2],
@@ -225,35 +237,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Fourth Row
             {
-                text: await getName(15),
+                text: await getName(14),
                 position: {
                     x: xPositions[0],
+                    y: yPositions[3],
+                },
+            },
+            {
+                text: await getName(15),
+                position: {
+                    x: xPositions[1],
                     y: yPositions[3],
                 },
             },
             {
                 text: await getName(16),
                 position: {
-                    x: xPositions[1],
+                    x: xPositions[2],
                     y: yPositions[3],
                 },
             },
             {
                 text: await getName(17),
                 position: {
-                    x: xPositions[2],
-                    y: yPositions[3],
-                },
-            },
-            {
-                text: await getName(18),
-                position: {
                     x: xPositions[3],
                     y: yPositions[3],
                 },
             },
             {
-                text: await getName(19),
+                text: await getName(18),
                 position: {
                     x: xPositions[4],
                     y: yPositions[3],
@@ -261,35 +273,35 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             // Fourth Row
             {
-                text: await getName(20),
+                text: await getName(19),
                 position: {
                     x: xPositions[0],
                     y: yPositions[4],
                 },
             },
             {
-                text: await getName(21),
+                text: await getName(20),
                 position: {
                     x: xPositions[1],
                     y: yPositions[4],
                 },
             },
             {
-                text: await getName(22),
+                text: await getName(21),
                 position: {
                     x: xPositions[2],
                     y: yPositions[4],
                 },
             },
             {
-                text: await getName(23),
+                text: await getName(22),
                 position: {
                     x: xPositions[3],
                     y: yPositions[4],
                 },
             },
             {
-                text: await getName(24),
+                text: await getName(23),
                 position: {
                     x: xPositions[4],
                     y: yPositions[4],
@@ -299,7 +311,8 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const canvas = createCanvas(2048, 2488);
         const ctx = canvas.getContext('2d');
-        const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
+        // @ts-ignore
+        const image = await loadImage(CampaignImages[bingo.campaign_id] ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
 
@@ -318,18 +331,22 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const lineHeight = 70;
 
         for (const data of imageGridData) {
+            console.log(data.text)
 
             if (data.text !== "" && data.text.startsWith("https://")) {
                 const sponser = await loadImage(data.text);
                 ctx.drawImage(sponser, data.position.x - 140, data.position.y - 90, 290, 290);
             }
+            else {
 
-            let lines = data.text.replace('\\n', '\n').split('\n');
 
-            let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
-            for (let i = 0; i < lines.length; i++) {
-                ctx.fillText(lines[i], data.position.x, y);
-                y += lineHeight;
+                let lines = data.text.replace('\\n', '\n').split('\n');
+
+                let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
+                for (let i = 0; i < lines.length; i++) {
+                    ctx.fillText(lines[i], data.position.x, y);
+                    y += lineHeight;
+                }
             }
         }
 
@@ -345,7 +362,10 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
          *	Check mark for the completed tasks
          */
 
+
         const checkMark = await loadImage(
+            //  @ts-ignore
+            CampaignCheckMark[bingo.campaign_id] ??
             'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Bingo+Verified+Badge-01.jpg'
         );
 
@@ -448,29 +468,33 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
             {
                 x: verifiedXPositions[0],
-                y: verifiedYPositions[4],
+                y: verifiedYPositions[4] - 65,
             },
             {
                 x: verifiedXPositions[1],
-                y: verifiedYPositions[4],
+                y: verifiedYPositions[4] - 65,
             },
             {
                 x: verifiedXPositions[2],
-                y: verifiedYPositions[4],
+                y: verifiedYPositions[4] - 65,
             },
             {
                 x: verifiedXPositions[3],
-                y: verifiedYPositions[4],
+                y: verifiedYPositions[4] - 65,
             },
             {
                 x: verifiedXPositions[4],
-                y: verifiedYPositions[4],
+                y: verifiedYPositions[4] - 65,
             },
         ];
 
         for (const index in verifiedTasks) {
             const task = verifiedTasks[index];
-            if (tasks[index] && tasks[index].task_status) ctx.drawImage(checkMark, task.x, task.y, 80, 80);
+            if (Number(index) != 12) {
+
+                if (tasks[index] && tasks[index].task_status)
+                    ctx.drawImage(checkMark, task.x, task.y, 80, 80);
+            }
         }
 
         /*

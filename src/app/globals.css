@@ -66,21 +66,30 @@ body {
   border: 1px solid !important;
   border-radius: 20px !important;
   padding: 0 2rem !important;
-  color: #fff !important
+  color: #000 !important
 }
 
 .connect > div > button > div {
   border: 0px !important;
-  color: #fff !important
+  color: #000 !important
 }
 
 .quantity_input input{
   background: transparent !important;
   border: 0px solid !important;
-  color: #fff !important
+  color: #000 !important
 }
 
 .faq_item  button span{
   color: #fff !important
 
+}
+
+
+.summer_gradient {
+  background: linear-gradient(180deg, #0052ff 0, #0052ff 20%, #54dce7 0, #54dce7 40%, #ff7dcb 0, #ff7dcb 60%, #735dff 0, #735dff 80%, #fcd22d 0, #fcd22d);
+}
+
+.page_bg_gradeint {
+ background:  linear-gradient(180deg, #000 0, #000 5%, #ff7dcb 0, #ff7dcb 7.5%, #0052ff 0, #0052ff 10%, #fcd22d 0, #fcd22d 12.5%, #735dff 0, #735dff 15%, #ff7dcb 0, #ff7dcb 17.5%, #735dff 0, #735dff 20%, #54dce7 0, #54dce7 22.5%, #fcd22d 0, #fcd22d 32.5%, #735dff 0, #735dff 50%, #0052ff 0, #0052ff)
 }

@@ -1,10 +1,11 @@
+import { ChainConfig } from "@/constants/chain.config";
 import { db } from "@/libs/db";
 import { graphVerification } from "@/libs/verification/graphVerification";
 import { campaigns_tasks } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { generateImage } from "./generate_image";
 
-const fetchData = async ({ contract }: { contract: string | string[] }) => {
+const fetchData = async ({ contract, network }: { contract: string | string[], network?: string }) => {
     try {
 
         const responseD = await graphVerification({
@@ -17,10 +18,10 @@ const fetchData = async ({ contract }: { contract: string | string[] }) => {
              orderBy: tokenId
             ) {
                 tokenId
-            owner
+                owner
             }
 	}`,
-            endpoint: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/mumbai-v2'
+            endpoint: ChainConfig[Number(network) as keyof typeof ChainConfig].subgraph,
         });
 
 
@@ -33,11 +34,11 @@ const fetchData = async ({ contract }: { contract: string | string[] }) => {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { contract } = req.query;
+    const { contract, network } = req.query;
 
     if (!contract) return res.status(400).json({ message: 'Contract address is required' });
 
-    const keys = await fetchData({ contract });
+    const keys = await fetchData({ contract, network: String(network) });
 
     if (!keys) return res.status(400).json({ message: 'No keys found' });
 
@@ -51,6 +52,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         });
 
+        if (String(campaign?.network) !== String(network)) return res.status(400).json({ message: 'Invalid network' });
+
         if (campaign) {
 
             const bingoExist = await db.bingo.count({
@@ -63,8 +66,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (bingoExist === 0) {
 
-                const campaign_tasks: campaigns_tasks[] = await db.$queryRawUnsafe(
-                    `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24`,
+                const campaign_tasks: campaigns_tasks[] = await db.$queryRawUnsafe(campaign.random_grid ?
+                    `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24` : `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY order ASC LIMIT 24`
                 )
 
 
