@@ -22,7 +22,6 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
-    console.log(bingo)
 
     if (!bingo) return 'not found';
 

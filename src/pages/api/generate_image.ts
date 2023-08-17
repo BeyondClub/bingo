@@ -9,6 +9,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 
 
+import { CampaignCheckMark } from '@/constants/campaigns/images';
 import { ipfsUpload } from '@/libs/w3storage';
 import path from 'path';
 
@@ -103,6 +104,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 			return name ?? '';
 		};
+
 
 		const imageGridData = [
 			// First Row
@@ -200,14 +202,14 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 				},
 			},
 			{
-				text: await getName(13),
+				text: await getName(12),
 				position: {
 					x: xPositions[3],
 					y: yPositions[2],
 				},
 			},
 			{
-				text: await getName(14),
+				text: await getName(13),
 				position: {
 					x: xPositions[4],
 					y: yPositions[2],
@@ -215,35 +217,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Fourth Row
 			{
-				text: await getName(15),
+				text: await getName(14),
 				position: {
 					x: xPositions[0],
+					y: yPositions[3],
+				},
+			},
+			{
+				text: await getName(15),
+				position: {
+					x: xPositions[1],
 					y: yPositions[3],
 				},
 			},
 			{
 				text: await getName(16),
 				position: {
-					x: xPositions[1],
+					x: xPositions[2],
 					y: yPositions[3],
 				},
 			},
 			{
 				text: await getName(17),
 				position: {
-					x: xPositions[2],
-					y: yPositions[3],
-				},
-			},
-			{
-				text: await getName(18),
-				position: {
 					x: xPositions[3],
 					y: yPositions[3],
 				},
 			},
 			{
-				text: await getName(19),
+				text: await getName(18),
 				position: {
 					x: xPositions[4],
 					y: yPositions[3],
@@ -251,35 +253,35 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			// Fourth Row
 			{
-				text: await getName(20),
+				text: await getName(19),
 				position: {
 					x: xPositions[0],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: await getName(21),
+				text: await getName(20),
 				position: {
 					x: xPositions[1],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: await getName(22),
+				text: await getName(21),
 				position: {
 					x: xPositions[2],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: await getName(23),
+				text: await getName(22),
 				position: {
 					x: xPositions[3],
 					y: yPositions[4],
 				},
 			},
 			{
-				text: await getName(24),
+				text: await getName(23),
 				position: {
 					x: xPositions[4],
 					y: yPositions[4],
@@ -287,9 +289,10 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 		];
 
+
 		const canvas = createCanvas(2048, 2488);
 		const ctx = canvas.getContext('2d');
-		const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
+		const image = await loadImage(campaign?.grid_image ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
 		/*
@@ -302,18 +305,21 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		const lineHeight = 70;
 
 		for (const data of imageGridData) {
-			let lines = data.text.replace('\\n', '\n').split('\n');
-
-			let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
 
 			if (data.text !== "" && data.text.startsWith("https://")) {
 				const sponser = await loadImage(data.text);
 				ctx.drawImage(sponser, data.position.x - 140, data.position.y - 90, 290, 290);
 			}
+			else {
 
-			for (let i = 0; i < lines.length; i++) {
-				ctx.fillText(lines[i], data.position.x, y);
-				y += lineHeight;
+
+				let lines = data.text.replace('\\n', '\n').split('\n');
+
+				let y = lines.length === 3 ? data.position.y - 25 : data.position.y;
+				for (let i = 0; i < lines.length; i++) {
+					ctx.fillText(lines[i], data.position.x, y);
+					y += lineHeight;
+				}
 			}
 		}
 
@@ -330,6 +336,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 		 */
 
 		const checkMark = await loadImage(
+			CampaignCheckMark[(bingo?.campaign_id) as keyof typeof CampaignCheckMark] ??
 			'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/Bingo+Verified+Badge-01.jpg'
 		);
 
@@ -432,23 +439,23 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			},
 			{
 				x: verifiedXPositions[0],
-				y: verifiedYPositions[4],
+				y: verifiedYPositions[4] - 65,
 			},
 			{
 				x: verifiedXPositions[1],
-				y: verifiedYPositions[4],
+				y: verifiedYPositions[4] - 65,
 			},
 			{
 				x: verifiedXPositions[2],
-				y: verifiedYPositions[4],
+				y: verifiedYPositions[4] - 65,
 			},
 			{
 				x: verifiedXPositions[3],
-				y: verifiedYPositions[4],
+				y: verifiedYPositions[4] - 65,
 			},
 			{
 				x: verifiedXPositions[4],
-				y: verifiedYPositions[4],
+				y: verifiedYPositions[4] - 65,
 			},
 		];
 
