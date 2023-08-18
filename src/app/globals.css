@@ -94,3 +94,8 @@ body {
 .page_bg_gradeint {
  background:  linear-gradient(180deg, #000 0, #000 5%, #ff7dcb 0, #ff7dcb 7.5%, #0052ff 0, #0052ff 10%, #fcd22d 0, #fcd22d 12.5%, #735dff 0, #735dff 15%, #ff7dcb 0, #ff7dcb 17.5%, #735dff 0, #735dff 20%, #54dce7 0, #54dce7 22.5%, #fcd22d 0, #fcd22d 32.5%, #735dff 0, #735dff 50%, #0052ff 0, #0052ff)
 }
+
+.description a{
+  color: rgb(59 130 246);
+  text-decoration:underline;
+}
