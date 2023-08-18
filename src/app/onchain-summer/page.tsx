@@ -4,6 +4,7 @@ import { db } from '@/libs/db';
 import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
 import dayjs from 'dayjs';
+import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import BuyButton from './BuyButton';
@@ -18,7 +19,7 @@ const YourBingo = dynamic(() => import('./YourBingo'), {
 	ssr: false,
 });
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Onchain Summer Bingo | LFBingo',
 	description:
 		'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
@@ -31,9 +32,21 @@ export const metadata = {
 		title: 'Onchain Summer Bingo | LFBingo',
 		description:
 			'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
-		image: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+		images: [
+			{
+				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				width: 800,
+				height: 600,
+			},
+			{
+				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				width: 1800,
+				height: 1600,
+				alt: 'LFBingo',
+			},
+		],
 	},
-	opengraph: {
+	openGraph: {
 		url: 'https://www.lfbingo.xyz/onchain-summer',
 		type: 'website',
 		title: 'Onchain Summer Bingo | LFBingo',
@@ -41,12 +54,12 @@ export const metadata = {
 			'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
 		images: [
 			{
-				url: 'https://www.lfbingo.xyz/assets/og.png',
+				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
 				width: 800,
 				height: 600,
 			},
 			{
-				url: 'https://www.lfbingo.xyz/assets/og.png',
+				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
 				width: 1800,
 				height: 1600,
 				alt: 'LFBingo',
