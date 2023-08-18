@@ -8,9 +8,10 @@ import '@rainbow-me/rainbowkit/styles.css';
 // import { SessionProvider } from 'next-auth/react';
 import Link from 'next/link';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
+import { base } from '@/constants/baseConfig';
+import { usePathname } from 'next/navigation';
 import { Toaster } from 'sonner';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -19,7 +20,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 		// polygon,
 		// optimism,
 		// arbitrum,
-		polygonMumbai,
+		base,
 		// ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [polygonMumbai] : []),
 	],
 	[publicProvider()]
@@ -63,28 +64,78 @@ const getSiweMessageOptions: GetSiweMessageOptions = () => ({
 const myCache = createEmotionCache({ key: 'lfbingo' });
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
+	const path = usePathname();
+
+	console.log(path);
+
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
 			{/* <SessionProvider refetchInterval={0} session={session}> */}
 			<WagmiConfig config={wagmiConfig}>
 				{/* <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}> */}
 				<RainbowKitProvider appInfo={demoAppInfo} chains={chains} modalSize={'compact'}>
-					<div className="bg-[#010314] text-[#f8f8f9] ">
-						<main className="mx-auto container px-5 sm:px-6 md:px-5  pt-5 space-y-5 pb-10 min-h-screen ">
-							<div className="flex justify-between">
-								<Link href="/" passHref>
-									<img src="/assets/LFbingo.svg" alt="" />
-								</Link>
-								<div className="connect">
-									<ConnectButton accountStatus={'address'} />
+					<div
+						className={
+							path?.includes('/onchain-summer')
+								? `bg-white text-gray-900`
+								: `bg-[#010314] text-[#f8f8f9] `
+						}
+					>
+						<main
+							className={
+								path?.includes('/onchain-summer')
+									? ''
+									: 'mx-auto container px-5 sm:px-6 md:px-5  pt-5 space-y-5 pb-10 min-h-screen '
+							}
+						>
+							<main
+								className={
+									path?.includes('/onchain-summer')
+										? 'mx-auto container px-5 sm:px-6 md:px-5 space-y-5 pt-5 pb-10'
+										: ''
+								}
+							>
+								<div className="flex justify-between">
+									<Link href="/" passHref>
+										<img
+											src={
+												path?.includes('/onchain-summer')
+													? `/assets/LFbingo_dark.svg`
+													: `/assets/LFbingo.svg`
+											}
+											alt=""
+										/>
+									</Link>
+									<div className="connect">
+										<ConnectButton accountStatus={'address'} />
+									</div>
 								</div>
-							</div>
+							</main>
 							{children}
 
 							<Toaster />
 
-							<footer className="text-center text-gray-400 border-t border-gray-800 pt-5 text-sm">
-								<p>Copyright © 2023 lfbingo</p>
+							<footer
+								className={
+									path?.includes('/onchain-summer')
+										? 'text-center text-gray-600 border-t border-gray-300 py-6 text-sm'
+										: 'text-center text-gray-400 border-t border-gray-800 py-6 text-sm'
+								}
+							>
+								<p>
+									Copyright © 2023 lfbingo
+									{path?.includes('/onchain-summer') ? (
+										<>
+											{' '}
+											| Powered by{' '}
+											<a href="https://beyondclub.xyz" target="_BLANK" rel="noreferrer noopener">
+												beyondClub
+											</a>
+										</>
+									) : (
+										''
+									)}
+								</p>
 							</footer>
 						</main>
 					</div>

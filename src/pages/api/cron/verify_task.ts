@@ -1,3 +1,4 @@
+import { ChainConfig } from "@/constants/chain.config";
 import { GraphQueryConfig } from "@/constants/graphQuery.config";
 import { db } from "@/libs/db";
 import { makeApiRequest } from "@/libs/helpers";
@@ -99,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "poap") {
                     const response = await poapVerification(bingo.wallet_address);
-                    if (response.length >= Number(task_config.response_value)) {
+                    if (response && response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }
@@ -155,6 +156,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "ens") {
                     const response = await tokenBalanceVerification({
+                        network: Number(campaign?.network) as keyof typeof ChainConfig,
                         wallet: bingo.wallet_address,
                         tokenContractAddress: "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85"
                     });
@@ -177,7 +179,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "nft_count") {
                     const response = await nftCountVerification(bingo.wallet_address);
-                    if (response.length >= Number(task_config.response_value)) {
+                    if (response && response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }
@@ -209,13 +211,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
                 if (task_config.task_type === "token_balance") {
-                    const response = await tokenBalanceVerification({
-                        wallet: bingo.wallet_address,
-                        tokenContractAddress: task_config.response_condition ?? "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-                    });
 
-                    if (response && response >= Number(task_config.response_value)) {
-                        await taskCompleted()
+                    if (String(task_config.response_condition).includes(',')) {
+                        const tokenAddressList = String(task_config.response_condition).split(',');
+
+                        for (const tokenAddress of tokenAddressList) {
+                            const response = await tokenBalanceVerification({
+                                wallet: bingo.wallet_address,
+                                network: Number(campaign?.network) as keyof typeof ChainConfig,
+                                tokenContractAddress: tokenAddress
+                            });
+
+                            if (response && response >= Number(task_config.response_value)) {
+                                await taskCompleted()
+                            }
+                        }
+
+
+
+                    }
+                    else {
+
+
+                        const response = await tokenBalanceVerification({
+                            wallet: bingo.wallet_address,
+                            network: Number(campaign?.network) as keyof typeof ChainConfig,
+                            tokenContractAddress: task_config.response_condition ?? "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+                        });
+
+                        if (response && response >= Number(task_config.response_value)) {
+                            await taskCompleted()
+                        }
+
                     }
                 }
 
@@ -223,6 +250,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (task_config.task_type === "uniswap_liquidity") {
                     const response = await tokenBalanceVerification({
                         wallet: bingo.wallet_address,
+                        network: Number(campaign?.network) as keyof typeof ChainConfig,
                         tokenContractAddress: "0xc36442b4a4522e871399cd717abdd847ab11fe88"
                     });
 

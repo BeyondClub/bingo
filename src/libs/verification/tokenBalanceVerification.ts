@@ -1,3 +1,4 @@
+import { ChainConfig } from "@/constants/chain.config";
 import { ethers } from "ethers";
 
 
@@ -9,15 +10,15 @@ const contractAddressDecimalMapping = {
 }
 
 
-export const tokenBalanceVerification = async ({ wallet, network = "mainnet", tokenContractAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimalPlaces = 6 }: {
+export const tokenBalanceVerification = async ({ wallet, network = 137, tokenContractAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimalPlaces = 6 }: {
     wallet: string,
-    network?: string
+    network?: number
     tokenContractAddress?: string
     decimalPlaces?: number
 }) => {
 
     try {
-        const provider = new ethers.providers.InfuraProvider(network);
+        const provider = new ethers.providers.JsonRpcProvider(ChainConfig[network as keyof typeof ChainConfig].provider);
 
         const abi = ['function balanceOf(address) view returns (uint256)'];
         const tokenContract = new ethers.Contract(tokenContractAddress, abi, provider);

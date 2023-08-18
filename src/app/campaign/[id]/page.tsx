@@ -71,7 +71,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					{/* <p className="my-2">test.eth</p> */}
 					<p className="my-4 text-gray-300">{campaign.description}</p>
 
-					<h5 className="font-medium text-xl">Open Edition (Randomly-generated)</h5>
+					{campaign.random_grid ? (
+						<h5 className="font-medium text-xl"> Open Edition (Randomly-generated)</h5>
+					) : null}
 
 					<div className="grid grid-cols-2 gap-5 mt-5">
 						<div>
@@ -104,7 +106,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 
 					<div className="md:w-3/4">
 						<h5 className="font-medium text-2xl my-2 mt-5">Bingo Detail</h5>
-						<ShowDetails label="1 Bingo">{Number(campaign.each_completion)} points</ShowDetails>
+						<ShowDetails label="1 Bingo">{Number(campaign.each_bingo)} points</ShowDetails>
 						<ShowDetails label="1 Grid completion">{Number(campaign.each_completion)} points</ShowDetails>
 
 						<h5 className="font-medium text-2xl my-2 mt-5">Contract Detail</h5>
@@ -113,7 +115,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<ShowDetails label="Contract Address">
 							<ContractAddressCopy contract_address={campaign.contract_address!} />
 						</ShowDetails>
-						<ShowDetails label="Mint limit per address">{Number(campaign.mint_limit)}</ShowDetails>
+						<ShowDetails label="Mint limit per address">
+							{Number(campaign.mint_limit) == -1 ? 'Unlimited' : Number(campaign.mint_limit)}
+						</ShowDetails>
 						{/* <ShowDetails label="Secondary Royalty">10%</ShowDetails> */}
 						<ShowDetails label="Campaign Duration">
 							{dayjs(campaign.start_at).format('YYYY/MM/DD')} -{' '}

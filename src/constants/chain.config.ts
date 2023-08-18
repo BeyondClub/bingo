@@ -104,4 +104,22 @@ export const ChainConfig = {
         name: 'Mumbai',
         subgraph: "https://api.thegraph.com/subgraphs/name/unlock-protocol/mumbai-v2"
     },
+    8453: {
+        unlockAddress: '0xd0b14797b9D08493392865647384974470202A78',
+        provider: 'https://developer-access-mainnet.base.org',
+        chainId: '0x2105',
+        network: 'base',
+        explorer: 'https://basescan.org',
+        name: 'Base',
+        subgraph: "https://api.studio.thegraph.com/query/44190/unlock-protocol-base/v0.0.1"
+    },
+    84531: {
+        unlockAddress: '0x51A1ceB83B83F1985a81C295d1fF28Afef186E02',
+        provider: 'https://rpc.unlock-protocol.com/84531',
+        chainId: '0x2105',
+        network: 'base',
+        explorer: 'https://basescan.org',
+        name: 'Base Goerli',
+        subgraph: "https://api.studio.thegraph.com/query/44190/unlock-protocol-base/v0.0.1"
+    },
 }
