@@ -71,9 +71,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const getName = async (index: number) => {
             let name = '';
-            console.log("_____________________________")
-            console.log(tasks[index])
-            console.log("_____________________________")
+
 
             // check if the task_type contains any image url.
 
@@ -92,7 +90,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
                 //@ts-ignore
                 const imageUrl = await getPoapImage(tasks[index].campaign_task_id?.response_value)
-                console.log(imageUrl)
+
                 return imageUrl;
 
             }
@@ -332,7 +330,6 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const lineHeight = 70;
 
             for (const data of imageGridData) {
-                console.log(data.text)
 
                 if (data.text !== "" && data.text.startsWith("https://")) {
                     const sponser = await loadImage(data.text);
@@ -833,7 +830,6 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const lineHeight = 70;
 
             for (const data of imageGridData) {
-                console.log(data.text)
 
                 if (data.text !== "" && data.text.startsWith("https://")) {
                     const sponser = await loadImage(data.text);

@@ -66,8 +66,6 @@ const myCache = createEmotionCache({ key: 'lfbingo' });
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
 	const path = usePathname();
 
-	console.log(path);
-
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
 			{/* <SessionProvider refetchInterval={0} session={session}> */}

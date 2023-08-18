@@ -5,7 +5,7 @@ export default function Home() {
 		<main>
 			<section className="grid items-center md:grid-cols-2 gap-10 my-12">
 				<div className="grid justify-start space-y-10">
-					<h1 className="text-5xl font-medium">Onchain $BINGO NFT</h1>
+					<h1 className="text-5xl font-medium md:text-[48px]">Onchain $BINGO NFT</h1>
 					<p className="my-5 text-xl">
 						BINGO based on your onchain activity <br /> Mint your $BINGO to flex your $BINGO score
 					</p>
