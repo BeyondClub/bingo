@@ -37,10 +37,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ]
         },
         orderBy: {
-            last_processed: "desc"
+            last_processed: "asc"
         },
         take: 3
     })
+
 
     for (const task of tasks) {
 
@@ -50,6 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 campaign_task_id: task.campaign_task_id
             }
         })
+
+        console.log(task_config)
 
         const campaign = await db.campaigns.findFirst({
             where: {
@@ -243,8 +246,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     }
                     else {
-
-
                         const response = await tokenBalanceVerification({
                             wallet: bingo.wallet_address,
                             network: Number(campaign?.network) as keyof typeof ChainConfig,
@@ -338,6 +339,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     }
+
+    await db.bingo_tasks.updateMany({
+        where: {
+            bingo_task_id: {
+                in: tasks.map(task => task.bingo_task_id)
+            }
+        },
+        data: {
+            last_processed: new Date(),
+        }
+    })
+
 
     return res.status(200).json({ status: 'completed' });
 
