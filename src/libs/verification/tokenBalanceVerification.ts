@@ -17,6 +17,14 @@ export const tokenBalanceVerification = async ({ wallet, network = 137, tokenCon
     decimalPlaces?: number
 }) => {
 
+    if (!tokenContractAddress || tokenContractAddress == "") {
+        return null
+    }
+
+    console.log("__________________________________________________________")
+    console.log({ wallet, network, tokenContractAddress, decimalPlaces })
+    console.log("__________________________________________________________")
+
     try {
         const provider = new ethers.providers.JsonRpcProvider(ChainConfig[network as keyof typeof ChainConfig].provider);
 
@@ -26,8 +34,13 @@ export const tokenBalanceVerification = async ({ wallet, network = 137, tokenCon
         const balance = await tokenContract.balanceOf(userAddressChecksum);
 
         //@ts-ignore
-        const formattedBalance = ethers.utils.formatUnits(balance, contractAddressDecimalMapping[tokenContractAddress.toLocaleLowerCase()] ?? decimalPlaces);
-        return Number(formattedBalance);
+        if (contractAddressDecimalMapping[tokenContractAddress.toLocaleLowerCase()]) {
+            //@ts-ignore
+            const formattedBalance = ethers.utils.formatUnits(balance, contractAddressDecimalMapping[tokenContractAddress.toLocaleLowerCase()] ?? decimalPlaces);
+            return Number(formattedBalance);
+        }
+
+        return Number(balance.toString());
     } catch (error) {
         console.error(error);
         return null;
