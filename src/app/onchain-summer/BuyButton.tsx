@@ -1,14 +1,16 @@
 'use client';
 
-import { defaultChainId } from '@/constants/chain.config';
+import { ChainConfig, defaultChainId } from '@/constants/chain.config';
 import { purchaseNFT } from '@/libs/unlock';
+import { graphVerification } from '@/libs/verification/graphVerification';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
+import MintSuccessModal from './MintSuccessModal';
 
 const Confetti = dynamic(() => import('react-confetti'), {
 	ssr: false,
@@ -16,12 +18,16 @@ const Confetti = dynamic(() => import('react-confetti'), {
 
 const BuyButton = ({
 	campaign_id,
+	campaign_name,
+	campaign_image,
 	network,
 	contract_address,
 	limit,
 	end_date,
 }: {
 	campaign_id: string;
+	campaign_name: string;
+	campaign_image: string;
 	network: string;
 	contract_address: string;
 	limit?: number;
@@ -83,6 +89,35 @@ const BuyButton = ({
 		}
 	};
 
+	const [totalMinted, setTotalMinted] = useState<null | string>('-');
+
+	useEffect(() => {
+		(async () => {
+			const responseD = await graphVerification({
+				extra_variables: {
+					lock: contract_address,
+				},
+				wallet: contract_address as string,
+				query: `query($wallet: String) {
+		locks(
+			where: {
+ 					address: $wallet
+			}
+		) {
+			id
+			address
+			name
+			totalKeys
+			symbol
+		}
+	}`,
+				endpoint: ChainConfig[Number(network) as keyof typeof ChainConfig].subgraph,
+			});
+
+			setTotalMinted(responseD.locks[0].totalKeys);
+		})();
+	}, []);
+
 	return (
 		<>
 			<Confetti
@@ -92,6 +127,15 @@ const BuyButton = ({
 				onConfettiComplete={(confetti) => {
 					setMinted(false);
 				}}
+			/>
+
+			<MintSuccessModal
+				open={minted}
+				onClose={() => setMinted(false)}
+				position={totalMinted ? Number(totalMinted) + 1 : null}
+				collectible_url={campaign_image}
+				campaign_name={campaign_name}
+				disableReload={true}
 			/>
 
 			{limit !== 1 ? (

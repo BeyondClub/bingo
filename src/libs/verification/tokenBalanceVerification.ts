@@ -17,6 +17,14 @@ export const tokenBalanceVerification = async ({ wallet, network = 137, tokenCon
     decimalPlaces?: number
 }) => {
 
+    if (!tokenContractAddress || tokenContractAddress == "") {
+        return null
+    }
+
+    console.log("__________________________________________________________")
+    console.log({ wallet, network, tokenContractAddress, decimalPlaces })
+    console.log("__________________________________________________________")
+
     try {
         const provider = new ethers.providers.JsonRpcProvider(ChainConfig[network as keyof typeof ChainConfig].provider);
 

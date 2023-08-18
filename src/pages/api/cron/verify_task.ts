@@ -20,15 +20,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const tasks = await db.bingo_tasks.findMany({
         where: {
-            task_status: false,
-            paused_verification: false
+            AND: [
+                {
+                    task_status: false,
+                },
+                {
+                    OR: [
+                        {
+                            paused_verification: false
+                        },
+                        {
+                            paused_verification: null
+                        }
+                    ]
+                }
+            ]
         },
         orderBy: {
             last_processed: "desc"
         },
         take: 3
     })
-
 
     for (const task of tasks) {
 
