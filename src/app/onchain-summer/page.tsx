@@ -5,6 +5,7 @@ import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
 import TotalMinted from './TotalMinted';
@@ -65,10 +66,13 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 
 	return (
 		<div className=" text-gray-900 rounded-xl">
+			<Head>
+				<link rel="icon" href="/assets/favicon_summer.png" />
+			</Head>
 			<main className="mx-auto container px-5 sm:px-6 md:px-5  space-y-5 pb-10 min-h-screen ">
 				<section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 md:p-5">
 					<div className="col-span-6">
-						<h2 className="font-bolder text-3xl">{campaign.name}</h2>
+						<h2 className="font-extrabold text-4xl">{campaign.name}</h2>
 						{/* <p className="my-2">test.eth</p> */}
 						<p className="my-4 text-gray-800">{campaign.description}</p>
 
@@ -125,7 +129,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 									contract_address={campaign.contract_address!}
 								/>
 							</ShowDetails>
-							<ShowDetails label="Mint limit per address">{Number(campaign.mint_limit)}</ShowDetails>
+							<ShowDetails label="Mint limit per address">
+								{Number(campaign.mint_limit) == -1 ? 'Unlimited' : Number(campaign.mint_limit)}
+							</ShowDetails>
 							{/* <ShowDetails label="Secondary Royalty">10%</ShowDetails> */}
 							<ShowDetails label="Campaign Duration">
 								{dayjs(campaign.start_at).format('YYYY/MM/DD')} -{' '}

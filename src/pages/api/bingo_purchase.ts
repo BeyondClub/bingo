@@ -52,6 +52,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         });
 
+
+
         if (String(campaign?.network) !== String(network)) return res.status(400).json({ message: 'Invalid network' });
 
         if (campaign) {
@@ -67,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (bingoExist === 0) {
 
                 const campaign_tasks: campaigns_tasks[] = await db.$queryRawUnsafe(campaign.random_grid ?
-                    `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24` : `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY order ASC LIMIT 24`
+                    `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY RANDOM() LIMIT 24` : `SELECT * FROM "campaigns_tasks" WHERE campaign_id = '${campaign?.campaign_id}' ORDER BY "order" ASC LIMIT 24`
                 )
 
 

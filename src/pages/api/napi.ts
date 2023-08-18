@@ -1078,7 +1078,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         const format = "jpeg";
-        const { canvas } = await threeByThreeGrid();
+        const { canvas } = await fiveByfiveGrid();
 
         res.setHeader("content-type", `image/${format}`);
         res.send(await canvas.encode(format, 80));

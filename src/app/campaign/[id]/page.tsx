@@ -115,7 +115,9 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<ShowDetails label="Contract Address">
 							<ContractAddressCopy contract_address={campaign.contract_address!} />
 						</ShowDetails>
-						<ShowDetails label="Mint limit per address">{Number(campaign.mint_limit)}</ShowDetails>
+						<ShowDetails label="Mint limit per address">
+							{Number(campaign.mint_limit) == -1 ? 'Unlimited' : Number(campaign.mint_limit)}
+						</ShowDetails>
 						{/* <ShowDetails label="Secondary Royalty">10%</ShowDetails> */}
 						<ShowDetails label="Campaign Duration">
 							{dayjs(campaign.start_at).format('YYYY/MM/DD')} -{' '}

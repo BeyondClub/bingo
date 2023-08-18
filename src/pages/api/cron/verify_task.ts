@@ -100,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "poap") {
                     const response = await poapVerification(bingo.wallet_address);
-                    if (response.length >= Number(task_config.response_value)) {
+                    if (response && response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }
@@ -179,7 +179,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (task_config.task_type === "nft_count") {
                     const response = await nftCountVerification(bingo.wallet_address);
-                    if (response.length >= Number(task_config.response_value)) {
+                    if (response && response.length >= Number(task_config.response_value)) {
                         await taskCompleted()
                     }
                 }

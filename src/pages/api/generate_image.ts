@@ -9,7 +9,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 
 
-import { CampaignCheckMark } from '@/constants/campaigns/images';
+import { CampaignCheckMark, CampaignImages } from '@/constants/campaigns/images';
 import { ipfsUpload } from '@/libs/w3storage';
 import path from 'path';
 

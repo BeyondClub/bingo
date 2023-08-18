@@ -120,11 +120,15 @@ const BuyButton = ({
 							value={quantity}
 							onChange={(value) => setQuantity(Number(value))}
 							min={1}
-							max={50}
+							max={limit == -1 ? undefined : limit}
 						/>
 						<Button
 							variant="subtle"
 							onClick={() => {
+								if (limit === -1) {
+									setQuantity(quantity + 1);
+									return;
+								}
 								if (quantity < limit!) setQuantity(quantity + 1);
 							}}
 						>
