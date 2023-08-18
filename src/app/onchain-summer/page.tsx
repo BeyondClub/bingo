@@ -18,6 +18,43 @@ const YourBingo = dynamic(() => import('./YourBingo'), {
 	ssr: false,
 });
 
+export const metadata = {
+	title: 'Onchain Summer Bingo | LFBingo',
+	description:
+		'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
+	icons: {
+		icon: '/assets/favicon_summer.png',
+	},
+	twitter: {
+		card: 'summary_large_image',
+		site: '@beyondclub_xyz',
+		title: 'Onchain Summer Bingo | LFBingo',
+		description:
+			'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
+		image: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+	},
+	opengraph: {
+		url: 'https://www.lfbingo.xyz/onchain-summer',
+		type: 'website',
+		title: 'Onchain Summer Bingo | LFBingo',
+		description:
+			'Mint and join your Onchain Summer Bingo and visualize your onchain summer activity on Base! Aim and shill your high score!',
+		images: [
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 800,
+				height: 600,
+			},
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 1800,
+				height: 1600,
+				alt: 'LFBingo',
+			},
+		],
+	},
+};
+
 const getCampaign = async (id: string) => {
 	const campaign = await db.campaigns.findFirst({
 		where: {
