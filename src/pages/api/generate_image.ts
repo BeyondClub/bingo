@@ -317,7 +317,6 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			const lineHeight = 70;
 
 			for (const data of imageGridData) {
-				console.log(data.text)
 
 				if (data.text !== "" && data.text.startsWith("https://")) {
 					const sponser = await loadImage(data.text);
@@ -818,7 +817,6 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			const lineHeight = 70;
 
 			for (const data of imageGridData) {
-				console.log(data.text)
 
 				if (data.text !== "" && data.text.startsWith("https://")) {
 					const sponser = await loadImage(data.text);

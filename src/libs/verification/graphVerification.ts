@@ -15,13 +15,6 @@ export const graphVerification = async ({ wallet, query, endpoint, extra_variabl
 
     try {
 
-        console.log({
-            endpoint
-        });
-        console.log({
-            query,
-            variables: query.includes('wallet') ? variables : null,
-        })
 
 
         const response = await axios.post(endpoint, {
@@ -29,7 +22,6 @@ export const graphVerification = async ({ wallet, query, endpoint, extra_variabl
             variables: query.includes('wallet') ? variables : null,
         });
 
-        console.log(response.data);
 
         return response.data.data;
     } catch (error) {

@@ -16,7 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     })
 
-    console.log(bingos)
 
     await db.bingo_tasks.updateMany({
         where: {

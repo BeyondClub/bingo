@@ -71,7 +71,8 @@ body {
 
 .connect > div > button > div {
   border: 0px !important;
-  color: #000 !important
+  color: #000 !important;
+  background: none !important;
 }
 
 .quantity_input input{

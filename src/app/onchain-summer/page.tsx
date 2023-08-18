@@ -9,9 +9,12 @@ import Head from 'next/head';
 import BuyButton from './BuyButton';
 import ContractAddressCopy from './ContractAddressCopy';
 import TotalMinted from './TotalMinted';
-import YourBingo from './YourBingo';
 
 const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
+	ssr: false,
+});
+
+const YourBingo = dynamic(() => import('./YourBingo'), {
 	ssr: false,
 });
 
