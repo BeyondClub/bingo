@@ -37,6 +37,7 @@
     "pg": "^8.11.0",
     "postcss": "8.4.23",
     "react": "18.2.0",
+    "react-autolink-text2": "^3.3.0",
     "react-confetti": "^6.1.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.5",

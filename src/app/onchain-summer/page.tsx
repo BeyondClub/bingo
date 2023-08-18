@@ -1,3 +1,4 @@
+import DescriptionLink from '@/components/DescriptionLink/DescriptionLink';
 import { NETWORK } from '@/constants';
 import { CurrencyConfig } from '@/constants/currency.config';
 import { db } from '@/libs/db';
@@ -123,11 +124,13 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				<link rel="icon" href="/assets/favicon_summer.png" />
 			</Head>
 			<main className="mx-auto container px-5 sm:px-6 md:px-5  space-y-5 pb-10 min-h-screen ">
-				<section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 md:p-5">
+				<section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 md:px-5 md:pb-5">
 					<div className="col-span-6">
 						<h2 className="font-extrabold text-4xl">{campaign.name}</h2>
 						{/* <p className="my-2">test.eth</p> */}
-						<p className="my-4 text-gray-800">{campaign.description}</p>
+						<p className="my-4 text-gray-800 whitespace-pre-wrap description">
+							<DescriptionLink text={campaign?.description} />
+						</p>
 
 						{campaign.random_grid ? (
 							<h5 className="font-medium text-xl"> Open Edition (Randomly-generated)</h5>
@@ -194,7 +197,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							</ShowDetails>
 						</div>
 					</div>
-					<div className="col-span-6 grid place-items-center">
+					<div className="col-span-6 items-center mx-auto">
 						<img
 							src="/assets/demo_onchain.png"
 							className="rounded-lg"

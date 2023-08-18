@@ -23,7 +23,7 @@ const MetadataHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.json({
         name: getCampaign?.name,
         description: getCampaign?.description,
-        image: `ipfs://${getBingo?.image}/bingo.png`,
+        image: getBingo ? `ipfs://${getBingo?.image}/bingo.png` : getCampaign?.loading_image,
         attributes: {
             score: getBingo?.score
         }
