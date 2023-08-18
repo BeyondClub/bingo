@@ -1,10 +1,11 @@
+import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import AppLayout from './AppLayout';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'LFBingo',
 	description: 'Bingo ',
 	icons: {
@@ -15,9 +16,21 @@ export const metadata = {
 		site: '@beyondclub_xyz',
 		title: 'LFBingo',
 		description: 'Bingo',
-		image: 'https://www.lfbingo.xyz/assets/og.png',
+		images: [
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 800,
+				height: 600,
+			},
+			{
+				url: 'https://www.lfbingo.xyz/assets/og.png',
+				width: 1800,
+				height: 1600,
+				alt: 'LFBingo',
+			},
+		],
 	},
-	opengraph: {
+	openGraph: {
 		url: 'https://www.lfbingo.xyz',
 		type: 'website',
 		title: 'LFBingo',
