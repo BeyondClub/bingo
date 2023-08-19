@@ -17,7 +17,15 @@ const ListToken = ({
 			target="_BLANK"
 			rel="noreferrer noopener"
 		>
-			<img src={`https://w3s.link/ipfs/${token?.image}/bingo.png`} className="rounded-md h-90 mb-5" alt="" />
+			<img
+				src={`${
+					token?.image.includes('ipfs://')
+						? token?.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
+						: token?.image
+				}`}
+				className="rounded-md h-90 mb-5"
+				alt=""
+			/>
 
 			<p className="font-medium">ID: #{token.token_id}</p>
 			<p className="font-medium">Score: {token.score}</p>
