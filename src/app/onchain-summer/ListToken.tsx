@@ -19,9 +19,7 @@ const ListToken = ({
 		>
 			<img
 				src={`${
-					token?.image.includes('ipfs://')
-						? token?.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
-						: token?.image
+					token?.image.includes('https://') ? token?.image : `https://ipfs.io/ipfs/${token?.image}/bingo.png`
 				}`}
 				className="rounded-md h-90 mb-5"
 				alt=""
