@@ -41,9 +41,7 @@ const page = async ({ params }: any) => {
 											{task.response_condition}
 										</div>
 									</td>
-									<td>
-										<img src={task.task_image} alt="" />
-									</td>
+									<td>{task.task_image ? <img src={task?.task_image} alt="" /> : null}</td>
 								</tr>
 							);
 						})}
