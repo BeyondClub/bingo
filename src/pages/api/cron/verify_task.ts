@@ -30,7 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             paused_verification: false
                         },
                         {
-                            paused_verification: null
+                            paused_verification: {
+                                equals: null
+                            }
                         }
                     ]
                 }
@@ -39,8 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderBy: {
             last_processed: "asc"
         },
-        take: 3
+        take: 5
     })
+
+    console.log(tasks)
 
 
     for (const task of tasks) {
@@ -52,7 +56,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         })
 
-        console.log(task_config)
 
         const campaign = await db.campaigns.findFirst({
             where: {

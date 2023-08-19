@@ -909,8 +909,8 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 				const task = verifiedTasks[index];
 				if (Number(index) != 4) {
 
-					// if (tasks[index] && tasks[index].task_status)
-					ctx.drawImage(checkMark, task.x, task.y, 120, 120);
+					if (tasks[index] && tasks[index].task_status)
+						ctx.drawImage(checkMark, task.x, task.y, 120, 120);
 				}
 			}
 

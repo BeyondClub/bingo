@@ -12,7 +12,7 @@ import path from 'path';
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = 'bffb6756-a6f9-41c1-a96c-6022a4340593' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = '8f26ecb4-7910-4207-b1e1-e5644c1258f9' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
@@ -486,13 +486,17 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             ];
 
-            for (const index in verifiedTasks) {
-                const task = verifiedTasks[index];
-                if (Number(index) != 12) {
 
-                    if (tasks[index] && tasks[index].task_status)
-                        ctx.drawImage(checkMark, task.x, task.y, 80, 80);
+            for (const index in verifiedTasks) {
+
+                const findIndex = tasks.findIndex(i => Number(i.grid_number) === Number(index) + 1)
+                const task = verifiedTasks[findIndex > 12 ? Number(findIndex) + 1 : findIndex];
+
+
+                if (tasks[index] && tasks[findIndex]?.task_status) {
+                    ctx.drawImage(checkMark, task.x, task.y, 80, 80);
                 }
+
             }
 
             /*

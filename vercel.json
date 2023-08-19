@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/generate_image",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/3 * * * *"
     }
   ]
 }
