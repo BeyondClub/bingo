@@ -99,3 +99,12 @@ body {
   color: rgb(59 130 246);
   text-decoration:underline;
 }
+
+.kbw_btn {
+  background: #6AFACF !important;
+  color: #000 !important;
+}
+.btn_onchain {
+  background: #000 !important;
+  color: #fff !important;
+}

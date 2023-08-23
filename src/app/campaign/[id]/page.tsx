@@ -1,3 +1,6 @@
+import BuyButton from '@/components/CampaignDetails/BuyButton';
+import ContractAddressCopy from '@/components/CampaignDetails/ContractAddressCopy';
+import TotalMinted from '@/components/CampaignDetails/TotalMinted';
 import { NETWORK } from '@/constants';
 import { CurrencyConfig } from '@/constants/currency.config';
 import { db } from '@/libs/db';
@@ -5,15 +8,12 @@ import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
-import BuyButton from './BuyButton';
-import ContractAddressCopy from './ContractAddressCopy';
-import TotalMinted from './TotalMinted';
 
-const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
+const CloseCountdown = dynamic(() => import('@/components/CampaignDetails/CloseCountdown'), {
 	ssr: false,
 });
 
-const YourBingo = dynamic(() => import('./YourBingo'), {
+const YourBingo = dynamic(() => import('@/components/CampaignDetails/YourBingo'), {
 	ssr: false,
 });
 
@@ -88,7 +88,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 									: null}
 							</p>
 						</div>
-						<TotalMinted contract_address={campaign.contract_address!} />
+						<TotalMinted network={Number(campaign.network)} contract_address={campaign.contract_address!} />
 					</div>
 
 					{campaign.end_at ? (
@@ -101,10 +101,12 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					) : null}
 
 					<BuyButton
-						campaign_id={campaign.campaign_id!}
+						network={String(campaign.network)}
 						contract_address={campaign.contract_address!}
 						limit={Number(campaign.mint_limit)}
 						end_date={campaign.end_at}
+						campaign_name={campaign.name}
+						campaign_image={'https://lfbingo.xyz/assets/demo_onchain.png'}
 					/>
 
 					<div className="md:w-3/4">
@@ -134,7 +136,11 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 			</section>
 
 			{campaign?.contract_address ? (
-				<YourBingo campaign_id={campaign?.campaign_id} contract_address={campaign?.contract_address} />
+				<YourBingo
+					campaign_id={campaign?.campaign_id}
+					network={String(campaign?.network)}
+					contract_address={campaign?.contract_address}
+				/>
 			) : null}
 
 			{leaderboard.length > 0 ? (

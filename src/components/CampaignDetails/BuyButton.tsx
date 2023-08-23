@@ -1,37 +1,48 @@
 'use client';
 
-import { defaultChainId } from '@/constants/chain.config';
+import { ChainConfig, defaultChainId } from '@/constants/chain.config';
 import { purchaseNFT } from '@/libs/unlock';
+import { graphVerification } from '@/libs/verification/graphVerification';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
+import MintSuccessModal from './MintSuccessModal';
 
 const Confetti = dynamic(() => import('react-confetti'), {
 	ssr: false,
 });
 
 const BuyButton = ({
-	campaign_id,
+	className,
+	campaign_name,
+	campaign_image,
+	network,
 	contract_address,
 	limit,
 	end_date,
 }: {
-	campaign_id: string;
+	className?: string;
+	campaign_name: string;
+	campaign_image: string;
+	network: string;
 	contract_address: string;
 	limit?: number;
 	end_date: Date | null;
 }) => {
+	const { openChainModal } = useChainModal();
+
+	const { openConnectModal } = useConnectModal();
 	const [txHash, setTxHash] = useState<string | null>(null);
 	const [minted, setMinted] = useState(false);
-	const { openConnectModal } = useConnectModal();
 
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
+	const { chain, chains } = useNetwork();
 
 	const claimNFT = async () => {
 		// convert end date to getTime() and compare it with now time to check campaign expired
@@ -40,9 +51,18 @@ const BuyButton = ({
 			toast.error('Campaign expired');
 			return;
 		}
+
 		//@ts-ignore
 		if (address) {
 			setLoading(true);
+
+			if (chain?.id !== Number(network)) {
+				toast.error(
+					`Please switch to the ${ChainConfig[Number(network) as keyof typeof ChainConfig].name} chain`
+				);
+				setLoading(false);
+				return;
+			}
 
 			try {
 				const purchase = await purchaseNFT({
@@ -57,7 +77,7 @@ const BuyButton = ({
 
 						const updateRecords = async () => {
 							const response = await fetch(
-								`/api/bingo_purchase?contract=${contract_address}&tx=${tx_hash}`
+								`/api/bingo_purchase?contract=${contract_address}&network=${network}&tx=${tx_hash}`
 							);
 							const response_data = await response.json();
 
@@ -81,6 +101,35 @@ const BuyButton = ({
 		}
 	};
 
+	const [totalMinted, setTotalMinted] = useState<null | string>('-');
+
+	useEffect(() => {
+		(async () => {
+			const responseD = await graphVerification({
+				extra_variables: {
+					lock: contract_address,
+				},
+				wallet: contract_address as string,
+				query: `query($wallet: String) {
+		locks(
+			where: {
+ 					address: $wallet
+			}
+		) {
+			id
+			address
+			name
+			totalKeys
+			symbol
+		}
+	}`,
+				endpoint: ChainConfig[Number(network) as keyof typeof ChainConfig].subgraph,
+			});
+
+			setTotalMinted(responseD.locks[0].totalKeys);
+		})();
+	}, []);
+
 	return (
 		<>
 			<Confetti
@@ -92,11 +141,21 @@ const BuyButton = ({
 				}}
 			/>
 
+			<MintSuccessModal
+				open={minted}
+				onClose={() => setMinted(false)}
+				position={totalMinted ? Number(totalMinted) + 1 : null}
+				collectible_url={campaign_image}
+				campaign_name={campaign_name}
+				disableReload={true}
+			/>
+
 			{limit !== 1 ? (
 				<>
-					<div className="text-gray-400 mt-5 text-sm">Quantity</div>
+					<div className="text-gray-600 mt-5 text-sm">Quantity</div>
 					<div className="flex my-5 space-x-5">
 						<Button
+							color="dark"
 							onClick={() => {
 								if (quantity > 1) setQuantity(quantity - 1);
 							}}
@@ -111,17 +170,21 @@ const BuyButton = ({
 								width: '44px',
 								textAlign: 'center',
 								background: 'transparent !important',
-								color: '#fff !important',
+								color: '#000 !important',
 								border: '0px',
 							}}
 							value={quantity}
 							onChange={(value) => setQuantity(Number(value))}
 							min={1}
-							max={50}
+							max={limit == -1 ? undefined : limit}
 						/>
 						<Button
 							variant="subtle"
 							onClick={() => {
+								if (limit === -1) {
+									setQuantity(quantity + 1);
+									return;
+								}
 								if (quantity < limit!) setQuantity(quantity + 1);
 							}}
 						>
@@ -135,7 +198,8 @@ const BuyButton = ({
 				fullWidth
 				size="md"
 				radius={'md'}
-				className="text-center my-5 block primary_button"
+				// color="dark"
+				className={`text-center my-5 block ${className}`}
 				loading={loading}
 				onClick={address ? claimNFT : openConnectModal}
 			>
