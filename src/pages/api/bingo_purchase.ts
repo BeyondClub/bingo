@@ -40,8 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const keys = await fetchData({ contract, network: String(network) });
 
-    console.log('keys', keys)
-
     if (!keys) return res.status(400).json({ message: 'No keys found' });
 
     for (const key of keys) {

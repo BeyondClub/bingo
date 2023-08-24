@@ -44,7 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         take: 5
     })
 
-    console.log(tasks)
 
 
     for (const task of tasks) {

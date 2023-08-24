@@ -69,8 +69,6 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 	const path = usePathname();
 	const origin = useOrigin();
 
-	console.log(origin);
-
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
 			{/* <SessionProvider refetchInterval={0} session={session}> */}
