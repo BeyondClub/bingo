@@ -28,7 +28,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[publicProvider()]
 );
 
-const projectId = 'YOUR_PROJECT_ID';
+const projectId = '23ec90d12e49dee0f269a39772364054';
 
 const { wallets } = getDefaultWallets({
 	appName: 'Bingo',

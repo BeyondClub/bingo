@@ -38,7 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!contract) return res.status(400).json({ message: 'Contract address is required' });
 
-    const keys = await fetchData({ contract, network: String(network) });
+    const keys = await fetchData({ contract: contract, network: String(network) });
+
+    console.log('keys', keys);
 
     if (!keys) return res.status(400).json({ message: 'No keys found' });
 
