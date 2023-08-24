@@ -100,7 +100,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 										: ''
 								}
 							>
-								<div className="flex justify-between">
+								<div className="flex items-center justify-between">
 									<Link href="/" passHref>
 										{origin?.includes('beyondclub') ? (
 											<img
@@ -110,6 +110,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 														: `/assets/bc_light.png`
 												}
 												alt=""
+												style={{ width: '150px' }}
 											/>
 										) : (
 											<img
