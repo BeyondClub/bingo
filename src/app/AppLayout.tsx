@@ -107,7 +107,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 												src={
 													path?.includes('/onchain-summer')
 														? `https://www.beyondclub.xyz/assets/images/logo.svg`
-														: `https://www.beyondclub.xyz/assets/images/logo.svg`
+														: `/assets/bc_light.png`
 												}
 												alt=""
 											/>
