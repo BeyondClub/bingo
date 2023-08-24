@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 	title: 'Korea Blockchain Week Side Event BINGO | LFBingo',
 	description: 'Korea Blockchain Week Side Event BINGO',
 	icons: {
-		icon: '/assets/favicon_summer.png',
+		icon: '/assets/kbw/favicon.png',
 	},
 	twitter: {
 		card: 'summary_large_image',
@@ -33,12 +33,12 @@ export const metadata: Metadata = {
 		description: 'Korea Blockchain Week Side Event BINGO',
 		images: [
 			{
-				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				url: 'https://www.lfbingo.xyz/assets/kbw/og.png',
 				width: 800,
 				height: 600,
 			},
 			{
-				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				url: 'https://www.lfbingo.xyz/assets/kbw/og.png',
 				width: 1800,
 				height: 1600,
 				alt: 'LFBingo',
@@ -52,12 +52,12 @@ export const metadata: Metadata = {
 		description: 'Korea Blockchain Week Side Event BINGO',
 		images: [
 			{
-				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				url: 'https://www.lfbingo.xyz/assets/kbw/og.png',
 				width: 800,
 				height: 600,
 			},
 			{
-				url: 'https://www.lfbingo.xyz/assets/og_onchain.png',
+				url: 'https://www.lfbingo.xyz/assets/kbw/og.png',
 				width: 1800,
 				height: 1600,
 				alt: 'LFBingo',
@@ -118,7 +118,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 	return (
 		<div className="bg-[#090042] text-gray-100 rounded-2xl pt-20">
 			<Head>
-				<link rel="icon" href="/assets/favicon_summer.png" />
+				<link rel="icon" href="/assets/kbw/favicon.png" />
 			</Head>
 			<main className="mx-auto container px-5 sm:px-6 md:px-5  space-y-5 pb-10 min-h-screen ">
 				<section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 md:px-5 md:pb-5">
@@ -166,7 +166,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							limit={Number(campaign.mint_limit)}
 							end_date={campaign.end_at}
 							campaign_name={campaign.name}
-							campaign_image={'https://lfbingo.xyz/assets/demo_onchain.png'}
+							campaign_image={'https://lfbingo.xyz/assets/kbw/favicon.png'}
 						/>
 
 						<div className="md:w-3/4">
@@ -197,7 +197,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					</div>
 					<div className="col-span-6 items-center mx-auto relative overflow-hidden">
 						<img
-							src="/assets/demo_onchain.png"
+							src="/assets/kbw/favicon.png"
 							className="rounded-lg z-50 relative"
 							style={{ maxHeight: '500px' }}
 							alt=""

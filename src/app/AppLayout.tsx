@@ -79,7 +79,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 				<RainbowKitProvider appInfo={demoAppInfo} chains={chains} modalSize={'compact'}>
 					<div
 						className={
-							path?.includes('/onchain-summer') || path?.includes('/kbw2023')
+							path?.includes('/kbw2023')
+								? 'bg-[#090042] text-gray-300'
+								: path?.includes('/onchain-summer')
 								? `bg-white text-gray-900`
 								: `bg-[#010314] text-[#f8f8f9] `
 						}
@@ -103,7 +105,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 										{origin?.includes('beyondclub') ? (
 											<img
 												src={
-													path?.includes('/onchain-summer') || path?.includes('/kbw2023')
+													path?.includes('/onchain-summer')
 														? `https://www.beyondclub.xyz/assets/images/logo.svg`
 														: `https://www.beyondclub.xyz/assets/images/logo.svg`
 												}
@@ -112,7 +114,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 										) : (
 											<img
 												src={
-													path?.includes('/onchain-summer') || path?.includes('/kbw2023')
+													path?.includes('/onchain-summer')
 														? `/assets/LFbingo_dark.svg`
 														: `/assets/LFbingo.svg`
 												}
@@ -120,7 +122,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 											/>
 										)}
 									</Link>
-									<div className="connect">
+									<div className={path?.includes('/onchain-summer') ? 'connect' : ''}>
 										<ConnectButton accountStatus={'address'} />
 									</div>
 								</div>
@@ -131,7 +133,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
 							<footer
 								className={
-									path?.includes('/onchain-summer') || path?.includes('/kbw2023')
+									path?.includes('/onchain-summer')
 										? 'text-center text-gray-600 border-t border-gray-300 py-6 text-sm'
 										: 'text-center text-gray-400 border-t border-gray-800 py-6 text-sm'
 								}
