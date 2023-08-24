@@ -8,15 +8,16 @@ import dayjs from 'dayjs';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import BuyButton from './BuyButton';
-import ContractAddressCopy from './ContractAddressCopy';
-import TotalMinted from './TotalMinted';
 
-const CloseCountdown = dynamic(() => import('./CloseCountdown'), {
+import BuyButton from '@/components/CampaignDetails/BuyButton';
+import ContractAddressCopy from '@/components/CampaignDetails/ContractAddressCopy';
+import TotalMinted from '@/components/CampaignDetails/TotalMinted';
+
+const CloseCountdown = dynamic(() => import('@/components/CampaignDetails/CloseCountdown'), {
 	ssr: false,
 });
 
-const YourBingo = dynamic(() => import('./YourBingo'), {
+const YourBingo = dynamic(() => import('@/components/CampaignDetails/YourBingo'), {
 	ssr: false,
 });
 
@@ -147,7 +148,8 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 								</p>
 							</div>
 							<TotalMinted
-								network={String(campaign.network)}
+								className="text-gray-600"
+								network={Number(campaign.network)}
 								contract_address={campaign.contract_address!}
 							/>
 						</div>
@@ -162,8 +164,8 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						) : null}
 
 						<BuyButton
+							className="btn_onchain"
 							network={String(campaign.network)}
-							campaign_id={campaign.campaign_id!}
 							contract_address={campaign.contract_address!}
 							limit={Number(campaign.mint_limit)}
 							end_date={campaign.end_at}
