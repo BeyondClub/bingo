@@ -7,6 +7,7 @@ import { graphVerification } from '@/libs/verification/graphVerification';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
+import { Web3Service } from '@unlock-protocol/unlock-js';
 import { ethers } from 'ethers';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
@@ -44,6 +45,7 @@ const BuyButton = ({
 	const [minted, setMinted] = useState(false);
 
 	const [quantity, setQuantity] = useState(1);
+	const [nftHolding, setNFTHolding] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
 	const { chain, chains } = useNetwork();
@@ -67,9 +69,16 @@ const BuyButton = ({
 	console.log(config, prepareError, isPrepareError);
 	const { data, error, isError, write } = useContractWrite(config);
 	console.log(data, error, isError);
-	const { isLoading, isSuccess } = useWaitForTransaction({
+	const {
+		isLoading,
+		isSuccess,
+		isError: err,
+	} = useWaitForTransaction({
 		hash: data?.hash,
 	});
+
+	console.log('err');
+	console.log(err);
 
 	useEffect(() => {
 		if (data?.hash) {
@@ -92,6 +101,22 @@ const BuyButton = ({
 			setMinted(true);
 		}
 	}, [isSuccess]);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const ChainId = Number(network) as keyof typeof ChainConfig;
+
+				const web3Service = new Web3Service(ChainConfig);
+
+				const tokenBalance = await web3Service.totalKeys(contract_address, address as string, ChainId);
+
+				setNFTHolding(Number(tokenBalance.toString()));
+			} catch (e) {
+				console.log(e);
+			}
+		})();
+	}, [address]);
 
 	const claimNFT = async () => {
 		if (end_date && new Date().getTime() > new Date(end_date).getTime()) {
@@ -177,6 +202,9 @@ const BuyButton = ({
 		})();
 	}, []);
 
+	console.log('nftHolding');
+	console.log(nftHolding);
+
 	return (
 		<>
 			<Confetti
@@ -241,27 +269,29 @@ const BuyButton = ({
 				</>
 			) : null}
 
-			<Button
-				fullWidth
-				size="md"
-				radius={'md'}
-				// color="dark"
-				className={`text-center my-5 block ${className}`}
-				loading={loading || isLoading}
-				onClick={address ? (chain?.id !== Number(network) ? openChainModal : write) : openConnectModal}
-			>
-				{address ? (
-					<>
-						{chain?.id !== Number(network)
-							? `Switch Chain to ${
-									ChainConfig[Number(network) as keyof typeof ChainConfig].name
-							  } Mint NFT`
-							: 'Mint NFT'}
-					</>
-				) : (
-					'Connect Wallet'
-				)}
-			</Button>
+			{nftHolding < Number(limit ?? 1) ? (
+				<Button
+					fullWidth
+					size="md"
+					radius={'md'}
+					// color="dark"
+					className={`text-center my-5 block ${className}`}
+					loading={loading || isLoading}
+					onClick={address ? (chain?.id !== Number(network) ? openChainModal : write) : openConnectModal}
+				>
+					{address ? (
+						<>
+							{chain?.id !== Number(network)
+								? `Switch Chain to ${
+										ChainConfig[Number(network) as keyof typeof ChainConfig].name
+								  } Mint NFT`
+								: 'Mint NFT'}
+						</>
+					) : (
+						'Connect Wallet'
+					)}
+				</Button>
+			) : null}
 
 			{txHash ? (
 				<a
