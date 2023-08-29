@@ -1,4 +1,3 @@
-import BuyButton from '@/components/CampaignDetails/BuyButton';
 import ContractAddressCopy from '@/components/CampaignDetails/ContractAddressCopy';
 import TotalMinted from '@/components/CampaignDetails/TotalMinted';
 import DescriptionLink from '@/components/DescriptionLink/DescriptionLink';
@@ -13,6 +12,10 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 const CloseCountdown = dynamic(() => import('@/components/CampaignDetails/CloseCountdown'), {
+	ssr: false,
+});
+
+const BuyButton = dynamic(() => import('@/components/CampaignDetails/BuyButton'), {
 	ssr: false,
 });
 
@@ -116,7 +119,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 	const leaderboard = data.scoreboard;
 
 	return (
-		<div className="bg-[#090042] text-gray-100 rounded-2xl pt-20">
+		<div className="bg-[#090042] text-gray-100 rounded-2xl pt-14">
 			<Head>
 				<link rel="icon" href="/assets/favicon_kbw.png" />
 			</Head>
