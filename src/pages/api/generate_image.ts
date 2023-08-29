@@ -9,7 +9,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 
 
 
-import { CampaignCheckMark, CampaignImages } from '@/constants/campaigns/images';
+import { CampaignCheckMark } from '@/constants/campaigns/images';
 import { ipfsUpload } from '@/libs/w3storage';
 import path from 'path';
 
@@ -298,7 +298,7 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			const canvas = createCanvas(2048, 2488);
 			const ctx = canvas.getContext('2d');
 			// @ts-ignore
-			const image = await loadImage(CampaignImages[bingo.campaign_id] ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
+			const image = await loadImage(campaign?.grid_image ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
 			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
 
