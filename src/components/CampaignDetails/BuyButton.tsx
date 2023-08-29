@@ -250,9 +250,17 @@ const BuyButton = ({
 				loading={loading || isLoading}
 				onClick={address ? (chain?.id !== Number(network) ? openChainModal : write) : openConnectModal}
 			>
-				{chain?.id !== Number(network)
-					? `Switch Chain to ${ChainConfig[Number(network) as keyof typeof ChainConfig].name} Mint NFT`
-					: 'Mint NFT'}
+				{address ? (
+					<>
+						{chain?.id !== Number(network)
+							? `Switch Chain to ${
+									ChainConfig[Number(network) as keyof typeof ChainConfig].name
+							  } Mint NFT`
+							: 'Mint NFT'}
+					</>
+				) : (
+					'Connect Wallet'
+				)}
 			</Button>
 
 			{txHash ? (
