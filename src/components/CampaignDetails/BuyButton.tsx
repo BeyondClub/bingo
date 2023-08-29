@@ -48,6 +48,10 @@ const BuyButton = ({
 	const { address, isConnecting, isDisconnected } = useAccount();
 	const { chain, chains } = useNetwork();
 
+	const cost = ethers.BigNumber.from(ethers.utils.parseEther(price));
+	const WalletArray = Array.from({ length: quantity }, () => address!);
+	console.log('cost');
+	console.log(cost);
 	const {
 		config,
 		error: prepareError,
@@ -57,8 +61,8 @@ const BuyButton = ({
 		chainId: Number(network),
 		abi: UNIVERSAL_ABI,
 		functionName: 'purchase',
-		args: [[0], [address!], [address!], [address!], [address!]],
-		value: price ? ethers.BigNumber.from(ethers.utils.parseEther(price)) : null,
+		args: [[0], WalletArray, WalletArray, WalletArray, WalletArray],
+		value: price ? cost._hex : (null as any),
 	});
 	console.log(config, prepareError, isPrepareError);
 	const { data, error, isError, write } = useContractWrite(config);
