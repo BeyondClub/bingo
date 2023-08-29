@@ -287,12 +287,13 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					<section className="my-14">
 						<div className="text-center mb-5">Partnered with</div>
 
-						<div className="grid place-items-center md:grid-cols-7 gap-5">
+						<div className="grid place-items-center md:grid-cols-7 gap-10">
 							<img className="h-10" src="/assets/kbw/circle-logo 2.png" alt="" />
 							<img className="h-10" src="/assets/kbw/e6f72f0-image 2.png" alt="" />
 							<img className="" src="/assets/kbw/Group 10be.png" alt="" />
 							<img className="h-10" src="/assets/kbw/Group 9468.png" alt="" />
 							<img className="h-10" src="/assets/kbw/logo_white.png" alt="" />
+							<img className="h-10" src="/assets/kbw/AEGIS_venture (1).png" alt="" />
 							<img className="h-10" src="/assets/kbw/svgexport-1 (2).svg" alt="" />
 							<img className="h-10" src="/assets/kbw/svgexport-1 1.png" alt="" />
 						</div>
