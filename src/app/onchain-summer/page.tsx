@@ -9,9 +9,12 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-import BuyButton from '@/components/CampaignDetails/BuyButton';
 import ContractAddressCopy from '@/components/CampaignDetails/ContractAddressCopy';
 import TotalMinted from '@/components/CampaignDetails/TotalMinted';
+
+const BuyButton = dynamic(() => import('@/components/CampaignDetails/BuyButton'), {
+	ssr: false,
+});
 
 const CloseCountdown = dynamic(() => import('@/components/CampaignDetails/CloseCountdown'), {
 	ssr: false,

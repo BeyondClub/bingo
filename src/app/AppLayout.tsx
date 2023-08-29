@@ -40,8 +40,10 @@ const demoAppInfo = {
 	appName: 'Bingo',
 };
 
+const walletslist = wallets.map((wallet) => ({ ...wallet, walletConnectVersion: '1' }));
+
 const connectors = connectorsForWallets([
-	...wallets,
+	...walletslist,
 	// {
 	// 	groupName: 'Other',
 	// 	wallets: [

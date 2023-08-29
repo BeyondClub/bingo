@@ -1,4 +1,3 @@
-import BuyButton from '@/components/CampaignDetails/BuyButton';
 import ContractAddressCopy from '@/components/CampaignDetails/ContractAddressCopy';
 import TotalMinted from '@/components/CampaignDetails/TotalMinted';
 import { NETWORK } from '@/constants';
@@ -8,6 +7,10 @@ import { shortenAddress } from '@/libs/helpers';
 import { campaigns } from '@prisma/client';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
+
+const BuyButton = dynamic(() => import('@/components/CampaignDetails/BuyButton'), {
+	ssr: false,
+});
 
 const CloseCountdown = dynamic(() => import('@/components/CampaignDetails/CloseCountdown'), {
 	ssr: false,
