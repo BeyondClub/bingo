@@ -9,8 +9,18 @@ import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import MintSuccessModal from './MintSuccessModal';
+import { UNIVERSAL_ABI } from '@/constants/abi';
+import { ethers } from 'ethers'
+import {
+	usePrepareContractWrite,
+	useContractWrite,
+	useWaitForTransaction,
+	useAccount,
+	useConnect,
+	useDisconnect
+} from 'wagmi'
 
 const Confetti = dynamic(() => import('react-confetti'), {
 	ssr: false,
@@ -43,6 +53,27 @@ const BuyButton = ({
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
 	const { chain, chains } = useNetwork();
+
+	//  @jijin wagmi contract write hook below
+
+	// const cost = ethers.BigNumber.from(ethers.utils.parseEther('0.01'))
+	const { config, error: prepareError, isError: isPrepareError } = usePrepareContractWrite({
+	address: contract_address as `0x${string}`,
+	chainId: Number(network),
+	abi: UNIVERSAL_ABI,
+	functionName: 'purchase',
+	args: [[0], [address!], [address!], [address!], [address!]],
+	// value: cost,
+    
+	})
+	console.log(config, prepareError, isPrepareError)
+	const { data, error, isError, write } = useContractWrite(config)
+	console.log(data, error)
+	const { isLoading, isSuccess } = useWaitForTransaction({
+		hash: data?.hash,
+	})
+
+  	
 
 	const claimNFT = async () => {
 		// convert end date to getTime() and compare it with now time to check campaign expired
@@ -201,7 +232,7 @@ const BuyButton = ({
 				// color="dark"
 				className={`text-center my-5 block ${className}`}
 				loading={loading}
-				onClick={address ? (chain?.id !== Number(network) ? openChainModal : claimNFT) : openConnectModal}
+				onClick={() => address ? (chain?.id !== Number(network) ? openChainModal : write!()) : openConnectModal}
 			>
 				{chain?.id !== Number(network)
 					? `Switch Chain to ${ChainConfig[Number(network) as keyof typeof ChainConfig].name} Mint NFT`
