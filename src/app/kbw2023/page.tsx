@@ -183,7 +183,6 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 				<section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 md:px-5 md:pb-5">
 					<div className="col-span-6">
 						<h2 className="font-extrabold text-4xl">{campaign.name}</h2>
-						{/* <p className="my-2">test.eth</p> */}
 						<p className="my-4 text-gray-300 whitespace-pre-wrap description">
 							<DescriptionLink text={campaign?.description} />
 						</p>
@@ -230,7 +229,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							price={String(campaign.price)}
 							end_date={campaign.end_at}
 							campaign_name={campaign.name}
-							campaign_image={'https://lfbingo.xyz/assets/kbw/favicon.png'}
+							campaign_image={'/assets/kbw/1.png'}
 						/>
 
 						<div className="md:w-3/4">
@@ -261,7 +260,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 					</div>
 					<div className="col-span-6 items-center mx-auto">
 						<img
-							src="/assets/kbw/favicon.png"
+							src="/assets/kbw/1.png"
 							className="rounded-lg z-50 relative"
 							style={{ maxHeight: '500px' }}
 							alt=""
@@ -286,14 +285,16 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 
 				<main className="mx-auto container px-5 sm:px-6 md:px-5  space-y-5 pb-10">
 					<section className="my-14">
-						<div className="text-center mb-5">Quest with</div>
+						<div className="text-center mb-5">Partnered with</div>
 
-						<div className="grid place-items-center md:grid-cols-5 gap-5">
-							<img className="h-10" src="/assets/quest/ens.png" alt="" />
-							<img className="h-10" src="/assets/quest/superfluid.png" alt="" />
-							<img className="" src="/assets/quest/optimism.png" alt="" />
-							<img className="h-10" src="/assets/quest/polygon.png" alt="" />
-							<img className="h-10" src="/assets/quest/thegraph.png" alt="" />
+						<div className="grid place-items-center md:grid-cols-7 gap-5">
+							<img className="h-10" src="/assets/kbw/circle-logo 2.png" alt="" />
+							<img className="h-10" src="/assets/kbw/e6f72f0-image 2.png" alt="" />
+							<img className="" src="/assets/kbw/Group 10be.png" alt="" />
+							<img className="h-10" src="/assets/kbw/Group 9468.png" alt="" />
+							<img className="h-10" src="/assets/kbw/logo_white.png" alt="" />
+							<img className="h-10" src="/assets/kbw/svgexport-1 (2).svg" alt="" />
+							<img className="h-10" src="/assets/kbw/svgexport-1 1.png" alt="" />
 						</div>
 					</section>
 
