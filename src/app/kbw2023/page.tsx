@@ -110,6 +110,61 @@ const ShowDetails = ({ label, children }: { label: string; children: React.React
 	);
 };
 
+const EventCard = ({ name, time, index, link }: { name: string; time: string; index: string; link: string }) => {
+	return (
+		<p>
+			{index}.{' '}
+			<a className="text-blue-400 underline" href={link} target="_BLANK" rel="noreferrer nooepner">
+				{name}
+			</a>{' '}
+			: {time}
+		</p>
+	);
+};
+
+const EventsList = [
+	{
+		name: 'Circle Networking Night',
+		time: 'Sep 3 7pm - 10pm',
+		link: 'https://www.eventbrite.com/e/circle-hacker-house-seoul-tickets-672084411567?aff=bingo',
+	},
+	{
+		name: 'Circle Hacker House: Seoul',
+		time: 'Sep 4 9:30am - 6pm',
+		link: 'https://go.buildoncircle.dev/bingo-Seoul',
+	},
+	{
+		name: 'WEB3 WAVE',
+		time: 'Sep 6 7pm - 11pm',
+		link: 'https://lu.ma/WEB3_WAVE',
+	},
+	{
+		name: 'PolkadotSocial: Seoul',
+		time: 'Sep 7 1:30pm - 10pm',
+		link: 'https://www.eventbrite.com/e/polkadotsocial-seoul-tickets-643545711547?aff=bingo',
+	},
+	{
+		name: 'KBW 2023: ZK Builder’s Meetup',
+		time: 'Sep 7 2pm-6pm',
+		link: 'https://lu.ma/kroma_kbw2023',
+	},
+	{
+		name: 'Rooftop K-BBQ Party',
+		time: 'Sep 7 5pm - 10pm',
+		link: 'https://vivid-slicer-fe0.notion.site/CoinEasy-x-H-E-R-DAO-x-SojuDAO-x-Hexens-x-Q-protocol-x-Orbis-x-Screena-x-Matr1x-x-Blockchain-valley-983081f6adf0491088fe5ee833fd77ce',
+	},
+	{
+		name: 'Event by Phaver',
+		time: 'TBA',
+		link: 'https://2023.ethcon.kr/',
+	},
+	{
+		name: 'Ethcon Korea',
+		time: 'Sep 1-3',
+		link: '',
+	},
+];
+
 const CampaignPage = async ({ params }: { params: { id: string } }) => {
 	const data = await getCampaign('875580ea-de51-424f-b041-7443b7c60b37');
 
@@ -132,6 +187,10 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 						<p className="my-4 text-gray-300 whitespace-pre-wrap description">
 							<DescriptionLink text={campaign?.description} />
 						</p>
+
+						{EventsList.map((event, index) => {
+							return <EventCard key={index} {...event} index={String(index + 1)} />;
+						})}
 
 						{campaign.random_grid ? (
 							<h5 className="font-medium text-xl"> Open Edition (Randomly-generated)</h5>
@@ -168,6 +227,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							network={String(campaign.network)}
 							contract_address={campaign.contract_address!}
 							limit={Number(campaign.mint_limit)}
+							price={String(campaign.price)}
 							end_date={campaign.end_at}
 							campaign_name={campaign.name}
 							campaign_image={'https://lfbingo.xyz/assets/kbw/favicon.png'}

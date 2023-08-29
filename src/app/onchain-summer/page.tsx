@@ -171,6 +171,7 @@ const CampaignPage = async ({ params }: { params: { id: string } }) => {
 							network={String(campaign.network)}
 							contract_address={campaign.contract_address!}
 							limit={Number(campaign.mint_limit)}
+							price={String(campaign.price)}
 							end_date={campaign.end_at}
 							campaign_name={campaign.name}
 							campaign_image={'https://lfbingo.xyz/assets/demo_onchain.png'}

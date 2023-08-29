@@ -14,11 +14,11 @@ import { base } from '@/constants/baseConfig';
 import useOrigin from '@/hooks/use-origin';
 import { usePathname } from 'next/navigation';
 import { Toaster } from 'sonner';
-import { polygon } from 'viem/chains';
+import { mainnet, polygon } from 'viem/chains';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[
-		// mainnet,
+		mainnet,
 		polygon,
 		// optimism,
 		// arbitrum,

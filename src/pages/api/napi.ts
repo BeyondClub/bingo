@@ -4,7 +4,7 @@ import { bingo, bingo_tasks, campaigns } from '@prisma/client';
 // import { createCanvas, loadImage, registerFont } from 'canvas';
 import { GlobalFonts, createCanvas, loadImage } from '@napi-rs/canvas';
 
-import { CampaignCheckMark, CampaignImages } from '@/constants/campaigns/images';
+import { CampaignCheckMark } from '@/constants/campaigns/images';
 import { ScoreValidation } from '@/libs/bingo';
 import { getPoapImage } from '@/libs/verification/poapVerification';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -12,7 +12,7 @@ import path from 'path';
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const query = `SELECT * FROM bingo  WHERE bingo_id = '8f26ecb4-7910-4207-b1e1-e5644c1258f9' LIMIT 1`;
+    const query = `SELECT * FROM bingo  WHERE bingo_id = '74b3428d-15e6-48df-a57d-6c5e4eeb3bf1' LIMIT 1`;
     const result = await pool.query(query);
     const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
@@ -311,7 +311,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const canvas = createCanvas(2048, 2488);
             const ctx = canvas.getContext('2d');
             // @ts-ignore
-            const image = await loadImage(CampaignImages[bingo.campaign_id] ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
+            const image = await loadImage(campaign?.grid_image ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
 

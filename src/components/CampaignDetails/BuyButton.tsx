@@ -1,15 +1,18 @@
 'use client';
 
+import { UNIVERSAL_ABI } from '@/constants/abi';
 import { ChainConfig, defaultChainId } from '@/constants/chain.config';
 import { purchaseNFT } from '@/libs/unlock';
 import { graphVerification } from '@/libs/verification/graphVerification';
 import { Button, NumberInput } from '@mantine/core';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
+import { Web3Service } from '@unlock-protocol/unlock-js';
+import { ethers } from 'ethers';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import MintSuccessModal from './MintSuccessModal';
 
 const Confetti = dynamic(() => import('react-confetti'), {
@@ -24,6 +27,7 @@ const BuyButton = ({
 	contract_address,
 	limit,
 	end_date,
+	price,
 }: {
 	className?: string;
 	campaign_name: string;
@@ -32,6 +36,7 @@ const BuyButton = ({
 	contract_address: string;
 	limit?: number;
 	end_date: Date | null;
+	price: string;
 }) => {
 	const { openChainModal } = useChainModal();
 
@@ -40,13 +45,80 @@ const BuyButton = ({
 	const [minted, setMinted] = useState(false);
 
 	const [quantity, setQuantity] = useState(1);
+	const [nftHolding, setNFTHolding] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const { address, isConnecting, isDisconnected } = useAccount();
 	const { chain, chains } = useNetwork();
 
-	const claimNFT = async () => {
-		// convert end date to getTime() and compare it with now time to check campaign expired
+	const cost = ethers.BigNumber.from(ethers.utils.parseEther(price));
+	const WalletArray = Array.from({ length: quantity }, () => address!);
+	console.log('cost');
+	console.log(cost);
+	const {
+		config,
+		error: prepareError,
+		isError: isPrepareError,
+	} = usePrepareContractWrite({
+		address: contract_address as `0x${string}`,
+		chainId: Number(network),
+		abi: UNIVERSAL_ABI,
+		functionName: 'purchase',
+		args: [[0], WalletArray, WalletArray, WalletArray, WalletArray],
+		value: price ? cost._hex : (null as any),
+	});
+	console.log(config, prepareError, isPrepareError);
+	const { data, error, isError, write } = useContractWrite(config);
+	console.log(data, error, isError);
+	const {
+		isLoading,
+		isSuccess,
+		isError: err,
+	} = useWaitForTransaction({
+		hash: data?.hash,
+	});
 
+	console.log('err');
+	console.log(err);
+
+	useEffect(() => {
+		if (data?.hash) {
+			const updateRecords = async () => {
+				const response = await fetch(
+					`/api/bingo_purchase?contract=${contract_address}&network=${network}&tx=${data?.hash}`
+				);
+				const response_data = await response.json();
+
+				setTimeout(() => updateRecords(), 10000);
+			};
+			updateRecords();
+			setTxHash(data?.hash);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (isSuccess) {
+			toast('NFT Minted Successfully!');
+			setMinted(true);
+		}
+	}, [isSuccess]);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const ChainId = Number(network) as keyof typeof ChainConfig;
+
+				const web3Service = new Web3Service(ChainConfig);
+
+				const tokenBalance = await web3Service.totalKeys(contract_address, address as string, ChainId);
+
+				setNFTHolding(Number(tokenBalance.toString()));
+			} catch (e) {
+				console.log(e);
+			}
+		})();
+	}, [address]);
+
+	const claimNFT = async () => {
 		if (end_date && new Date().getTime() > new Date(end_date).getTime()) {
 			toast.error('Campaign expired');
 			return;
@@ -130,6 +202,9 @@ const BuyButton = ({
 		})();
 	}, []);
 
+	console.log('nftHolding');
+	console.log(nftHolding);
+
 	return (
 		<>
 			<Confetti
@@ -194,19 +269,29 @@ const BuyButton = ({
 				</>
 			) : null}
 
-			<Button
-				fullWidth
-				size="md"
-				radius={'md'}
-				// color="dark"
-				className={`text-center my-5 block ${className}`}
-				loading={loading}
-				onClick={address ? (chain?.id !== Number(network) ? openChainModal : claimNFT) : openConnectModal}
-			>
-				{chain?.id !== Number(network)
-					? `Switch Chain to ${ChainConfig[Number(network) as keyof typeof ChainConfig].name} Mint NFT`
-					: 'Mint NFT'}
-			</Button>
+			{nftHolding < Number(limit ?? 1) ? (
+				<Button
+					fullWidth
+					size="md"
+					radius={'md'}
+					// color="dark"
+					className={`text-center my-5 block ${className}`}
+					loading={loading || isLoading}
+					onClick={address ? (chain?.id !== Number(network) ? openChainModal : write) : openConnectModal}
+				>
+					{address ? (
+						<>
+							{chain?.id !== Number(network)
+								? `Switch Chain to ${
+										ChainConfig[Number(network) as keyof typeof ChainConfig].name
+								  } Mint NFT`
+								: 'Mint NFT'}
+						</>
+					) : (
+						'Connect Wallet'
+					)}
+				</Button>
+			) : null}
 
 			{txHash ? (
 				<a
