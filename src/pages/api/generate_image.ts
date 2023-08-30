@@ -297,6 +297,8 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 
 			const canvas = createCanvas(2048, 2488);
 			const ctx = canvas.getContext('2d');
+
+
 			// @ts-ignore
 			const image = await loadImage(campaign?.grid_image ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_1.png');
 			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -797,11 +799,8 @@ export const generateImage = async ({ bingo }: { bingo: bingo }) => {
 			const canvas = createCanvas(2048, 2488);
 			const ctx = canvas.getContext('2d');
 			// @ts-ignore
-			// const image = await loadImage(CampaignImages[bingo.campaign_id] ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_8.png');
-			const image = await loadImage('https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_8.png');
+			const image = await loadImage(campaign?.grid_image ?? 'https://beyondclub-assets.s3.ap-northeast-1.amazonaws.com/bingo/bingo-01_8.png');
 			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-
 
 
 			/*
@@ -1082,8 +1081,8 @@ const getImage = async () => {
 	const bingo: bingo | null = result.rows.length > 0 ? result.rows[0] : null;
 
 	if (!bingo) return 'not found';
-
 	const response = await generateImage({ bingo });
+
 
 	return response;
 };

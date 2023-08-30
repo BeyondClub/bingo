@@ -19,7 +19,8 @@ export const ipfsUpload = async ({
 
 
         return filecoinUpload;
-    } catch {
+    } catch (e) {
+        console.log(e)
         return null;
     }
 }
