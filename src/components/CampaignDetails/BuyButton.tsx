@@ -291,7 +291,18 @@ const BuyButton = ({
 						'Connect Wallet'
 					)}
 				</Button>
-			) : null}
+			) : (
+				<Button
+					fullWidth
+					size="md"
+					radius={'md'}
+					// color="dark"
+					disabled
+					className={`text-center my-5 block ${className}`}
+				>
+					Claimed
+				</Button>
+			)}
 
 			{txHash ? (
 				<a
