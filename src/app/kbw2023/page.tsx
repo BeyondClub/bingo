@@ -156,12 +156,12 @@ const EventsList = [
 	{
 		name: 'Event by Phaver',
 		time: 'TBA',
-		link: 'https://2023.ethcon.kr/',
+		link: 'https://lu.ma/7nblgg88',
 	},
 	{
 		name: 'Ethcon Korea',
 		time: 'Sep 1-3',
-		link: '',
+		link: 'https://2023.ethcon.kr/',
 	},
 ];
 
