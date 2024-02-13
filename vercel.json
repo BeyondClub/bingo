@@ -1,12 +1,5 @@
 {
   "crons": [
-    {
-      "path": "/api/cron/verify_task",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/generate_image",
-      "schedule": "*/3 * * * *"
-    }
+    
   ]
 }
